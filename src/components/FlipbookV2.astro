@@ -1,0 +1,207 @@
+---
+interface Props {
+  imageUrls: string[];
+  title?: string;
+  semester?: string;
+}
+
+const { imageUrls, title = "光禾通訊", semester = "" } = Astro.props;
+---
+
+<div class="fb-wrapper">
+  <!-- Header -->
+  <div class="fb-header">
+    <div class="fb-title">
+      <span class="fb-icon">📖</span>
+      <span>{title}</span>
+      {semester && <span class="fb-semester">{semester}</span>}
+    </div>
+    <div class="fb-controls">
+      <button class="fb-btn" id="fb-prev">‹ 上一頁</button>
+      <span class="fb-pageinfo">
+        第 <span id="fb-current">1</span> 頁，共 <span id="fb-total">{imageUrls.length}</span> 頁
+      </span>
+      <button class="fb-btn" id="fb-next">下一頁 ›</button>
+      <button class="fb-btn fb-fullscreen-btn" id="fb-fullscreen">⛶</button>
+    </div>
+  </div>
+
+  <!-- Loading overlay -->
+  <div class="fb-loading" id="fb-loading">
+    <div class="fb-spinner"></div>
+    <p id="fb-loading-text">正在載入...</p>
+  </div>
+
+  <!-- Book stage -->
+  <div class="fb-stage" id="fb-stage">
+    <div class="fb-book" id="fb-book"></div>
+  </div>
+
+  <!-- Thumbnail strip -->
+  <div class="fb-thumbs" id="fb-thumbs">
+    {imageUrls.slice(0, 20).map((url, i) => (
+      <img
+        class="fb-thumb"
+        src={url}
+        alt={`第 ${i + 1} 頁`}
+        data-page={i}
+        loading="lazy"
+      />
+    ))}
+    {imageUrls.length > 20 && (
+      <div class="fb-thumb-more">+{imageUrls.length - 20} 頁</div>
+    )}
+  </div>
+</div>
+
+<script is:inline src="https://cdn.jsdelivr.net/npm/page-flip@2.0.7/dist/js/page-flip.browser.js"></script>
+
+<script is:inline define:vars={{ imageUrls }}>
+(function () {
+  'use strict';
+
+  let pageFlip = null;
+  let isReady = false;
+  let totalImages = imageUrls.length;
+  let loadedCount = 0;
+
+  const elLoading   = document.getElementById('fb-loading');
+  const elLoadTxt   = document.getElementById('fb-loading-text');
+  const elStage     = document.getElementById('fb-stage');
+  const elBook      = document.getElementById('fb-book');
+  const elCurrent   = document.getElementById('fb-current');
+  const elPrev      = document.getElementById('fb-prev');
+  const elNext      = document.getElementById('fb-next');
+  const elFullscreen = document.getElementById('fb-fullscreen');
+  const elThumbs    = document.querySelectorAll('.fb-thumb');
+
+  function preloadImages(urls, onProgress, onDone) {
+    const images = [];
+    let done = 0;
+    if (urls.length === 0) { onDone([]); return; }
+    urls.forEach((url, i) => {
+      const img = new Image();
+      img.onload = img.onerror = function () {
+        images[i] = img.complete && img.naturalWidth > 0 ? img : null;
+        done++;
+        onProgress(done, urls.length);
+        if (done === urls.length) onDone(images);
+      };
+      img.src = url;
+    });
+  }
+
+  function init() {
+    elLoading.style.display = 'flex';
+    elStage.style.opacity   = '0';
+    const firstBatch = imageUrls.slice(0, 4);
+    preloadImages(firstBatch,
+      function (done) { elLoadTxt.textContent = '正在載入圖片 ' + done + ' / ' + totalImages + '...'; },
+      function (images) {
+        const refImg = images.find(Boolean);
+        if (!refImg) { showError('圖片載入失敗'); return; }
+        buildFlipbook(refImg.naturalWidth, refImg.naturalHeight);
+        if (totalImages > 4) {
+          preloadImages(imageUrls.slice(4),
+            function (done) { loadedCount = 4 + done; },
+            function () {}
+          );
+        }
+      }
+    );
+  }
+
+  function buildFlipbook(imgW, imgH) {
+    const stageW = elStage.clientWidth || window.innerWidth;
+    const maxBookW = Math.min(stageW - 20, 900);
+    const pageW  = Math.floor(maxBookW / 2);
+    const pageH  = Math.round(pageW * (imgH / imgW));
+    elBook.innerHTML = '';
+    pageFlip = new St.PageFlip(elBook, {
+      width: pageW, height: pageH, size: 'fixed',
+      maxShadowOpacity: 0.6, showCover: true, flippingTime: 700,
+      mobileScrollSupport: false, swipeDistance: 20,
+      useMouseEvents: true, autoSize: false,
+    });
+    const pageEls = imageUrls.map(function (url, i) {
+      const div = document.createElement('div');
+      div.className = 'fb-page-item';
+      div.style.cssText = 'width:100%;height:100%;overflow:hidden;background:#fff;';
+      const img = document.createElement('img');
+      img.src = url; img.alt = '第 ' + (i + 1) + ' 頁';
+      img.style.cssText = 'width:100%;height:100%;object-fit:contain;display:block;';
+      img.loading = i < 4 ? 'eager' : 'lazy';
+      div.appendChild(img); return div;
+    });
+    pageFlip.loadFromHTML(pageEls);
+    pageFlip.on('flip', function (e) {
+      elCurrent.textContent = e.data + 1;
+      highlightThumb(e.data);
+    });
+    elLoading.style.display = 'none';
+    elStage.style.opacity = '1';
+    elStage.style.transition = 'opacity 0.4s';
+    isReady = true;
+    bindControls();
+  }
+
+  function bindControls() {
+    elPrev.onclick = function () { if (pageFlip) pageFlip.flipPrev('bottom'); };
+    elNext.onclick = function () { if (pageFlip) pageFlip.flipNext('bottom'); };
+    document.addEventListener('keydown', function (e) {
+      if (!isReady) return;
+      if (e.key === 'ArrowRight' || e.key === 'ArrowDown') { pageFlip.flipNext('bottom'); e.preventDefault(); }
+      if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') { pageFlip.flipPrev('bottom'); e.preventDefault(); }
+    });
+    elFullscreen.onclick = function () {
+      const w = document.querySelector('.fb-wrapper');
+      if (!document.fullscreenElement) { w.requestFullscreen && w.requestFullscreen(); }
+      else { document.exitFullscreen && document.exitFullscreen(); }
+    };
+    elThumbs.forEach(function (t) {
+      t.onclick = function () { var p = parseInt(t.dataset.page, 10); if (pageFlip) pageFlip.flip(p); };
+    });
+  }
+
+  function highlightThumb(idx) {
+    elThumbs.forEach(function (t) { t.classList.remove('fb-thumb-active'); });
+    var a = document.querySelector('.fb-thumb[data-page="' + idx + '"]');
+    if (a) { a.classList.add('fb-thumb-active'); a.scrollIntoView({ inline: 'center', behavior: 'smooth', block: 'nearest' }); }
+  }
+
+  function showError(msg) {
+    elLoading.innerHTML = '<p style="color:#e74c3c;font-size:1.2rem;"⚠️ ' + msg + '</p>';
+  }
+
+  if (document.readyState === 'loading') { document.addEventListener('DOMContentLoaded', init); }
+  else { init(); }
+  document.addEventListener('astro:page-load', init);
+})();
+</script>
+
+<style>
+  .fb-wrapper { background: #1a1a2e; border-radius: 16px; overflow: hidden; box-shadow: 0 20px 60px rgba(0,0,0,0.5); margin: 2rem auto; max-width: 960px; font-family: sans-serif; }
+  .fb-header { background: linear-gradient(135deg, #6B3A2A, #2D6A2D); color: white; padding: 0.9rem 1.2rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.6rem; }
+  .fb-title { display: flex; align-items: center; gap: 0.5rem; font-size: 1.1rem; font-weight: 700; }
+  .fb-semester { font-size: 0.85rem; font-weight: 400; opacity: 0.85; margin-left: 0.3rem; }
+  .fb-controls { display: flex; align-items: center; gap: 0.7rem; flex-wrap: wrap; }
+  .fb-pageinfo { font-size: 0.9rem; white-space: nowrap; }
+  .fb-btn { background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.35); color: white; padding: 0.45rem 1rem; border-radius: 6px; cursor: pointer; font-size: 0.95rem; transition: background 0.2s, transform 0.1s; white-space: nowrap; }
+  .fb-btn:hover { background: rgba(255,255,255,0.35); transform: scale(1.04); }
+  .fb-fullscreen-btn { font-size: 1.1rem; padding: 0.45rem 0.7rem; }
+  .fb-loading { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 420px; color: #ccc; gap: 1rem; font-size: 1rem; }
+  .fb-spinner { width: 48px; height: 48px; border: 4px solid rgba(255,255,255,0.2); border-top-color: #fff; border-radius: 50%; animation: fb-spin 0.8s linear infinite; }
+  @keyframes fb-spin { to { transform: rotate(360deg); } }
+  .fb-stage { background: radial-gradient(ellipse at center, #2c2c4a 0%, #0f0f1e 100%); padding: 24px 12px; min-height: 420px; display: flex; justify-content: center; align-items: center; }
+  :global(.stf__parent) { box-shadow: 0 8px 40px rgba(0,0,0,0.7); }
+  :global(.fb-page-item img) { image-rendering: -webkit-optimize-contrast; image-rendering: crisp-edges; }
+  .fb-thumbs { display: flex; gap: 6px; padding: 10px 12px; overflow-x: auto; background: #111126; scrollbar-width: thin; scrollbar-color: #444 transparent; }
+  .fb-thumbs::-webkit-scrollbar { height: 4px; }
+  .fb-thumbs::-webkit-scrollbar-thumb { background: #444; border-radius: 2px; }
+  .fb-thumb { height: 60px; width: auto; border-radius: 4px; cursor: pointer; opacity: 0.55; border: 2px solid transparent; transition: opacity 0.2s, border-color 0.2s, transform 0.15s; flex-shrink: 0; object-fit: cover; }
+  .fb-thumb:hover { opacity: 0.85; transform: scale(1.08); }
+  .fb-thumb-active { opacity: 1; border-color: #7ec87e; transform: scale(1.1); }
+  .fb-thumb-more { height: 60px; min-width: 60px; background: rgba(255,255,255,0.08); border-radius: 4px; display: flex; align-items: center; justify-content: center; color: #aaa; font-size: 0.8rem; flex-shrink: 0; }
+  :fullscreen .fb-wrapper, :-webkit-full-screen .fb-wrapper { border-radius: 0; max-width: 100vw; height: 100vh; }
+  @media (max-width: 640px) { .fb-header { flex-direction: column; text-align: center; } .fb-controls { justify-content: center; } .fb-stage { padding: 12px 6px; min-height: 320px; } .fb-thumb { height: 44px; } }
+</style>
