@@ -1,0 +1,95 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Navigation from '../../components/Navigation.astro';
+import FlipbookV2 from '../../components/FlipbookV2.astro';
+
+export function getStaticPaths() {
+  // PNG 格式期數與編號位數對照
+  // 36期只有66頁 -> 2位數
+  // 35期有120頁 -> 3位數
+  // 34期有100頁 -> 3位數
+  const pngConfig = {
+    '36': { count: 66, digits: 2 },   // 2位數編號
+    '35': { count: 120, digits: 3 },  // 3位數編號
+    '34': { count: 100, digits: 3 },  // 3位數編號
+  };
+  
+  const data = {
+    '36': { title: '第36期', semester: '113學年度 秋冬學季合輯', count: 66 },
+    '35': { title: '第35期', semester: '112學年度 秋冬學季合輯', count: 120 },
+    '34': { title: '第34期', semester: '112學年度 冬春夏學季合輯', count: 100 },
+    '33': { title: '第33期', semester: '112學年度 春學季刊', count: 20 },
+    '32': { title: '第32期', semester: '112學年度 夏學季刊', count: 20 },
+    '31': { title: '第31期', semester: '111學年度 春學季刊', count: 18 },
+    '30': { title: '第30期', semester: '110學年度 冬學季刊', count: 24 },
+    '29': { title: '第29期', semester: '110學年度 秋學季刊', count: 30 },
+    '28': { title: '第28期', semester: '110學年度 夏學季刊', count: 51 },
+    '27': { title: '第27期', semester: '110學年度 春學季刊', count: 37 },
+    '26': { title: '第26期', semester: '109學年度 夏學季刊', count: 52 },
+    '24-25': { title: '光禾通訊24-25', semester: '113-114學年度合訂本', count: 52 },
+    '23': { title: '第23期', semester: '109學年度 春學季刊', count: 65 },
+  };
+  
+  return Object.entries(data).map(([id, item]) => {
+    const prefix = id === '24-25' ? 'NO24-25' : 'NO' + id;
+    const pngInfo = pngConfig[id];
+    const images = [];
+    
+    for (let i = 1; i <= item.count; i++) {
+      if (pngInfo) {
+        const numStr = i.toString().padStart(pngInfo.digits, '0');
+        images.push(`/newsletter/光禾通訊/${prefix}-${numStr}.png`);
+      } else {
+        const numStr = i.toString().padStart(2, '0');
+        images.push(`/newsletter/光禾通訊/${prefix}-${numStr}.jpg`);
+      }
+    }
+    
+    return {
+      params: { id },
+      props: { id, title: item.title, semester: item.semester, images },
+    };
+  });
+}
+
+const { id, title, semester, images } = Astro.props;
+---
+
+<Layout title={`${title} - 光禾通訊`}>
+  <Navigation />
+  
+  <section class="hero-small">
+    <div class="container">
+      <h1>光禾通訊</h1>
+      <p>每學季發行的校園通訊，記錄光禾的点�x</p>
+    </div>
+  </section>
+  
+  <section class="section">
+    <div class="container">
+      <p class="intro">選擇一期開始閱讀</p>
+      
+      <FlipbookV2
+        imageUrls={images}
+        title={title}
+        semester={semester}
+      />
+      
+      <div class="issue-links">
+        <p class="intro" style="margin-top: 2rem;">其他期數：</p>
+        <div class="links-grid">
+          {['36', '35', '34', '33', '32', '31', '30', '29', '28', '27', '26', '24-25', '23'].filter(i => i !== id).map(i => (
+            <a href={`/newsletter/${i}`}>{i === '24-25' ? '24-25期合訂' : `第${i}期`}</a>
+          ))}
+        </div>
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .intro { text-align: center; font-size: 1.2rem; color: #666; margin-bottom: 1rem; }
+  .links-grid { display: flex; flex-wrap: wrap; justify-content: center; gap: 1rem; max-width: 800px; margin: 0 auto; }
+  .links-grid a { background: linear-gradient(135deg, #8B4513, #228B22); color: white; padding: 0.8rem 1.2rem; border-radius: 25px; text-decoration: none; font-weight: 500; transition: transform 0.3s; }
+  .links-grid a:hover { transform: scale(1.05); }
+</style>
