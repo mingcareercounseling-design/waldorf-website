@@ -4,16 +4,61 @@ import Navigation from '../../components/Navigation.astro';
 import FlipbookV2 from '../../components/FlipbookV2.astro';
 
 export function getStaticPaths() {
-  // PNG 格式期數與編號位數對照
-  // 36期只有66頁 -> 2位數
-  // 35期有120頁 -> 3位數
-  // 34期有100頁 -> 3位數
+  // PNG æ ¼å¼æœŸæ•¸èˆ‡ç·¨è™Ÿä½æ•¸å°ç…§
+  // 36æœŸåªæœ‰66é  -> 2ä½æ•¸
+  // 35æœŸæœ‰120é  -> 3ä½æ•¸
+  // 34æœŸæœ‰100é  -> 3ä½æ•¸
   const pngConfig = {
-    '36': { count: 66, digits: 2 },   // 2位數編號
-    '35': { count: 120, digits: 3 },  // 3位數編號
-    '34': { count: 100, digits: 3 },  // 3位數編號
+    '36': { count: 66, digits: 2 },   // 2ä½æ•¸ç·¨è™Ÿ
+    '35': { count: 120, digits: 3 },  // 3ä½æ•¸ç·¨è™Ÿ
+    '34': { count: 100, digits: 3 },  // 3ä½æ•¸ç·¨è™Ÿ
   };
   
+  const data = {
+    '36': { title: 'ç¬¬36æœŸ', semester: '113å­¸å¹´åº¦ ç§‹å†¬å­¸å­£åˆè¼¯', count: 66 },
+    '35': { title: 'ç¬¬35æœŸ', semester: '112å­¸å¹´åº¦ ç§‹å†¬å­¸å­£åˆè¼¯', count: 120 },
+    '34': { title: 'ç¬¬34æœŸ', semester: '112å­¸å¹´åº¦ å†¬æ˜¥å¤å­¸å­£åˆè¼¯', count: 100 },
+    '33': { title: 'ç¬¬33æœŸ', semester: '112å­¸å¹´åº¦ æ˜¥å­¸å­£åˆŠ', count: 20 },
+    '32': { title: 'ç¬¬32æœŸ', semester: '112å­¸å¹´åº¦ å¤å­¸å­£åˆŠ', count: 20 },
+    '31': { title: 'ç¬¬31æœŸ', semester: '111å­¸å¹´åº¦ æ˜¥å­¸å­£åˆŠ', count: 18 },
+    '30': { title: 'ç¬¬30æœŸ', semester: '110å­¸å¹´åº¦ å†¬å­¸å­£åˆŠ', count: 24 },
+    '29': { title: 'ç¬¬29æœŸ', semester: '110å­¸å¹´åº¦ ç§‹å­¸å­£åˆŠ', count: 30 },
+    '28': { title: 'ç¬¬28æœŸ', semester: '110å­¸å¹´åº¦ å¤å­¸å­£åˆŠ', count: 51 },
+    '27': { title: 'ç¬¬27æœŸ', semester: '110å­¸å¹´åº¦ æ˜¥å­¸å­£åˆŠ', count: 37 },
+    '26': { title: 'ç¬¬26æœŸ', semester: '109å­¸å¹´åº¦ å¤å­¸å­£åˆŠ', count: 52 },
+    '24-25': { title: 'å…‰ç¦¾é€šè¨Š24-25', semester: '113-114å­¸å¹´åº¦åˆè¨‚æœ¬', count: 52 },
+    '23': { title: 'ç¬¬23æœŸ', semester: '109å­¸å¹´åº¦ æ˜¥å­¸å­£åˆŠ', count: 65 },
+  };
+  
+  return Object.entries(data).map(([id, item]) => {
+    const prefix = id === '24-25' ? 'NO24-25' : 'NO' + id;
+    const pngInfo = pngConfig[id];
+    const images = [];
+    
+    for (let i = 1; i <= item.count; i++) {
+      if (pngInfo) {
+        const numStr = i.toString().padStart(pngInfo.digits, '0');
+        images.push(`/newsletter/å…‰ç¦¾é€šè¨Š/${prefix}-${numStr}.png`);
+      } else {
+        const numStr = i.toString().padStart(2, '0');
+        images.push(`/newsletter/å…‰ç¦¾é€šè¨Š/${prefix}-${numStr}.jpg`);
+      }
+    }
+    
+---
+import Layout from '../../layouts/Layout.astro';
+import Navigation from '../../components/Navigation.astro';
+import FlipbookV2 from '../../components/FlipbookV2.astro';
+
+export function getStaticPaths() {
+  const CDN_BASE = 'https://raw.githubusercontent.com/mingcareercounseling-design/waldorf-newsletter-images/main';
+
+  const pngConfig = {
+    '36': { count: 66, digits: 2 },
+    '35': { count: 120, digits: 3 },
+    '34': { count: 100, digits: 3 },
+  };
+
   const data = {
     '36': { title: '第36期', semester: '113學年度 秋冬學季合輯', count: 66 },
     '35': { title: '第35期', semester: '112學年度 秋冬學季合輯', count: 120 },
@@ -29,23 +74,57 @@ export function getStaticPaths() {
     '24-25': { title: '光禾通訊24-25', semester: '113-114學年度合訂本', count: 52 },
     '23': { title: '第23期', semester: '109學年度 春學季刊', count: 65 },
   };
-  
+
   return Object.entries(data).map(([id, item]) => {
     const prefix = id === '24-25' ? 'NO24-25' : 'NO' + id;
     const pngInfo = pngConfig[id];
     const images = [];
-    
     for (let i = 1; i <= item.count; i++) {
       if (pngInfo) {
         const numStr = i.toString().padStart(pngInfo.digits, '0');
-        images.push(`/newsletter/光禾通訊/${prefix}-${numStr}.png`);
+        images.push(CDN_BASE + '/' + prefix + '-' + numStr + '.png');
       } else {
         const numStr = i.toString().padStart(2, '0');
-        images.push(`/newsletter/光禾通訊/${prefix}-${numStr}.jpg`);
+        images.push(CDN_BASE + '/' + prefix + '-' + numStr + '.jpg');
       }
     }
-    
-    return {
+    return { params: { id }, props: { id, title: item.title, semester: item.semester, images } };
+  });
+}
+
+const { id, title, semester, images } = Astro.props;
+---
+
+<Layout title={title + ' - 光禾通訊'}>
+  <Navigation />
+  <section class="hero-small">
+    <div class="container">
+      <h1>光禾通訊</h1>
+      <p>每學季發行的校園通訊，記錄光禾的點點滴滴</p>
+    </div>
+  </section>
+  <section class="section">
+    <div class="container">
+      <p class="intro">選擇一期開始閱讀</p>
+      <FlipbookV2 imageUrls={images} title={title} semester={semester} />
+      <div class="issue-links">
+        <p class="intro" style="margin-top: 2rem;">其他期數：</p>
+        <div class="links-grid">
+          {['36','35','34','33','32','31','30','29','28','27','26','24-25','23'].filter(i => i !== id).map(i => (
+            <a href={'/newsletter/' + i}>{i === '24-25' ? '24-25期合訂' : '第' + i + '期'}</a>
+          ))}
+        </div>
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .intro { text-align: center; font-size: 1.2rem; color: #666; margin-bottom: 1rem; }
+  .links-grid { display: flex; flex-wrap: wrap; justify-content: center; gap: 1rem; max-width: 800px; margin: 0 auto; }
+  .links-grid a { background: linear-gradient(135deg, #8B4513, #228B22); color: white; padding: 0.8rem 1.2rem; border-radius: 25px; text-decoration: none; font-weight: 500; transition: transform 0.3s; }
+  .links-grid a:hover { transform: scale(1.05); }
+</style>return {
       params: { id },
       props: { id, title: item.title, semester: item.semester, images },
     };
@@ -55,19 +134,19 @@ export function getStaticPaths() {
 const { id, title, semester, images } = Astro.props;
 ---
 
-<Layout title={`${title} - 光禾通訊`}>
+<Layout title={`${title} - å…‰ç¦¾é€šè¨Š`}>
   <Navigation />
   
   <section class="hero-small">
     <div class="container">
-      <h1>光禾通訊</h1>
-      <p>每學季發行的校園通訊，記錄光禾的点�x</p>
+      <h1>å…‰ç¦¾é€šè¨Š</h1>
+      <p>æ¯å­¸å­£ç™¼è¡Œçš„æ ¡åœ’é€šè¨Šï¼Œè¨˜éŒ„å…‰ç¦¾çš„ç‚¹çŽx</p>
     </div>
   </section>
   
   <section class="section">
     <div class="container">
-      <p class="intro">選擇一期開始閱讀</p>
+      <p class="intro">é¸æ“‡ä¸€æœŸé–‹å§‹é–±è®€</p>
       
       <FlipbookV2
         imageUrls={images}
@@ -76,10 +155,10 @@ const { id, title, semester, images } = Astro.props;
       />
       
       <div class="issue-links">
-        <p class="intro" style="margin-top: 2rem;">其他期數：</p>
+        <p class="intro" style="margin-top: 2rem;">å…¶ä»–æœŸæ•¸ï¼š</p>
         <div class="links-grid">
           {['36', '35', '34', '33', '32', '31', '30', '29', '28', '27', '26', '24-25', '23'].filter(i => i !== id).map(i => (
-            <a href={`/newsletter/${i}`}>{i === '24-25' ? '24-25期合訂' : `第${i}期`}</a>
+            <a href={`/newsletter/${i}`}>{i === '24-25' ? '24-25æœŸåˆè¨‚' : `ç¬¬${i}æœŸ`}</a>
           ))}
         </div>
       </div>
