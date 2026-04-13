@@ -14,16 +14,16 @@ export function getStaticPaths() {
     '36': { title: '第36期', semester: '113學年度 秋冬學季合輯', count: 66 },
     '35': { title: '第35期', semester: '112學年度 秋冬學季合輯', count: 120 },
     '34': { title: '第34期', semester: '112學年度 冬春夏學季合輯', count: 100 },
-    '33': { title: '第33期', semester: '112學年度 春學季刊', count: 20 },
-    '32': { title: '第32期', semester: '112學年度 夏學季刊', count: 20 },
-    '31': { title: '第31期', semester: '111學年度 春學季刊', count: 18 },
-    '30': { title: '第30期', semester: '110學年度 冬學季刊', count: 24 },
-    '29': { title: '第29期', semester: '110學年度 秋學季刊', count: 30 },
-    '28': { title: '第28期', semester: '110學年度 夏學季刊', count: 51 },
-    '27': { title: '第27期', semester: '110學年度 春學季刊', count: 37 },
-    '26': { title: '第26期', semester: '109學年度 夏學季刊', count: 52 },
-    '24-25': { title: '光禾通訊24-25', semester: '113-114學年度合訂本', count: 52 },
-    '23': { title: '第23期', semester: '109學年度 春學季刊', count: 65 },
+    '33': { title: '第33期', semester: '112學年度 春學季就', count: 20 },
+    '32': { title: '第32期', semester: '112學年度 夏學季就', count: 20 },
+    '31': { title: '第31期', semester: '111學年度 春學季就', count: 18 },
+    '30': { title: '第30期', semester: '110學年度 冬學季就', count: 24 },
+    '29': { title: '第29期', semester: '110學年度 秋學季就', count: 30 },
+    '28': { title: '第28期', semester: '110學年度 夏學季就', count: 51 },
+    '27': { title: '第27期', semester: '110學年度 春學季就', count: 37 },
+    '26': { title: '第26期', semester: '109學年度 夏學季就', count: 52 },
+    '24-25': { title: '光禁通訊24-25', semester: '113-114學年度合訂本', count: 52 },
+    '23': { title: '第23期', semester: '109學年度 春學季就', count: 65 },
   };
   return Object.entries(data).map(([id, item]) => {
     const prefix = id === '24-25' ? 'NO24-25' : 'NO' + id;
@@ -41,12 +41,17 @@ export function getStaticPaths() {
     return { params: { id }, props: { id, title: item.title, semester: item.semester, images } };
   });
 }
+
 const { id, title, semester, images } = Astro.props;
 ---
 
-<Layout title={title}>
+<Layout title={title + ' - 光禁通訊'}>
   <Navigation />
-  <main>
-    <FlipbookV2 images={images} title={title} semester={semester} />
+  <main style="padding: 2rem 1rem;">
+    <FlipbookV2
+      imageUrls={images}
+      title={title}
+      semester={semester}
+    />
   </main>
 </Layout>
