@@ -51,7 +51,6 @@ const { imageUrls, title = "光禾通訊", semester = "" } = Astro.props;
   let pageFlip     = null;
   let isReady      = false;
   let totalImages  = imageUrls.length;
-  let loadedCount  = 0;
   let imgAspectW   = 1;
   let imgAspectH   = 1;
 
@@ -71,7 +70,7 @@ const { imageUrls, title = "光禾通訊", semester = "" } = Astro.props;
     const images = [];
     let done = 0;
     if (urls.length === 0) { onDone([]); return; }
-    urls.forEach((url, i) => {
+    urls.forEach(function(url, i) {
       const img = new Image();
       img.onload = img.onerror = function () {
         images[i] = img.complete && img.naturalWidth > 0 ? img : null;
@@ -99,8 +98,7 @@ const { imageUrls, title = "光禾通訊", semester = "" } = Astro.props;
         if (totalImages > 4) {
           preloadImages(imageUrls.slice(4),
             function (done) {
-              loadedCount = 4 + done;
-              elLoadTxt.textContent = '正在載入圖片 ' + loadedCount + ' / ' + totalImages + '...';
+              elLoadTxt.textContent = '正在載入圖片 ' + (4 + done) + ' / ' + totalImages + '...';
             },
             function () {}
           );
@@ -113,8 +111,8 @@ const { imageUrls, title = "光禾通訊", semester = "" } = Astro.props;
   function buildFlipbook(imgW, imgH) {
     imgAspectW = imgW;
     imgAspectH = imgH;
-    const { pageW, pageH } = calcNormalPageSize();
-    createPageFlip(pageW, pageH);
+    const sz = calcNormalPageSize();
+    createPageFlip(sz.pageW, sz.pageH, true);
     elLoading.style.display = 'none';
     elStage.style.opacity = '1';
     elStage.style.transition = 'opacity 0.4s';
@@ -123,8 +121,9 @@ const { imageUrls, title = "光禾通訊", semester = "" } = Astro.props;
   }
 
   // ── 建立 / 重建 PageFlip 實例 ─────────────────────
-  function createPageFlip(pageW, pageH) {
-    const startPage = pageFlip ? pageFlip.getCurrentPageIndex() : 0;
+  // isInitial: true = 首次建立（頁面 0-3 eager，其他 lazy）
+  //            false = 重建（全部 eager，從第 1 頁開始）
+  function createPageFlip(pageW, pageH, isInitial) {
     if (pageFlip) { pageFlip.destroy(); pageFlip = null; }
     elBook.innerHTML = '';
 
@@ -149,7 +148,8 @@ const { imageUrls, title = "光禾通訊", semester = "" } = Astro.props;
       img.src = url;
       img.alt = '第 ' + (i + 1) + ' 頁';
       img.style.cssText = 'width:100%;height:100%;object-fit:contain;display:block;';
-      img.loading = i < 4 ? 'eager' : 'lazy';
+      // 重建時全部 eager，確保圖片顯示；首次建立時 lazy 節省流量
+      img.loading = (isInitial && i >= 4) ? 'lazy' : 'eager';
       div.appendChild(img);
       return div;
     });
@@ -160,9 +160,7 @@ const { imageUrls, title = "光禾通訊", semester = "" } = Astro.props;
       highlightThumb(e.data);
     });
 
-    if (startPage > 0) {
-      setTimeout(function () { if (pageFlip) pageFlip.flip(startPage); }, 400);
-    }
+    elCurrent.textContent = '1';
   }
 
   // ── 計算尺寸：一般模式 ────────────────────────────
@@ -208,7 +206,7 @@ const { imageUrls, title = "光禾通訊", semester = "" } = Astro.props;
       elFullscreen.textContent = '✕';
       requestAnimationFrame(function () {
         var sz = calcFSPageSize();
-        createPageFlip(sz.pageW, sz.pageH);
+        createPageFlip(sz.pageW, sz.pageH, false);
       });
     }
 
@@ -219,7 +217,7 @@ const { imageUrls, title = "光禾通訊", semester = "" } = Astro.props;
       elFullscreen.textContent = '⛶';
       requestAnimationFrame(function () {
         var sz = calcNormalPageSize();
-        createPageFlip(sz.pageW, sz.pageH);
+        createPageFlip(sz.pageW, sz.pageH, false);
       });
     }
 
@@ -427,7 +425,8 @@ const { imageUrls, title = "光禾通訊", semester = "" } = Astro.props;
   border-radius: 0 !important;
   max-width: 100vw !important;
   margin: 0 !important;
-  overflow: hidden !important;
+  /* 不能 overflow:hidden，否則 PageFlip 的 3D 頁面會被裁切 */
+  overflow: visible !important;
   display: flex !important;
   flex-direction: column !important;
 }
@@ -435,6 +434,7 @@ const { imageUrls, title = "光禾通訊", semester = "" } = Astro.props;
   flex: 1 !important;
   min-height: 0 !important;
   padding: 12px !important;
+  overflow: visible !important;
 }
 
 /* ── 手機 ── */
