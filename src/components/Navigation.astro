@@ -43,14 +43,13 @@ const navItems = [
   { name: '聯絡我們', href: '/contact' },
 ];
 ---
-
 <header class="header">
   <div class="container">
     <a href="/" class="logo">
       <img src="/images/brand/logo2.png" alt="光禾華德福" class="logo-img" />
     </a>
-    
-    <nav class="nav">
+    <button class="menu-toggle" id="menu-toggle" aria-label="選單" aria-expanded="false">☰</button>
+    <nav class="nav" id="main-nav">
       {navItems.map(item => (
         <div class="nav-item">
           <a href={item.href} class="nav-link">{item.name}</a>
@@ -67,110 +66,120 @@ const navItems = [
   </div>
 </header>
 
+<script is:inline>
+(function () {
+  var toggle = document.getElementById('menu-toggle');
+  var nav    = document.getElementById('main-nav');
+  if (!toggle || !nav) return;
+  toggle.addEventListener('click', function () {
+    var open = nav.classList.toggle('is-open');
+    toggle.textContent = open ? '✕' : '☰';
+    toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+  });
+  // 點導覽連結後自動收起
+  nav.querySelectorAll('.nav-link, .submenu-link').forEach(function (a) {
+    a.addEventListener('click', function () {
+      nav.classList.remove('is-open');
+      toggle.textContent = '☰';
+      toggle.setAttribute('aria-expanded', 'false');
+    });
+  });
+})();
+</script>
+
 <style>
-  .header {
-    background: rgba(255, 255, 255, 0.95);
-    backdrop-filter: blur(10px);
-    position: sticky;
-    top: 0;
-    z-index: 100;
-    box-shadow: 0 2px 20px rgba(139, 69, 19, 0.1);
-  }
+.header {
+  background: rgba(255, 255, 255, 0.97);
+  backdrop-filter: blur(10px);
+  position: sticky; top: 0; z-index: 100;
+  box-shadow: 0 2px 20px rgba(139, 69, 19, 0.1);
+}
+.container {
+  max-width: 1200px; margin: 0 auto; padding: 1rem 1.5rem;
+  display: flex; justify-content: space-between; align-items: center;
+  flex-wrap: wrap; gap: 0.5rem;
+}
+.logo { display: flex; align-items: center; text-decoration: none; color: #8B4513; }
+.logo-img { height: 55px; width: auto; }
 
-  .container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 1rem 2rem;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
+/* ── 漢堡按鈕（桌機隱藏）── */
+.menu-toggle {
+  display: none;
+  background: none;
+  border: 2px solid #8B4513;
+  color: #8B4513;
+  font-size: 1.25rem;
+  line-height: 1;
+  padding: 0.35rem 0.65rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+.menu-toggle:hover { background: #8B4513; color: #fff; }
 
-  .logo {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    text-decoration: none;
-    color: #8B4513;
-  }
+/* ── 導航列 ── */
+.nav { display: flex; gap: 0.4rem; flex-wrap: wrap; }
+.nav-item { position: relative; }
+.nav-link {
+  text-decoration: none; color: #666; font-weight: 500;
+  padding: 0.5rem 0.9rem; border-radius: 20px;
+  transition: all 0.3s; display: block; white-space: nowrap;
+}
+.nav-link:hover { background: linear-gradient(135deg, #8B4513, #228B22); color: white; }
+.submenu {
+  display: none; position: absolute; top: 100%; left: 0;
+  background: white; border-radius: 15px;
+  box-shadow: 0 10px 40px rgba(139,69,19,0.2);
+  min-width: 180px; overflow: hidden; z-index: 200;
+}
+.nav-item:hover .submenu { display: block; }
+.submenu-link {
+  display: block; padding: 0.8rem 1rem; color: #666;
+  text-decoration: none; transition: all 0.2s;
+}
+.submenu-link:hover { background: #FFF8DC; color: #8B4513; }
 
-  .logo-img {
-    height: 60px;
-    width: auto;
-  }
-
-  .logo-icon {
-    font-size: 2rem;
-  }
-
-  .logo-text {
-    font-family: 'Liu Jian Mao Cao', 'Zhi Mang Xing', cursive;
-    font-size: 1.5rem;
-  }
+/* ── 手機（≤ 768px）── */
+@media (max-width: 768px) {
+  .menu-toggle { display: block; }
 
   .nav {
-    display: flex;
-    gap: 0.5rem;
+    display: none;           /* 預設收起 */
+    width: 100%;
+    flex-direction: column;
+    gap: 0;
+    background: #fff;
+    border-top: 1px solid #f0e8d8;
+    padding: 0.5rem 0;
+    /* 展開動畫 */
+    animation: none;
   }
+  .nav.is-open { display: flex; }
 
-  .nav-item {
-    position: relative;
-  }
-
+  .nav-item { width: 100%; }
   .nav-link {
-    text-decoration: none;
-    color: #666;
-    font-weight: 500;
-    padding: 0.5rem 1rem;
-    border-radius: 20px;
-    transition: all 0.3s ease;
-    display: block;
+    border-radius: 0;
+    padding: 0.75rem 1.5rem;
+    border-bottom: 1px solid #faf5ef;
+    color: #5a3a1a;
   }
+  .nav-link:hover { border-radius: 0; }
 
-  .nav-link:hover {
-    background: linear-gradient(135deg, #8B4513, #228B22);
-    color: white;
-  }
-
+  /* 子選單在手機展開顯示（不用 hover）*/
   .submenu {
-    display: none;
-    position: absolute;
-    top: 100%;
-    left: 0;
-    background: white;
-    border-radius: 15px;
-    box-shadow: 0 10px 40px rgba(139, 69, 19, 0.2);
-    min-width: 180px;
-    overflow: hidden;
-    z-index: 10;
-  }
-
-  .nav-item:hover .submenu {
+    position: static;
     display: block;
+    box-shadow: none;
+    border-radius: 0;
+    background: #fdf8f0;
+    padding: 0;
+    border-bottom: 1px solid #f0e8d8;
   }
+  .submenu-link { padding: 0.6rem 2.5rem; font-size: 0.9rem; }
+}
 
-  .submenu-link {
-    display: block;
-    padding: 0.8rem 1rem;
-    color: #666;
-    text-decoration: none;
-    transition: all 0.2s ease;
-  }
-
-  .submenu-link:hover {
-    background: #FFF8DC;
-    color: #8B4513;
-  }
-
-  @media (max-width: 1024px) {
-    .container {
-      flex-direction: column;
-      gap: 1rem;
-    }
-    
-    .nav {
-      flex-wrap: wrap;
-      justify-content: center;
-    }
-  }
+/* ── 桌機中等尺寸（1025px 以下）── */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .nav { justify-content: center; }
+}
 </style>
