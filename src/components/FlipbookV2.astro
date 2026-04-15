@@ -15,6 +15,7 @@ const { imageUrls, title = "光禾通訊", semester = "" } = Astro.props;
       {semester && <span class="fb-semester">{semester}</span>}
     </div>
     <div class="fb-controls">
+      <a href="/newsletter" class="fb-btn fb-back-btn">← 通訊列表</a>
       <button class="fb-btn" id="fb-prev">‹ 上一頁</button>
       <span class="fb-pageinfo">
         第 <span id="fb-current">1</span> 頁，共 <span id="fb-total">{imageUrls.length}</span> 頁
@@ -357,5 +358,13 @@ const { imageUrls, title = "光禾通訊", semester = "" } = Astro.props;
   .fb-controls { justify-content: center; }
   .fb-stage { padding: 12px 6px; min-height: 320px; }
   .fb-thumb { height: 44px; }
+}
+
+.fb-back-btn {
+  text-decoration: none;
+  background: rgba(255,255,255,0.15) !important;
+}
+.fb-back-btn:hover {
+  background: rgba(255,255,255,0.3) !important;
 }
 </style>
