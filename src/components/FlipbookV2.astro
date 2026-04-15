@@ -161,24 +161,27 @@ const { imageUrls, title = "光禾通訊", semester = "" } = Astro.props;
     // 不重建 PageFlip，直接用 CSS zoom 放大現有書本
     // 這樣圖片已載入、翻頁狀態保留、按鈕正常
     function applyFSZoom() {
-      var inner = elBook.firstElementChild;
-      if (!inner) return;
-      var bW = inner.offsetWidth;
-      var bH = inner.offsetHeight;
+      // 找 PageFlip 建立的容器（.stf__parent）
+      var stf = elBook.querySelector('[class*="stf__"]');
+      if (!stf) stf = elBook.firstElementChild;
+      if (!stf) return;
+      var bW = stf.offsetWidth;
+      var bH = stf.offsetHeight;
       if (!bW || !bH) return;
-      var hdrH   = document.querySelector('.fb-header').offsetHeight || 60;
-      var availW = window.innerWidth;
-      var availH = window.innerHeight - hdrH - 24;
-      var scale  = Math.min(availW / bW, availH / bH);
-      elBook.style.zoom          = scale;
-      elBook.style.margin        = '0 auto';
-      elBook.style.display       = 'block';
-    }
-
-    function resetZoom() {
-      elBook.style.zoom    = '';
-      elBook.style.margin  = '';
-      elBook.style.display = '';
+      var hdrH  = document.querySelector('.fb-header').offsetHeight || 60;
+      var vw    = window.innerWidth;
+      var vh    = window.innerHeight - hdrH - 8;
+      var scale = Math.min(vw / bW, vh / bH);
+      // transform: scale 比 zoom 在 iOS Safari 更可靠
+      elBook.style.transform       = 'scale(' + scale + ')';
+      elBook.style.transformOrigin = 'top center';
+      elBook.style.width           = bW + 'px';
+      elBook.style.overflow        = 'visible';
+      // 縮短 stage 高度，避免大片深色空白
+      var scaledH = Math.round(bH * scale);
+      elStage.style.minHeight  = 'auto';
+      elStage.style.height     = (scaledH + 24) + 'px';
+      elStage.style.alignItems = 'flex-start';
     }
 
     function enterPseudo() {
@@ -190,11 +193,17 @@ const { imageUrls, title = "光禾通訊", semester = "" } = Astro.props;
     }
 
     function exitPseudo() {
-      resetZoom();
       document.querySelector('.fb-wrapper').classList.remove('fb-pseudo-fullscreen');
-      elThumbsStrip.style.display = '';
+      elThumbsStrip.style.display  = '';
       document.body.style.overflow = '';
       elFullscreen.textContent = '⛶';
+      elBook.style.transform       = '';
+      elBook.style.transformOrigin = '';
+      elBook.style.width           = '';
+      elBook.style.overflow        = '';
+      elStage.style.minHeight      = '';
+      elStage.style.height         = '';
+      elStage.style.alignItems     = '';
     }
 
     function isPseudo() {
