@@ -2,26 +2,24 @@
 import Layout from '../../layouts/Layout.astro';
 import Navigation from '../../components/Navigation.astro';
 
-const CDN = 'https://raw.githubusercontent.com/mingcareercounseling-design/waldorf-newsletter-images/main';
-
 const issues = [
-  { id: '36',    title: '第36期',      semester: '113學年度 秋冬學季合輯',  cover: CDN + '/NO36-01.png'    },
-  { id: '35',    title: '第35期',      semester: '112學年度 秋冬學季合輯',  cover: CDN + '/NO35-001.png'   },
-  { id: '34',    title: '第34期',      semester: '112學年度 冬春夏學季合輯', cover: CDN + '/NO34-01.jpg'   },
-  { id: '33',    title: '第33期',      semester: '112學年度 春學季刊',       cover: CDN + '/NO33-01.jpg'    },
-  { id: '32',    title: '第32期',      semester: '112學年度 夏學季刊',       cover: CDN + '/NO32-01.jpg'    },
-  { id: '31',    title: '第31期',      semester: '111學年度 春學季刊',       cover: CDN + '/NO31-01.jpg'    },
-  { id: '30',    title: '第30期',      semester: '110學年度 冬學季刊',       cover: CDN + '/NO30-01.jpg'    },
-  { id: '29',    title: '第29期',      semester: '110學年度 秋學季刊',       cover: CDN + '/NO29-01.jpg'    },
-  { id: '28',    title: '第28期',      semester: '110學年度 夏學季刊',       cover: CDN + '/NO28-01.jpg'    },
-  { id: '27',    title: '第27期',      semester: '110學年度 春學季刊',       cover: CDN + '/NO27-01.jpg'    },
-  { id: '26',    title: '第26期',      semester: '109學年度 夏學季刊',       cover: CDN + '/NO26-01.jpg'    },
-  { id: '24-25', title: '第24-25期',   semester: '113-114學年度合訂本',      cover: CDN + '/NO24-25-01.jpg' },
-  { id: '23',    title: '第23期',      semester: '109學年度 春學季刊',       cover: CDN + '/NO23-01.jpg'    },
+  { id: '36', title: '第36期', semester: '113學年度 秋冬學季合輯', color: 'linear-gradient(135deg,#6B3410,#1a6b1a)' },
+  { id: '35', title: '第35期', semester: '112學年度 秋冬學季合輯', color: 'linear-gradient(135deg,#8B4513,#2e8b2e)' },
+  { id: '34', title: '第34期', semester: '112學年度 冬春夏學季合輯', color: 'linear-gradient(135deg,#7a3c10,#248b24)' },
+  { id: '33', title: '第33期', semester: '112學年度 春學季刊', color: 'linear-gradient(135deg,#9b5523,#228B22)' },
+  { id: '32', title: '第32期', semester: '112學年度 夏學季刊', color: 'linear-gradient(135deg,#8B4513,#1e7b1e)' },
+  { id: '31', title: '第31期', semester: '111學年度 春學季刊', color: 'linear-gradient(135deg,#7d3d11,#257025)' },
+  { id: '30', title: '第30期', semester: '110學年度 冬學季刊', color: 'linear-gradient(135deg,#6d3410,#206020)' },
+  { id: '29', title: '第29期', semester: '110學年度 秋學季刊', color: 'linear-gradient(135deg,#8B4513,#228B22)' },
+  { id: '28', title: '第28期', semester: '110學年度 夏學季刊', color: 'linear-gradient(135deg,#9a4a18,#2a7a2a)' },
+  { id: '27', title: '第27期', semester: '110學年度 春學季刊', color: 'linear-gradient(135deg,#7b3c12,#247024)' },
+  { id: '26', title: '第26期', semester: '109學年度 夏學季刊', color: 'linear-gradient(135deg,#8B4513,#1d6b1d)' },
+  { id: '24-25', title: '第24-25期', semester: '108-109學年度合訂本', color: 'linear-gradient(135deg,#6e3310,#226022)' },
+  { id: '23', title: '第23期', semester: '109學年度 春學季刊', color: 'linear-gradient(135deg,#8B4513,#228B22)' },
 ];
 
 const latest = issues[0];
-const rest   = issues.slice(1);
+const rest = issues.slice(1);
 ---
 <Layout title="光禾通訊">
   <Navigation />
@@ -35,26 +33,28 @@ const rest   = issues.slice(1);
   <section class="section">
     <div class="container">
       <!-- 最新一期：大卡片 -->
-      <div class="latest-card">
-        <a href={`/newsletter/${latest.id}`} class="latest-cover-link">
-          <img src={latest.cover} alt={latest.title} class="latest-cover" loading="eager" />
-          <div class="latest-badge">最新一期</div>
-        </a>
+      <a href={`/newsletter/${latest.id}`} class="latest-card">
+        <div class="latest-cover" style={`background: ${latest.color}`}>
+          <div class="cover-num">{latest.title}</div>
+          <div class="cover-icon">📰</div>
+        </div>
         <div class="latest-info">
+          <span class="latest-badge">最新一期</span>
           <h2>{latest.title}</h2>
           <p class="semester">{latest.semester}</p>
-          <a href={`/newsletter/${latest.id}`} class="read-btn">📖 立即翻閱</a>
+          <span class="read-btn">📖 立即翻閱</span>
         </div>
-      </div>
+      </a>
 
-      <!-- 其他期數：格狀封面 -->
+      <!-- 其他期數：格狀 -->
       <h3 class="section-title">📚 過往期數</h3>
       <div class="issues-grid">
         {rest.map(issue => (
           <a href={`/newsletter/${issue.id}`} class="issue-card">
-            <div class="cover-wrap">
-              <img src={issue.cover} alt={issue.title} class="issue-cover" loading="lazy" />
-              <div class="cover-overlay"><span>📖 開始閱讀</span></div>
+            <div class="cover-wrap" style={`background: ${issue.color}`}>
+              <div class="cover-num">{issue.title}</div>
+              <div class="cover-icon">📖</div>
+              <div class="cover-overlay"><span>開始閱讀</span></div>
             </div>
             <div class="issue-info">
               <h4>{issue.title}</h4>
@@ -73,7 +73,7 @@ const rest   = issues.slice(1);
   color: white; padding: 4rem 2rem; text-align: center;
 }
 .hero h1 { font-size: 2.5rem; margin-bottom: 0.5rem; }
-.hero p  { font-size: 1.1rem; opacity: 0.9; }
+.hero p { font-size: 1.1rem; opacity: 0.9; }
 .section { padding: 3rem 2rem; }
 .container { max-width: 1000px; margin: 0 auto; }
 
@@ -82,18 +82,24 @@ const rest   = issues.slice(1);
   display: flex; gap: 2rem; align-items: flex-start;
   background: white; border-radius: 20px; padding: 2rem;
   box-shadow: 0 12px 40px rgba(0,0,0,0.12); margin-bottom: 3rem;
+  text-decoration: none; color: inherit;
+  transition: transform 0.2s, box-shadow 0.2s;
 }
-.latest-cover-link { position: relative; flex-shrink: 0; display: block; width: 200px; }
+.latest-card:hover { transform: translateY(-3px); box-shadow: 0 16px 50px rgba(0,0,0,0.18); }
 .latest-cover {
-  width: 100%; border-radius: 10px;
-  box-shadow: 4px 4px 20px rgba(0,0,0,0.25); display: block;
+  flex-shrink: 0; width: 200px; height: 270px;
+  border-radius: 10px; box-shadow: 4px 4px 20px rgba(0,0,0,0.25);
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center; gap: 0.8rem;
 }
+.cover-num { color: white; font-size: 1.1rem; font-weight: 700; opacity: 0.9; }
+.cover-icon { font-size: 3rem; }
 .latest-badge {
-  position: absolute; top: -10px; left: -10px;
+  display: inline-block;
   background: linear-gradient(135deg, #e74c3c, #c0392b);
   color: white; font-size: 0.75rem; font-weight: 700;
   padding: 4px 10px; border-radius: 20px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2); margin-bottom: 0.5rem;
 }
 .latest-info { flex: 1; padding-top: 0.5rem; }
 .latest-info h2 { font-size: 1.8rem; color: #8B4513; margin-bottom: 0.5rem; }
@@ -102,7 +108,7 @@ const rest   = issues.slice(1);
   display: inline-block;
   background: linear-gradient(135deg, #8B4513, #228B22);
   color: white; padding: 0.8rem 2rem; border-radius: 30px;
-  text-decoration: none; font-size: 1.05rem; font-weight: 600;
+  font-size: 1.05rem; font-weight: 600;
   transition: transform 0.2s, box-shadow 0.2s;
   box-shadow: 0 4px 15px rgba(139,69,19,0.35);
 }
@@ -125,22 +131,26 @@ const rest   = issues.slice(1);
   transition: transform 0.25s, box-shadow 0.25s;
 }
 .issue-card:hover { transform: translateY(-5px); box-shadow: 0 10px 30px rgba(0,0,0,0.18); }
-.cover-wrap { position: relative; overflow: hidden; aspect-ratio: 3/4; background: #f0ebe5; }
-.issue-cover { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.3s; }
-.issue-card:hover .issue-cover { transform: scale(1.05); }
+.cover-wrap {
+  position: relative; overflow: hidden; aspect-ratio: 3/4;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center; gap: 0.5rem;
+}
+.cover-wrap .cover-num { color: rgba(255,255,255,0.9); font-size: 0.85rem; font-weight: 700; }
+.cover-wrap .cover-icon { font-size: 2rem; }
 .cover-overlay {
-  position: absolute; inset: 0; background: rgba(139,69,19,0.7);
+  position: absolute; inset: 0; background: rgba(139,69,19,0.75);
   color: white; display: flex; align-items: center; justify-content: center;
-  font-size: 0.9rem; font-weight: 600; opacity: 0; transition: opacity 0.25s;
+  font-size: 0.85rem; font-weight: 600; opacity: 0; transition: opacity 0.25s;
 }
 .issue-card:hover .cover-overlay { opacity: 1; }
 .issue-info { padding: 0.6rem 0.7rem; }
 .issue-info h4 { font-size: 0.9rem; color: #8B4513; margin: 0 0 0.2rem; font-weight: 700; }
-.issue-info p  { font-size: 0.75rem; color: #888; margin: 0; line-height: 1.3; }
+.issue-info p { font-size: 0.75rem; color: #888; margin: 0; line-height: 1.3; }
 
 @media (max-width: 600px) {
   .latest-card { flex-direction: column; align-items: center; text-align: center; }
-  .latest-cover-link { width: 160px; }
+  .latest-cover { width: 160px; height: 215px; }
   .issues-grid { grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 0.8rem; }
 }
 </style>
