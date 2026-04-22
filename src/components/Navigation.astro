@@ -69,19 +69,33 @@ const navItems = [
 <script is:inline>
 (function () {
   var toggle = document.getElementById('menu-toggle');
-  var nav    = document.getElementById('main-nav');
+  var nav = document.getElementById('main-nav');
   if (!toggle || !nav) return;
+  var scrollY = 0;
+  function lockScroll() {
+    scrollY = window.scrollY;
+    document.body.style.position = 'fixed';
+    document.body.style.top = '-' + scrollY + 'px';
+    document.body.style.width = '100%';
+  }
+  function unlockScroll() {
+    document.body.style.position = '';
+    document.body.style.top = '';
+    document.body.style.width = '';
+    window.scrollTo(0, scrollY);
+  }
   toggle.addEventListener('click', function () {
     var open = nav.classList.toggle('is-open');
     toggle.textContent = open ? '✕' : '☰';
     toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+    if (open) { lockScroll(); } else { unlockScroll(); }
   });
-  // 點導覽連結後自動收起
   nav.querySelectorAll('.nav-link, .submenu-link').forEach(function (a) {
     a.addEventListener('click', function () {
       nav.classList.remove('is-open');
       toggle.textContent = '☰';
       toggle.setAttribute('aria-expanded', 'false');
+      unlockScroll();
     });
   });
 })();
@@ -144,17 +158,21 @@ const navItems = [
   .menu-toggle { display: block; }
 
   .nav {
-    display: none;           /* 預設收起 */
+    display: none;
     width: 100%;
     flex-direction: column;
     gap: 0;
     background: #fff;
     border-top: 1px solid #f0e8d8;
     padding: 0.5rem 0;
-    /* 展開動畫 */
     animation: none;
   }
-  .nav.is-open { display: flex; }
+  .nav.is-open {
+    display: flex;
+    max-height: calc(100vh - 80px);
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
 
   .nav-item { width: 100%; }
   .nav-link {
@@ -165,7 +183,6 @@ const navItems = [
   }
   .nav-link:hover { border-radius: 0; }
 
-  /* 子選單在手機展開顯示（不用 hover）*/
   .submenu {
     position: static;
     display: block;
