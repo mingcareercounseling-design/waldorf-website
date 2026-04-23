@@ -71,15 +71,11 @@ const navItems = [
   var toggle = document.getElementById('menu-toggle');
   var nav = document.getElementById('main-nav');
   if (!toggle || !nav) return;
-  var savedScrollY = 0;
 
   function openNav() {
-    var headerBottom = document.querySelector('.header').getBoundingClientRect().bottom;
-    nav.style.top = headerBottom + 'px';
-    savedScrollY = window.scrollY;
-    document.body.style.position = 'fixed';
-    document.body.style.top = '-' + savedScrollY + 'px';
-    document.body.style.width = '100%';
+    // Set padding-top to exact header height so items start right below header
+    var headerH = document.querySelector('.header').getBoundingClientRect().height;
+    nav.style.paddingTop = headerH + 'px';
     nav.classList.add('is-open');
     toggle.textContent = '✕';
     toggle.setAttribute('aria-expanded', 'true');
@@ -87,13 +83,9 @@ const navItems = [
 
   function closeNav() {
     nav.classList.remove('is-open');
-    nav.style.top = '';
+    nav.style.paddingTop = '';
     toggle.textContent = '☰';
     toggle.setAttribute('aria-expanded', 'false');
-    document.body.style.position = '';
-    document.body.style.top = '';
-    document.body.style.width = '';
-    window.scrollTo(0, savedScrollY);
   }
 
   toggle.addEventListener('click', function () {
@@ -168,14 +160,15 @@ const navItems = [
     flex-direction: column;
     gap: 0;
     background: #fff;
-    padding: 0.5rem 0;
   }
 
-  /* 開啟時：固定浮層，不影響頁面佈局，背景不會滾動 */
+  /* 全螢幕遮罩：從螢幕頂端到底部，padding-top 讓內容在 header 以下顯示
+     不動 body，header 的 z-index:100 保持可見
+     overscroll-behavior:contain 防止 iOS 滾動穿透到背景 */
   .nav.is-open {
     display: flex;
     position: fixed;
-    top: 79px; /* JS 會動態覆蓋為實際 header 高度 */
+    top: 0;
     left: 0;
     right: 0;
     bottom: 0;
@@ -183,8 +176,9 @@ const navItems = [
     -webkit-overflow-scrolling: touch;
     overscroll-behavior: contain;
     z-index: 99;
-    border-top: 1px solid #f0e8d8;
-    box-shadow: 0 4px 20px rgba(139, 69, 19, 0.15);
+    border-top: none;
+    box-shadow: none;
+    padding-bottom: 2rem;
   }
 
   .nav-item { width: 100%; }
@@ -193,6 +187,7 @@ const navItems = [
     padding: 0.75rem 1.5rem;
     border-bottom: 1px solid #faf5ef;
     color: #5a3a1a;
+    white-space: normal;
   }
   .nav-link:hover { border-radius: 0; }
 
