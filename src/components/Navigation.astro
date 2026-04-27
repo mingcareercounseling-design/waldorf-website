@@ -2,22 +2,21 @@
 const navItems = [
   { name: '首頁', href: '/' },
   { name: '關於光禾', href: '/about', submenu: [
-    { name: '宗旨與理念', href: '/about/philosophy' },
-    { name: '歷史沿革', href: '/about/history' },
+    { name: '願景', href: '/about/vision' },
+    { name: '成長故事', href: '/about/history' },
     { name: '經營團隊', href: '/about/team' },
     { name: '社團法人', href: '/about/association' },
     { name: '教職團隊', href: '/about/teachers' },
     { name: '家長會', href: '/about/parents' },
-    { name: '願景', href: '/about/vision' },
     { name: '華德福名錄', href: '/about/waldorf-list' },
   ]},
   { name: '招生資訊', href: '/admissions', submenu: [
     { name: '預約參訪', href: '/admissions/visit' },
+    { name: '入學申請', href: '/admissions/apply' },
     { name: '招生簡章', href: '/admissions/guide' },
     { name: '招生Q&A', href: '/admissions/faq' },
     { name: '招生說明會', href: '/admissions/seminar' },
     { name: '本校學費', href: '/admissions/tuition' },
-    { name: '入學申請', href: '/admissions/apply' },
     { name: '收退費辦法', href: '/admissions/refund' },
     { name: '轉出流程', href: '/admissions/transfer-out' },
     { name: '交通資訊', href: '/admissions/transportation' },
@@ -29,7 +28,7 @@ const navItems = [
     { name: '小學部主副課程介紹', href: '/curriculum/elementary-courses' },
     { name: '教學正常化', href: '/curriculum/normalization' },
   ]},
-  { name: '活動集錦', href: '/activities', submenu: [
+  { name: '活動集錦', submenu: [
     { name: '四季慶典', href: '/activities/seasons' },
     { name: '發表暨成果展', href: '/activities/achievement' },
     { name: '心得分享', href: '/activities/experience' },
@@ -43,13 +42,15 @@ const navItems = [
   { name: '聯絡我們', href: '/contact' },
 ];
 ---
+
 <header class="header">
   <div class="container">
     <a href="/" class="logo">
       <img src="/images/brand/logo2.png" alt="光禾華德福" class="logo-img" />
     </a>
-    <button class="menu-toggle" id="menu-toggle" aria-label="選單" aria-expanded="false">☰</button>
-    <nav class="nav" id="main-nav">
+    <button class="nav-toggle" id="nav-toggle-btn">☰</button>
+    
+    <nav class="nav">
       {navItems.map(item => (
         <div class="nav-item">
           <a href={item.href} class="nav-link">{item.name}</a>
@@ -66,145 +67,203 @@ const navItems = [
   </div>
 </header>
 
-<script is:inline>
-(function () {
-  var toggle = document.getElementById('menu-toggle');
-  var nav = document.getElementById('main-nav');
-  if (!toggle || !nav) return;
+<style>
+  .header {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 20px rgba(139, 69, 19, 0.1);
+  }
+
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 1rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    text-decoration: none;
+    color: #8B4513;
+  }
+
+  .logo-img {
+    height: 60px;
+    width: auto;
+  }
+
+  .logo-icon {
+    font-size: 2rem;
+  }
+
+  .logo-text {
+    font-family: 'Liu Jian Mao Cao', 'Zhi Mang Xing', cursive;
+    font-size: 1.5rem;
+  }
+
+  .nav {
+    display: flex;
+    gap: 0.5rem;
+  }
+
+  .nav-item {
+    position: relative;
+  }
+
+  .nav-link {
+    text-decoration: none;
+    color: #666;
+    font-weight: 500;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    transition: all 0.3s ease;
+    display: block;
+  }
+
+  .nav-link:hover {
+    background: linear-gradient(135deg, #8B4513, #228B22);
+    color: white;
+  }
+  
+  .nav-toggle {
+    display: block;
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    padding: 0.5rem;
+  }
+  
+  @media (min-width: 1025px) {
+    .nav-toggle {
+      display: none;
+    }
+  }
+
+  .submenu {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 10px 40px rgba(139, 69, 19, 0.2);
+    min-width: 180px;
+    overflow: hidden;
+    z-index: 10;
+  }
+
+  .nav-item:hover .submenu {
+    display: block;
+  }
+
+  .submenu-link {
+    display: block;
+    padding: 0.8rem 1rem;
+    color: #666;
+    text-decoration: none;
+    transition: all 0.2s ease;
+  }
+
+  .submenu-link:hover {
+    background: #FFF8DC;
+    color: #8B4513;
+  }
+
+  @media (max-width: 1024px) {
+    .container {
+      flex-direction: row;
+      flex-wrap: nowrap;
+      justify-content: space-between;
+    }
+
+    .nav {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: white;
+      padding: 0 1.5rem 2rem;
+      /* padding-top set dynamically by JS to match header height */
+      box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+      overflow-y: scroll;
+      -webkit-overflow-scrolling: touch;
+      overscroll-behavior: contain;
+      z-index: 99;
+      flex-direction: column;
+    }
+
+    .nav.open { display: flex; }
+
+    .nav-toggle {
+      display: block !important;
+      font-size: 1.5rem;
+      cursor: pointer;
+      border: none;
+      background: none;
+      position: relative;
+      z-index: 101;
+    }
+
+    /* 導航開啟時的關閉按鈕（右上角 ✕） */
+    .nav-close-btn {
+      display: none;
+      position: fixed;
+      top: 1rem;
+      right: 1.2rem;
+      z-index: 102;
+      font-size: 1.8rem;
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: #8B4513;
+      line-height: 1;
+    }
+
+    .nav-close-btn.visible { display: block; }
+  }
+</style>
+
+<script>
+  const toggleBtn = document.getElementById('nav-toggle-btn');
+  const nav = document.querySelector('.nav');
+
+  // 動態建立關閉按鈕
+  const closeBtn = document.createElement('button');
+  closeBtn.className = 'nav-close-btn';
+  closeBtn.textContent = '✕';
+  document.body.appendChild(closeBtn);
 
   function openNav() {
-    // Set padding-top to exact header height so items start right below header
-    var headerH = document.querySelector('.header').getBoundingClientRect().height;
+    const headerH = document.querySelector('.header').getBoundingClientRect().height;
     nav.style.paddingTop = headerH + 'px';
-    nav.classList.add('is-open');
-    toggle.textContent = '✕';
-    toggle.setAttribute('aria-expanded', 'true');
+    nav.classList.add('open');
+    closeBtn.classList.add('visible');
   }
 
   function closeNav() {
-    nav.classList.remove('is-open');
+    nav.classList.remove('open');
     nav.style.paddingTop = '';
-    toggle.textContent = '☰';
-    toggle.setAttribute('aria-expanded', 'false');
+    closeBtn.classList.remove('visible');
   }
 
-  toggle.addEventListener('click', function () {
-    if (nav.classList.contains('is-open')) { closeNav(); } else { openNav(); }
+  toggleBtn?.addEventListener('click', () => {
+    nav.classList.contains('open') ? closeNav() : openNav();
   });
 
-  nav.querySelectorAll('.nav-link, .submenu-link').forEach(function (a) {
-    a.addEventListener('click', function () { closeNav(); });
+  closeBtn.addEventListener('click', closeNav);
+
+  // 點導航連結後自動關閉
+  nav?.querySelectorAll('a').forEach(link => {
+    link.addEventListener('click', closeNav);
   });
-})();
 </script>
-
-<style>
-.header {
-  background: rgba(255, 255, 255, 0.97);
-  backdrop-filter: blur(10px);
-  position: sticky; top: 0; z-index: 100;
-  box-shadow: 0 2px 20px rgba(139, 69, 19, 0.1);
-}
-.container {
-  max-width: 1200px; margin: 0 auto; padding: 1rem 1.5rem;
-  display: flex; justify-content: space-between; align-items: center;
-  flex-wrap: nowrap; gap: 0.5rem;
-}
-.logo { display: flex; align-items: center; text-decoration: none; color: #8B4513; }
-.logo-img { height: 55px; width: auto; }
-
-/* ── 漢堡按鈕（桌機隱藏）── */
-.menu-toggle {
-  display: none;
-  background: none;
-  border: 2px solid #8B4513;
-  color: #8B4513;
-  font-size: 1.25rem;
-  line-height: 1;
-  padding: 0.35rem 0.65rem;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: background 0.2s, color 0.2s;
-}
-.menu-toggle:hover { background: #8B4513; color: #fff; }
-
-/* ── 導航列（桌機）── */
-.nav { display: flex; gap: 0.4rem; flex-wrap: wrap; }
-.nav-item { position: relative; }
-.nav-link {
-  text-decoration: none; color: #666; font-weight: 500;
-  padding: 0.5rem 0.9rem; border-radius: 20px;
-  transition: all 0.3s; display: block; white-space: nowrap;
-}
-.nav-link:hover { background: linear-gradient(135deg, #8B4513, #228B22); color: white; }
-.submenu {
-  display: none; position: absolute; top: 100%; left: 0;
-  background: white; border-radius: 15px;
-  box-shadow: 0 10px 40px rgba(139,69,19,0.2);
-  min-width: 180px; overflow: hidden; z-index: 200;
-}
-.nav-item:hover .submenu { display: block; }
-.submenu-link {
-  display: block; padding: 0.8rem 1rem; color: #666;
-  text-decoration: none; transition: all 0.2s;
-}
-.submenu-link:hover { background: #FFF8DC; color: #8B4513; }
-
-/* ── 手機（≤ 768px）── */
-@media (max-width: 768px) {
-  .menu-toggle { display: block; }
-
-  /* 預設隱藏 */
-  .nav {
-    display: none;
-    flex-direction: column;
-    gap: 0;
-    background: #fff;
-  }
-
-  /* 全螢幕遮罩：從螢幕頂端到底部，padding-top 讓內容在 header 以下顯示
-     不動 body，header 的 z-index:100 保持可見
-     overscroll-behavior:contain 防止 iOS 滾動穿透到背景 */
-  .nav.is-open {
-    display: flex;
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    overflow-y: scroll;
-    -webkit-overflow-scrolling: touch;
-    overscroll-behavior: contain;
-    z-index: 99;
-    border-top: none;
-    box-shadow: none;
-    padding-bottom: 2rem;
-  }
-
-  .nav-item { width: 100%; }
-  .nav-link {
-    border-radius: 0;
-    padding: 0.75rem 1.5rem;
-    border-bottom: 1px solid #faf5ef;
-    color: #5a3a1a;
-    white-space: normal;
-  }
-  .nav-link:hover { border-radius: 0; }
-
-  .submenu {
-    position: static;
-    display: block;
-    box-shadow: none;
-    border-radius: 0;
-    background: #fdf8f0;
-    padding: 0;
-    border-bottom: 1px solid #f0e8d8;
-  }
-  .submenu-link { padding: 0.6rem 2.5rem; font-size: 0.9rem; }
-}
-
-/* ── 桌機中等尺寸（1025px 以下）── */
-@media (min-width: 769px) and (max-width: 1024px) {
-  .nav { justify-content: center; }
-}
-</style>
