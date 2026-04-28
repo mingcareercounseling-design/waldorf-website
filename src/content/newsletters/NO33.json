@@ -1,0 +1,11 @@
+{
+  "issue": "33",
+  "title": "第33期",
+  "semester": "112學年度 春學季刊",
+  "cover": "/newsletter-covers/NO33-01.jpg",
+  "imagePrefix": "https://raw.githubusercontent.com/mingcareercounseling-design/waldorf-newsletter-images/main/NO33-",
+  "pageCount": 20,
+  "pageDigits": 2,
+  "pageFormat": "jpg",
+  "date": "2023-06-01"
+}

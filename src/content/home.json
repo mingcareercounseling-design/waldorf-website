@@ -1,0 +1,36 @@
+{
+  "carousel": [
+    {
+      "id": 1,
+      "title": "歡迎來到光禾華德福",
+      "subtitle": "用愛與自然，啟發孩子的無限可能",
+      "image": "/images/carousel/hero.jpg",
+      "link": "/about"
+    },
+    {
+      "id": 2,
+      "title": "115學年度招生中",
+      "subtitle": "歡迎加入光禾華德福大家庭",
+      "image": "/images/carousel/admission.jpg",
+      "link": "/admissions"
+    }
+  ],
+  "highlights": [
+    {
+      "id": 1,
+      "title": "115學年度招生說明會",
+      "date": "2026.03.21",
+      "content": "在春光漸暖的時節，邀請您走進孩子真實而生動的學習現場...",
+      "link": "/admissions/seminar"
+    }
+  ],
+  "contact": {
+    "address": "806037 高雄市前鎮區德昌路345號 (興仁國中 理學大樓)",
+    "phone": "07-7885128",
+    "email": "waldorf.kh@gmail.com",
+    "facebook": "https://zh-tw.facebook.com/光禾華德福教育-831876970225632/",
+    "instagram": "https://www.instagram.com/kuang_he_waldorf_school/",
+    "threads": "https://www.threads.com/@kuang_he_waldorf_school",
+    "youtube": "https://www.youtube.com/channel/UCieLknPlzMYhlQRZQUH6rJA"
+  }
+}

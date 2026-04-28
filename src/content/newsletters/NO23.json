@@ -1,0 +1,11 @@
+{
+  "issue": "23",
+  "title": "第23期",
+  "semester": "109學年度 春學季刊",
+  "cover": "/newsletter-covers/NO23-01.jpg",
+  "imagePrefix": "https://raw.githubusercontent.com/mingcareercounseling-design/waldorf-newsletter-images/main/NO23-",
+  "pageCount": 65,
+  "pageDigits": 2,
+  "pageFormat": "jpg",
+  "date": "2020-10-01"
+}

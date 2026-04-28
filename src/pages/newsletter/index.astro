@@ -2,22 +2,34 @@
 import Layout from '../../layouts/Layout.astro';
 import Navigation from '../../components/Navigation.astro';
 
-// 封面圖路徑（本地靜態檔案）
-const issues = [
-  { id: '36', title: '第36期', semester: '113學年度 秋冬學季合輯', cover: '/newsletter-covers/NO36-01.png' },
-  { id: '35', title: '第35期', semester: '112學年度 秋冬學季合輯', cover: '/newsletter-covers/NO35-001.png' },
-  { id: '34', title: '第34期', semester: '112學年度 冬春夏學季合輯', cover: '/newsletter-covers/NO33-01.jpg' },
-  { id: '33', title: '第33期', semester: '112學年度 春學季刊', cover: '/newsletter-covers/NO33-01.jpg' },
-  { id: '32', title: '第32期', semester: '112學年度 夏學季刊', cover: '/newsletter-covers/NO32-01.jpg' },
-  { id: '31', title: '第31期', semester: '111學年度 春學季刊', cover: '/newsletter-covers/NO31-01.jpg' },
-  { id: '30', title: '第30期', semester: '110學年度 冬學季刊', cover: '/newsletter-covers/NO30-01.jpg' },
-  { id: '29', title: '第29期', semester: '110學年度 秋學季刊', cover: '/newsletter-covers/NO29-01.jpg' },
-  { id: '28', title: '第28期', semester: '110學年度 夏學季刊', cover: '/newsletter-covers/NO28-01.jpg' },
-  { id: '27', title: '第27期', semester: '110學年度 春學季刊', cover: '/newsletter-covers/NO27-01.jpg' },
-  { id: '26', title: '第26期', semester: '109學年度 夏學季刊', cover: '/newsletter-covers/NO26-01.jpg' },
-  { id: '24-25', title: '第24-25期', semester: '113-114學年度合訂本', cover: '/newsletter-covers/NO24-25-01.jpg' },
-  { id: '23', title: '第23期', semester: '109學年度 春學季刊', cover: '/newsletter-covers/NO23-01.jpg' },
-];
+// 從 src/content/newsletters/*.json 動態讀取期數資料
+const contentFiles = import.meta.glob('../../content/newsletters/*.json', { eager: true });
+
+interface NewsletterData {
+  issue: string;
+  title: string;
+  semester: string;
+  cover?: string;
+  imagePrefix: string;
+  pageCount: number;
+  pageDigits: number;
+  pageFormat: string;
+  date: string;
+}
+
+const issues = (Object.values(contentFiles) as NewsletterData[])
+  .sort((a, b) => {
+    // 排序：24-25 當作 24.5，其他用數字排序，由大到小
+    const aNum = String(a.issue) === '24-25' ? 24.5 : parseFloat(String(a.issue));
+    const bNum = String(b.issue) === '24-25' ? 24.5 : parseFloat(String(b.issue));
+    return bNum - aNum;
+  })
+  .map(n => ({
+    id: String(n.issue),
+    title: n.title,
+    semester: n.semester,
+    cover: n.cover || `/newsletter-covers/NO${n.issue}-01.jpg`,
+  }));
 
 const latest = issues[0];
 const rest = issues.slice(1);
