@@ -83,12 +83,14 @@ collections:
     slug: "NO{{fields.issue}}"
     summary: "第 {{fields.issue}} 期 - {{fields.title}}"
     fields:
-      - { label: "期數", name: "issue", widget: "number" }
-      - { label: "標題", name: "title", widget: "string" }
-      - { label: "學期", name: "semester", widget: "string", required: false, hint: "例：114春夏" }
+      - { label: "期數", name: "issue", widget: "string", hint: "數字，例：37。合訂本寫 24-25" }
+      - { label: "標題", name: "title", widget: "string", hint: "例：第37期" }
+      - { label: "學期", name: "semester", widget: "string", required: false, hint: "例：114學年度 春夏學季合輯" }
       - { label: "封面圖", name: "cover", widget: "image", required: false }
-      - { label: "CDN 圖片前綴路徑", name: "imagePrefix", widget: "string", required: false, hint: "例：https://raw.githubusercontent.com/user/repo/main/NO37/" }
+      - { label: "CDN 圖片前綴路徑", name: "imagePrefix", widget: "string", hint: "例：https://raw.githubusercontent.com/mingcareercounseling-design/waldorf-newsletter-images/main/NO37-" }
       - { label: "圖片總頁數", name: "pageCount", widget: "number", default: 1 }
+      - { label: "頁碼位數", name: "pageDigits", widget: "number", default: 2, hint: "頁碼補零位數（2=01頁, 3=001頁）" }
+      - { label: "圖片格式", name: "pageFormat", widget: "select", options: ["jpg", "png"], default: "jpg" }
       - { label: "發行年月", name: "date", widget: "datetime", format: "YYYY-MM-DD", date_format: "YYYY/MM/DD", time_format: false }
 
   # ========== 靜態頁面內容 ==========
