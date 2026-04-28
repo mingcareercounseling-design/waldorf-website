@@ -236,14 +236,19 @@ const navItems = [
 <script>
   const toggleBtn = document.getElementById('nav-toggle-btn');
   const nav = document.querySelector('.nav');
+  const headerContainer = document.querySelector('.header .container');
 
-  // 動態建立關閉按鈕
+  // 動態建立關閉按鈕（固定在 body 層）
   const closeBtn = document.createElement('button');
   closeBtn.className = 'nav-close-btn';
   closeBtn.textContent = '✕';
   document.body.appendChild(closeBtn);
 
   function openNav() {
+    // 把 nav 移到 body，跳出 header 的 backdrop-filter stacking context
+    // 否則 iOS Safari 不讓 position:fixed 正確覆蓋全螢幕
+    document.body.appendChild(nav);
+
     const headerH = document.querySelector('.header').getBoundingClientRect().height;
     nav.style.paddingTop = headerH + 'px';
     nav.classList.add('open');
@@ -254,6 +259,8 @@ const navItems = [
     nav.classList.remove('open');
     nav.style.paddingTop = '';
     closeBtn.classList.remove('visible');
+    // 把 nav 移回 header container（display:none，不影響 header 排版）
+    headerContainer.appendChild(nav);
   }
 
   toggleBtn?.addEventListener('click', () => {
