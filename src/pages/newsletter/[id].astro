@@ -3,9 +3,6 @@ import Layout from '../../layouts/Layout.astro';
 import Navigation from '../../components/Navigation.astro';
 import FlipbookV2 from '../../components/FlipbookV2.astro';
 
-// 從 src/content/newsletters/*.json 動態讀取
-const contentFiles = import.meta.glob('../../content/newsletters/*.json', { eager: true });
-
 interface NewsletterData {
   issue: string;
   title: string;
@@ -18,18 +15,26 @@ interface NewsletterData {
   date: string;
 }
 
-// 建立 id -> data 的 Map
-const newsletterMap: Record<string, NewsletterData> = {};
-for (const data of Object.values(contentFiles) as NewsletterData[]) {
-  newsletterMap[String(data.issue)] = data;
+export async function getStaticPaths() {
+  const contentFiles = import.meta.glob('../../content/newsletters/*.json', { eager: true });
+  const allData = Object.values(contentFiles) as NewsletterData[];
+
+  const allIds = allData
+    .map(n => String(n.issue))
+    .sort((a, b) => {
+      const aNum = a === '24-25' ? 24.5 : parseFloat(a);
+      const bNum = b === '24-25' ? 24.5 : parseFloat(b);
+      return bNum - aNum;
+    });
+
+  return allData.map((data) => ({
+    params: { id: String(data.issue) },
+    props: { newsletter: data as NewsletterData, allIds },
+  }));
 }
 
+const { newsletter: item, allIds } = Astro.props as { newsletter: NewsletterData; allIds: string[] };
 const { id } = Astro.params;
-const item = newsletterMap[id];
-
-if (!item) {
-  return Astro.redirect('/newsletter');
-}
 
 // 用 imagePrefix + 頁碼 + 副檔名 組成完整 URL 陣列
 const images: string[] = [];
@@ -42,37 +47,28 @@ for (let i = 1; i <= item.pageCount; i++) {
 }
 
 const { title, semester } = item;
-
-// 全部期數（用於底部連結）
-const allIds = Object.values(contentFiles as Record<string, NewsletterData>)
-  .map(n => String(n.issue))
-  .sort((a, b) => {
-    const aNum = a === '24-25' ? 24.5 : parseFloat(a);
-    const bNum = b === '24-25' ? 24.5 : parseFloat(b);
-    return bNum - aNum;
-  });
 ---
 
 <Layout title={`${title} - 光禾通訊`}>
   <Navigation />
-  
+
   <section class="hero-small">
     <div class="container">
       <h1>光禾通訊</h1>
       <p>每學季發行的校園通訊，記錄光禾的點點滴滴</p>
     </div>
   </section>
-  
+
   <section class="section">
     <div class="container">
       <p class="intro">選擇一期開始閱讀</p>
-      
+
       <FlipbookV2
         imageUrls={images}
         title={title}
         semester={semester}
       />
-      
+
       <div class="issue-links">
         <p class="intro" style="margin-top: 2rem;">其他期數：</p>
         <div class="links-grid">
