@@ -19,22 +19,13 @@ export async function getStaticPaths() {
   const contentFiles = import.meta.glob('../../content/newsletters/*.json', { eager: true });
   const allData = Object.values(contentFiles) as NewsletterData[];
 
-  const allIds = allData
-    .map(n => String(n.issue))
-    .sort((a, b) => {
-      const aNum = a === '24-25' ? 24.5 : parseFloat(a);
-      const bNum = b === '24-25' ? 24.5 : parseFloat(b);
-      return bNum - aNum;
-    });
-
   return allData.map((data) => ({
     params: { id: String(data.issue) },
-    props: { newsletter: data as NewsletterData, allIds },
+    props: { newsletter: data as NewsletterData },
   }));
 }
 
-const { newsletter: item, allIds } = Astro.props as { newsletter: NewsletterData; allIds: string[] };
-const { id } = Astro.params;
+const { newsletter: item } = Astro.props as { newsletter: NewsletterData };
 
 // 用 imagePrefix + 頁碼 + 副檔名 組成完整 URL 陣列
 const images: string[] = [];
@@ -49,41 +40,13 @@ for (let i = 1; i <= item.pageCount; i++) {
 const { title, semester } = item;
 ---
 
-<Layout title={`${title} - 光禾通訊`}>
+<Layout title={title + ' - 光禾通訊'}>
   <Navigation />
-
-  <section class="hero-small">
-    <div class="container">
-      <h1>光禾通訊</h1>
-      <p>每學季發行的校園通訊，記錄光禾的點點滴滴</p>
-    </div>
-  </section>
-
-  <section class="section">
-    <div class="container">
-      <p class="intro">選擇一期開始閱讀</p>
-
-      <FlipbookV2
-        imageUrls={images}
-        title={title}
-        semester={semester}
-      />
-
-      <div class="issue-links">
-        <p class="intro" style="margin-top: 2rem;">其他期數：</p>
-        <div class="links-grid">
-          {allIds.filter(i => i !== id).map(i => (
-            <a href={`/newsletter/${i}`}>{i === '24-25' ? '24-25期合訂' : `第${i}期`}</a>
-          ))}
-        </div>
-      </div>
-    </div>
-  </section>
+  <main style="padding: 2rem 1rem;">
+    <FlipbookV2
+      imageUrls={images}
+      title={title}
+      semester={semester}
+    />
+  </main>
 </Layout>
-
-<style>
-  .intro { text-align: center; font-size: 1.2rem; color: #666; margin-bottom: 1rem; }
-  .links-grid { display: flex; flex-wrap: wrap; justify-content: center; gap: 1rem; max-width: 800px; margin: 0 auto; }
-  .links-grid a { background: linear-gradient(135deg, #8B4513, #228B22); color: white; padding: 0.8rem 1.2rem; border-radius: 25px; text-decoration: none; font-weight: 500; transition: transform 0.3s; }
-  .links-grid a:hover { transform: scale(1.05); }
-</style>
