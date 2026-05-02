@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>光禾華德福 - 首頁視覺化編輯器</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    body { 
+      font-family: 'Noto Sans TC', -apple-system, sans-serif; 
+      background: #1a1a2e;
+      min-height: 100vh;
+    }
+    
+    /* 頂部工具欄 */
+    .editor-toolbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 60px;
+      background: linear-gradient(135deg, #8B4513, #228B22);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 2rem;
+      z-index: 10000;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+    }
+    
+    .toolbar-left { display: flex; align-items: center; gap: 1rem; }
+    .toolbar-left h1 { color: white; font-size: 1.3rem; }
+    .toolbar-left span { color: rgba(255,255,255,0.7); font-size: 0.9rem; }
+    .toolbar-right { display: flex; gap: 0.8rem; }
+    
+    .btn {
+      padding: 0.6rem 1.2rem;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 0.9rem;
+      font-weight: 500;
+      transition: all 0.2s;
+      font-family: inherit;
+    }
+    .btn:hover { transform: scale(1.05); }
+    .btn-primary { background: white; color: #228B22; }
+    .btn-secondary { background: rgba(255,255,255,0.2); color: white; }
+    .btn-success { background: #4CAF50; color: white; }
+    
+    /* 預覽區域 */
+    .preview-container {
+      margin-top: 60px;
+      padding: 0;
+      background: white;
+      min-height: calc(100vh - 60px);
+    }
+    
+    /* 可編輯區域 */
+    .editable-section {
+      position: relative;
+      border: 3px dashed transparent;
+      transition: all 0.2s;
+    }
+    
+    .editable-section:hover {
+      border-color: #228B22;
+    }
+    
+    .edit-btn {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      background: #228B22;
+      color: white;
+      border: none;
+      padding: 0.6rem 1rem;
+      border-radius: 25px;
+      cursor: pointer;
+      font-size: 0.85rem;
+      opacity: 0;
+      transition: all 0.2s;
+      z-index: 100;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+    }
+    
+    .editable-section:hover .edit-btn { opacity: 1; }
+    .edit-btn:hover { background: #8B4513; transform: scale(1.05); }
+    
+    /* 編輯面板 */
+    .edit-panel {
+      position: fixed;
+      top: 60px;
+      right: -450px;
+      width: 450px;
+      height: calc(100vh - 60px);
+      background: white;
+      box-shadow: -5px 0 30px rgba(0,0,0,0.3);
+      padding: 1.5rem;
+      overflow-y: auto;
+      z-index: 9999;
+      transition: right 0.3s ease;
+    }
+    
+    .edit-panel.active { right: 0; }
+    .edit-panel h2 { color: #333; margin-bottom: 1rem; padding-bottom: 0.8rem; border-bottom: 2px solid #eee; }
+    
+    .form-group { margin-bottom: 1.2rem; }
+    .form-group label { display: block; margin-bottom: 0.5rem; color: #555; font-weight: 600; font-size: 0.9rem; }
+    .form-group input, .form-group textarea {
+      width: 100%; padding: 0.7rem; border: 2px solid #ddd; border-radius: 8px;
+      font-size: 1rem; font-family: inherit;
+    }
+    .form-group input:focus, .form-group textarea:focus { outline: none; border-color: #228B22; }
+    .form-group textarea { min-height: 120px; resize: vertical; }
+    .form-group small { display: block; margin-top: 0.3rem; color: #888; font-size: 0.8rem; }
+    
+    .panel-actions { display: flex; gap: 1rem; margin-top: 1.5rem; padding-top: 1rem; border-top: 2px solid #eee; }
+    .panel-actions .btn { flex: 1; }
+    
+    .hint {
+      position: fixed; bottom: 2rem; left: 50%; transform: translateX(-50%);
+      background: rgba(0,0,0,0.85); color: white; padding: 1rem 2rem;
+      border-radius: 30px; font-size: 0.95rem; opacity: 0; transition: opacity 0.3s; z-index: 10001;
+    }
+    .hint.show { opacity: 1; }
+    
+    /* ====== 首頁樣式 ====== */
+    .home-hero { background: linear-gradient(135deg, #8B4513 0%, #228B22 100%); color: white; padding: 5rem 2rem; text-align: center; }
+    .home-hero h1 { font-size: 3.5rem; margin-bottom: 1rem; }
+    .home-hero p { font-size: 1.4rem; opacity: 0.95; max-width: 700px; margin: 0 auto; }
+    
+    .home-about { padding: 5rem 2rem; max-width: 900px; margin: 0 auto; }
+    .home-about h2 { color: #8B4513; font-size: 2.2rem; text-align: center; margin-bottom: 1.5rem; }
+    .home-about p { color: #555; font-size: 1.1rem; line-height: 1.9; text-align: center; }
+    
+    .home-features { background: #f9f9f9; padding: 5rem 2rem; }
+    .home-features h2 { color: #8B4513; font-size: 2.2rem; text-align: center; margin-bottom: 3rem; }
+    .features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2rem; max-width: 1100px; margin: 0 auto; }
+    .feature-card { background: white; padding: 2.5rem 2rem; border-radius: 20px; text-align: center; box-shadow: 0 10px 40px rgba(0,0,0,0.1); transition: transform 0.3s; }
+    .feature-card:hover { transform: translateY(-8px); }
+    .feature-icon { font-size: 3.5rem; margin-bottom: 1rem; }
+    .feature-card h3 { color: #228B22; font-size: 1.3rem; margin-bottom: 0.8rem; }
+    .feature-card p { color: #666; line-height: 1.7; }
+    
+    /* 🌱 樹苗區塊 - 視覺化 */
+    .home-trees {
+      background: linear-gradient(180deg, #e8f5e9 0%, #c8e6c9 100%);
+      padding: 4rem 2rem;
+    }
+    
+    .home-trees h2 {
+      color: #8B4513;
+      font-size: 2.2rem;
+      text-align: center;
+      margin-bottom: 1rem;
+    }
+    
+    /* 數字統計區 */
+    .stats-numbers {
+      display: flex;
+      justify-content: center;
+      gap: 3rem;
+      margin-bottom: 3rem;
+      flex-wrap: wrap;
+    }
+    
+    .stat-box {
+      text-align: center;
+      background: white;
+      padding: 1.5rem 2.5rem;
+      border-radius: 20px;
+      box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+      min-width: 150px;
+    }
+    
+    .stat-box .number {
+      font-size: 2.5rem;
+      font-weight: bold;
+      color: #228B22;
+      display: block;
+    }
+    
+    .stat-box .number span {
+      font-size: 1.5rem;
+    }
+    
+    .stat-box .label {
+      color: #666;
+      font-size: 0.95rem;
+      margin-top: 0.5rem;
+    }
+    
+    .trees-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 1.5rem;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+    
+    .tree-item {
+      text-align: center;
+      padding: 1rem;
+      background: rgba(255,255,255,0.7);
+      border-radius: 15px;
+      transition: all 0.3s;
+    }
+    
+    .tree-item:hover {
+      transform: scale(1.05);
+      background: white;
+      box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+    }
+    
+    .tree-item.graduated {
+      opacity: 0.6;
+    }
+    
+    .tree-visual {
+      font-size: 2.5rem;
+      margin-bottom: 0.5rem;
+      display: block;
+    }
+    
+    .tree-label {
+      color: #333;
+      font-size: 0.85rem;
+      font-weight: 600;
+    }
+    
+    .tree-status {
+      font-size: 0.75rem;
+      color: #888;
+      margin-top: 0.3rem;
+    }
+    
+    .home-news { padding: 5rem 2rem; max-width: 900px; margin: 0 auto; }
+    .home-news h2 { color: #8B4513; font-size: 2.2rem; text-align: center; margin-bottom: 2.5rem; }
+    .news-list { list-style: none; }
+    .news-list li { padding: 1.5rem; margin-bottom: 1rem; background: #f9f9f9; border-radius: 15px; border-left: 5px solid #228B22; }
+    .news-list li:hover { background: #f0f0f0; transform: translateX(5px); }
+    .news-list strong { color: #333; font-size: 1.1rem; }
+    .news-list .date { color: #888; font-size: 0.9rem; display: block; margin-top: 0.5rem; }
+    
+    .home-contact { background: #333; color: white; padding: 4rem 2rem; text-align: center; }
+    .home-contact h2 { font-size: 2rem; margin-bottom: 1.5rem; }
+    .contact-info { font-size: 1.1rem; line-height: 2; }
+    .contact-info strong { color: #4CAF50; }
+  </style>
+</head>
+<body>
+  <!-- 工具欄 -->
+  <header class="editor-toolbar">
+    <div class="toolbar-left">
+      <h1>🌟 光禾華德福</h1>
+      <span>| 首頁編輯器</span>
+    </div>
+    <div class="toolbar-right">
+      <button class="btn btn-secondary" onclick="resetData()">🔄 重置</button>
+      <button class="btn btn-secondary" onclick="exportData()">📤 匯出</button>
+      <button class="btn btn-primary" onclick="saveAll()">💾 儲存</button>
+    </div>
+  </header>
+  
+  <!-- 預覽區域 -->
+  <div class="preview-container">
+    
+    <!-- Hero -->
+    <section class="editable-section" data-type="hero" data-field="title">
+      <button class="edit-btn" onclick="openEdit('hero', 'title', '主標題')">✏️ 編輯</button>
+      <div class="home-hero"><h1 id="preview-hero-title">光禾華德福實驗學校</h1></div>
+    </section>
+    
+    <section class="editable-section" data-type="hero" data-field="subtitle">
+      <button class="edit-btn" onclick="openEdit('hero', 'subtitle', '副標題')">✏️ 編輯</button>
+      <div class="home-hero" style="padding-top:0;"><p id="preview-hero-subtitle">在充滿愛與自由的環境中，陪孩子走一段善、美、真的學習旅程</p></div>
+    </section>
+    
+    <!-- 關於我們 -->
+    <section class="editable-section" data-type="about" data-field="title">
+      <button class="edit-btn" onclick="openEdit('about', 'title', '標題')">✏️ 編輯</button>
+      <div class="home-about"><h2 id="preview-about-title">關於我們</h2></div>
+    </section>
+    
+    <section class="editable-section" data-type="about" data-field="content">
+      <button class="edit-btn" onclick="openEdit('about', 'content', '內容')">✏️ 編輯</button>
+      <div class="home-about" style="padding-top:0;"><p id="preview-about-content">光禾華德福實驗學校成立於民國101年，致力於實踐全人教育，讓孩子在溫暖的環境中成長。我們相信每個孩子都是獨特的個體，透過均衡的意志、情感與思考發展，成為完整的人。</p></div>
+    </section>
+    
+    <!-- 特色 -->
+    <section class="editable-section" data-type="features" data-field="title">
+      <button class="edit-btn" onclick="openEdit('features', 'title', '特色標題')">✏️ 編輯</button>
+      <div class="home-features"><h2 id="preview-features-title">教育特色</h2></div>
+    </section>
+    
+    <section class="editable-section" data-type="features" data-field="items">
+      <button class="edit-btn" onclick="openEdit('features', 'items', '特色項目')">✏️ 編輯</button>
+      <div class="home-features" style="padding-top:0;"><div class="features-grid" id="preview-features-items"></div></div>
+    </section>
+    
+    <!-- 🌱 樹苗統計 -->
+    <section class="editable-section" data-type="trees" data-field="title">
+      <button class="edit-btn" onclick="openEdit('trees', 'title', '樹苗標題')">✏️ 編輯</button>
+      <div class="home-trees">
+        <h2 id="preview-trees-title">班級樹苗</h2>
+      </div>
+    </section>
+    
+    <section class="editable-section" data-type="trees" data-field="groups">
+      <button class="edit-btn" onclick="openEdit('trees', 'groups', '班級設定')">✏️ 編輯</button>
+      <div class="home-trees" style="padding-top:0;">
+        <div class="trees-grid" id="preview-trees-groups"></div>
+      </div>
+    </section>
+    
+    <!-- 最新消息 -->
+    <section class="editable-section" data-type="news" data-field="title">
+      <button class="edit-btn" onclick="openEdit('news', 'title', '消息標題')">✏️ 編輯</button>
+      <div class="home-news"><h2 id="preview-news-title">最新消息</h2></div>
+    </section>
+    
+    <section class="editable-section" data-type="news" data-field="items">
+      <button class="edit-btn" onclick="openEdit('news', 'items', '消息項目')">✏️ 編輯</button>
+      <div class="home-news" style="padding-top:0;"><ul class="news-list" id="preview-news-items"></ul></div>
+    </section>
+    
+    <!-- 聯絡資訊 -->
+    <section class="editable-section" data-type="contact" data-field="title">
+      <button class="edit-btn" onclick="openEdit('contact', 'title', '聯絡標題')">✏️ 編輯</button>
+      <div class="home-contact"><h2 id="preview-contact-title">聯絡我們</h2></div>
+    </section>
+    
+    <section class="editable-section" data-type="contact" data-field="content">
+      <button class="edit-btn" onclick="openEdit('contact', 'content', '聯絡內容')">✏️ 編輯</button>
+      <div class="home-contact" style="padding-top:0;"><div class="contact-info" id="preview-contact-content"></div></div>
+    </section>
+    
+  </div>
+  
+  <!-- 編輯面板 -->
+  <div class="edit-panel" id="editPanel">
+    <h2>✏️ 編輯內容</h2>
+    <form id="editForm">
+      <input type="hidden" id="editType">
+      <input type="hidden" id="editField">
+      <div id="formFields"></div>
+      <div class="panel-actions">
+        <button type="button" class="btn btn-secondary" onclick="closeEdit()">取消</button>
+        <button type="submit" class="btn btn-success">✅ 儲存</button>
+      </div>
+    </form>
+  </div>
+  
+  <div class="hint" id="hint">💡 滑鼠移到區塊上，點擊「✏️ 編輯」</div>
+
+  <script>
+    // 預設資料
+    const defaultData = {
+      hero: { title: '光禾華德福實驗學校', subtitle: '在充滿愛與自由的環境中，陪孩子走一段善、美、真的學習旅程' },
+      about: { title: '關於我們', content: '光禾華德福實驗學校成立於民國101年，致力於實踐全人教育，讓孩子在溫暖的環境中成長。' },
+      features: { title: '教育特色', items: '全人教育|注重孩子的意志、情感與思考均衡發展|🌱\n藝術創作|重視音樂、美術、手工等藝術教育|🎨\n自然體驗|讓孩子在自然環境中學習與成長|🌳\n自主學習|培養孩子的創造力與解決問題能力|📚' },
+      trees: { 
+        title: '班級樹苗',
+        groups: '雲杉班|月桂班|星辰班|澄月班|銀杏班|暖陽班|海洋班|雲彩班|茉莉班|芙蓉班|榕樹班|天使班|水晶班|彩虹班'
+      },
+      news: { title: '最新消息', items: '115學年度招生說明會|2026年3月21日\n光禾榮獲高雄市實驗學校評鑑優等|2026年2月1日\n春季慶典暨校慶|2026年3月28日' },
+      contact: { title: '聯絡我們', content: '地址：806037 高雄市前鎮區德昌路345號\n電話：07-7885128\nEmail：waldorf.kh@gmail.com' }
+    };
+    
+    let pageData = JSON.parse(JSON.stringify(defaultData));
+    const saved = localStorage.getItem('waldorf-home-edit');
+    if (saved) { try { pageData = JSON.parse(saved); } catch(e) {} }
+    
+    function updatePreview() {
+      document.getElementById('preview-hero-title').textContent = pageData.hero.title;
+      document.getElementById('preview-hero-subtitle').textContent = pageData.hero.subtitle;
+      document.getElementById('preview-about-title').textContent = pageData.about.title;
+      document.getElementById('preview-about-content').textContent = pageData.about.content;
+      document.getElementById('preview-features-title').textContent = pageData.features.title;
+      renderFeatures();
+      document.getElementById('preview-trees-title').textContent = pageData.trees.title;
+      renderStats();
+      renderTrees();
+      document.getElementById('preview-news-title').textContent = pageData.news.title;
+      renderNews();
+      document.getElementById('preview-contact-title').textContent = pageData.contact.title;
+      document.getElementById('preview-contact-content').innerHTML = pageData.contact.content.replace(/\n/g, '<br>');
+    }
+    
+    function renderFeatures() {
+      const lines = pageData.features.items.split('\n').filter(l => l.trim());
+      let html = '';
+      lines.forEach(line => {
+        const parts = line.split('|');
+        html += `<div class="feature-card"><div class="feature-icon">${parts[2]||'🌟'}</div><h3>${parts[0]||''}</h3><p>${parts[1]||''}</p></div>`;
+      });
+      document.getElementById('preview-features-items').innerHTML = html;
+    }
+    
+    function renderTrees() {
+      const groups = pageData.trees.groups.split('|').filter(g => g.trim());
+      const graduated = ['已畢業1', '已畢業2', '已畢業'];
+      
+      // 不同的樹苗圖案
+      const treeEmojis = ['🌱', '🌿', '🌴', '🎄', '🌲', '🪴', '🍀', '🌵', '🌾', '🌿', '🪵', '🎍'];
+      
+      let html = '';
+      groups.forEach((name, i) => {
+        const isGraduated = graduated.some(g => name.includes(g));
+        const emoji = isGraduated ? '🌳' : treeEmojis[i % treeEmojis.length];
+        html += `<div class="tree-item ${isGraduated ? 'graduated' : ''}">
+          <span class="tree-visual">${emoji}</span>
+          <div class="tree-label">${name}</div>
+        </div>`;
+      });
+      document.getElementById('preview-trees-groups').innerHTML = html;
+    }
+    
+    function renderStats() {
+      const lines = pageData.trees.stats.split('\n').filter(l => l.trim());
+      let html = '';
+      lines.forEach(line => {
+        const parts = line.split('|');
+        const num = parts[0] || '0';
+        const label = parts[1] || '';
+        html += `<div class="stat-box">
+          <span class="number">${num}</span>
+          <div class="label">${label}</div>
+        </div>`;
+      });
+      document.getElementById('preview-trees-stats').innerHTML = html;
+    }
+    
+    function renderNews() {
+      const lines = pageData.news.items.split('\n').filter(l => l.trim());
+      let html = '';
+      lines.forEach(line => {
+        const parts = line.split('|');
+        html += `<li><strong>${parts[0]||''}</strong><span class="date">${parts[1]||''}</span></li>`;
+      });
+      document.getElementById('preview-news-items').innerHTML = html;
+    }
+    
+    function openEdit(type, field, label) {
+      document.getElementById('editType').value = type;
+      document.getElementById('editField').value = field;
+      let value = pageData[type]?.[field] || '';
+      
+      let html = '';
+      if (field === 'stats' && type === 'trees') {
+        html = `<div class="form-group">
+          <label>數字統計（用 | 分隔）</label>
+          <textarea name="value" rows="4" placeholder="13|辦學年資">${value}</textarea>
+          <small>每行一筆，用 | 分隔數字和說明<br>例如：13|辦學年資</small>
+        </div>`;
+      } else if (field === 'groups' && type === 'trees') {
+        html = `<div class="form-group">
+          <label>班級名稱（用 | 分隔）</label>
+          <textarea name="value" rows="4" placeholder="雲杉班|月桂班|星辰班|...">${value}</textarea>
+          <small>直接輸入班級名稱，用 | 分隔<br>名稱包含「畢業/彩虹/水晶」就會顯示為已畢業✨</small>
+        </div>`;
+      } else if (field === 'items' && (type === 'features' || type === 'news')) {
+        html = `<div class="form-group">
+          <label>${label}</label>
+          <textarea name="value" rows="8">${value}</textarea>
+          <small>每行一筆，用 | 分隔不同欄位</small>
+        </div>`;
+      } else if (field === 'content' || field === 'subtitle') {
+        html = `<div class="form-group"><label>${label}</label><textarea name="value" rows="4">${value}</textarea></div>`;
+      } else {
+        html = `<div class="form-group"><label>${label}</label><input type="text" name="value" value="${value}"></div>`;
+      }
+      
+      document.getElementById('formFields').innerHTML = html;
+      document.getElementById('editPanel').classList.add('active');
+    }
+    
+    function closeEdit() { document.getElementById('editPanel').classList.remove('active'); }
+    
+    document.getElementById('editForm').onsubmit = function(e) {
+      e.preventDefault();
+      const type = document.getElementById('editType').value;
+      const field = document.getElementById('editField').value;
+      const value = document.querySelector('[name="value"]').value;
+      if (!pageData[type]) pageData[type] = {};
+      pageData[type][field] = value;
+      saveData();
+      updatePreview();
+      closeEdit();
+      showHint('✅ 已儲存！');
+    };
+    
+    function saveData() { localStorage.setItem('waldorf-home-edit', JSON.stringify(pageData)); }
+    function saveAll() { saveData(); showHint('💾 全部已儲存！'); }
+    
+    function exportData() {
+      const blob = new Blob([JSON.stringify(pageData, null, 2)], {type: 'application/json'});
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = '光禾首頁內容.json';
+      a.click();
+      showHint('📤 已匯出！');
+    }
+    
+    // 儲存到網站目錄供前台讀取
+    function syncToSite() {
+      const json = JSON.stringify(pageData, null, 2);
+      
+      // 建立一個看不見的表單提交來下載檔案
+      // 使用 FileSaver API 直接存檔（需要伺服器支援）
+      
+      // 顯示目前的 JSON讓你可以複製
+      const blob = new Blob([json], {type: 'application/json'});
+      const url = URL.createObjectURL(blob);
+      
+      // 同時顯示內容
+      console.log('網站資料：', json);
+      
+      showHint('📄 請按「匯出」下載 JSON，傳給我更新到網站');
+    }
+    
+    function resetData() {
+      if (confirm('確定要重置嗎？')) {
+        pageData = JSON.parse(JSON.stringify(defaultData));
+        saveData();
+        updatePreview();
+        showHint('🔄 已重置！');
+      }
+    }
+    
+    function showHint(text) {
+      const hint = document.getElementById('hint');
+      hint.textContent = text;
+      hint.classList.add('show');
+      setTimeout(() => hint.classList.remove('show'), 2500);
+    }
+    
+    updatePreview();
+    setTimeout(() => showHint('💡 滑鼠移到區塊上，點擊「✏️ 編輯」'), 1000);
+  </script>
+</body>
+</html>

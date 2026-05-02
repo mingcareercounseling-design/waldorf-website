@@ -80,20 +80,111 @@ import Navigation from '../../components/Navigation.astro';
       <div class="schedule-section">
         <h2>家長社群參與年度時程表</h2>
         
-        <div class="schedule-block">
-          <h3>全校性活動</h3>
-          <ul>
-            <li>年度活動</li>
-            <li>三元社群活動</li>
-            <li>每日活動</li>
-            <li>其他不定期或定期活動</li>
-          </ul>
+        <!-- 全校性活動 -->
+        <div class="section-block">
+          <h3>1. 全校性活動</h3>
+          <div class="season-grid">
+            <div class="season-item">
+              <h4>🌸 春</h4>
+              <ul>
+                <li>春季聯合班親會（主題講座、秋冬季靜態成果展）</li>
+                <li>校慶音樂會暨親師生團體活動</li>
+                <li>各班班親會（週間）</li>
+              </ul>
+            </div>
+            <div class="season-item">
+              <h4>☀️ 夏</h4>
+              <ul>
+                <li>夏慶活動</li>
+                <li>家長工作日－木工小組</li>
+              </ul>
+            </div>
+            <div class="season-item">
+              <h4>🍂 秋</h4>
+              <ul>
+                <li>秋季聯合班親會（主題講座、春夏季靜態成果展）</li>
+                <li>秋慶活動</li>
+                <li>秋季大露營</li>
+                <li>各班班親會（週間）</li>
+              </ul>
+            </div>
+            <div class="season-item">
+              <h4>❄️ 冬</h4>
+              <ul>
+                <li>冬慶走螺旋</li>
+                <li>家長工作日－染布小組</li>
+                <li>動態成果展暨感恩餐會</li>
+              </ul>
+            </div>
+          </div>
         </div>
 
-        <div class="schedule-block">
-          <h3>班級性活動</h3>
-          <p>各班級的家長參與活動</p>
+        <!-- 三元社群活動 -->
+        <div class="section-block">
+          <h3>2. 三元社群活動</h3>
+          <div class="three-yuan">
+            <div class="yuan-card">
+              <h4>🌱 協會理監事會</h4>
+              <p>針對學校長遠發展與法制相關之決策會議，相關決議於會員大會或「心之橋」臉書社群發布。</p>
+            </div>
+            <div class="yuan-card">
+              <h4>🏫 校發小組</h4>
+              <p>協會/學校（教師會）/家長會各派代表參加，針對學校運作與行政事務的三元溝通與決策會議。</p>
+            </div>
+            <div class="yuan-card">
+              <h4>👨‍👩‍👧 家長會</h4>
+              <p>不限家委，所有家長皆可參加，會議紀錄於「心之橋」臉書社群發布。</p>
+            </div>
+          </div>
         </div>
+
+        <!-- 每日活動 -->
+        <div class="section-block">
+          <h3>3. 每日活動</h3>
+          <div class="daily-activity">
+            <h4>👨‍👩‍👧 家長安親志工</h4>
+            <p>與安親老師共同看顧學生放學後之遊戲安全。安親輪值以家庭為單位，每學季由家長會安排輪值表。每學年新班秋學季為觀摩學季，不安排安親輪值。</p>
+          </div>
+        </div>
+
+        <!-- 不定期活動 -->
+        <div class="section-block">
+          <h3>4. 其他不定期或定期活動</h3>
+          <div class="other-activities">
+            <div class="activity-item">
+              <h4>📚 家長成長課程</h4>
+              <p>協會/學校/家長會所舉辦之各項親職成長課程。</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- 班級性活動 -->
+        <div class="section-block">
+          <h3>5. 班級性活動</h3>
+          <div class="class-grid">
+            <div class="class-item">
+              <h4>👨‍👩‍👧 班親會</h4>
+              <p>每學季召開一次，為親師分享交流時間，務必以家庭為單位至少一名家長參與。</p>
+            </div>
+            <div class="class-item">
+              <h4>💬 親師單獨面談</h4>
+              <p>老師安排時間與家長個別約談（至少半年一次）。</p>
+            </div>
+            <div class="class-item">
+              <h4>🎮 班遊</h4>
+              <p>班級家庭為增進彼此情感之活動，建議以親近大自然之活動為佳。</p>
+            </div>
+            <div class="class-item">
+              <h4>⛰️ G5、G6 一月一山</h4>
+              <p>班級家庭自主安排之活動。</p>
+            </div>
+            <div class="class-item">
+              <h4>📖 班級課程支援性活動</h4>
+              <p>例如：G3 農耕課、G6 天文學課程</p>
+            </div>
+          </div>
+        </div>
+
       </div>
 
     </div>
@@ -222,6 +313,225 @@ import Navigation from '../../components/Navigation.astro';
 
   .schedule-block li {
     padding: 0.4rem 0;
+  }
+
+  /* 四季時程表 */
+  .season-block {
+    margin-bottom: 2rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 2px dashed #eee;
+  }
+  
+  .season-block:last-child {
+    border-bottom: none;
+  }
+
+  .season-header {
+    background: linear-gradient(135deg, #228B22, #2E7D32);
+    color: white;
+    padding: 0.8rem 1.5rem;
+    border-radius: 30px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin-bottom: 1.5rem;
+    display: inline-block;
+  }
+
+  .schedule-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+  }
+
+  .schedule-item {
+    background: #f9f9f9;
+    padding: 1rem;
+    border-radius: 12px;
+    border-left: 4px solid #8B4513;
+  }
+
+  .schedule-item h4 {
+    color: #8B4513;
+    font-size: 0.95rem;
+    margin-bottom: 0.8rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid #ddd;
+  }
+
+  .schedule-item ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .schedule-item li {
+    color: #555;
+    font-size: 0.9rem;
+    padding: 0.4rem 0;
+    padding-left: 1rem;
+    position: relative;
+  }
+
+  .schedule-item li::before {
+    content: "•";
+    color: #228B22;
+    position: absolute;
+    left: 0;
+  }
+
+  /* 新的時程表樣式 */
+  .section-block {
+    margin-bottom: 2.5rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 2px dashed #eee;
+  }
+  
+  .section-block:last-child {
+    border-bottom: none;
+  }
+
+  .section-block h3 {
+    color: #8B4513;
+    font-size: 1.3rem;
+    margin-bottom: 1.2rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid #228B22;
+    display: inline-block;
+  }
+
+  .season-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1rem;
+  }
+
+  .season-item {
+    background: #f9f9f9;
+    padding: 1rem;
+    border-radius: 12px;
+  }
+
+  .season-item h4 {
+    color: #228B22;
+    font-size: 1rem;
+    margin-bottom: 0.8rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid #ddd;
+  }
+
+  .season-item ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .season-item li {
+    color: #555;
+    font-size: 0.85rem;
+    padding: 0.4rem 0;
+    line-height: 1.4;
+  }
+
+  /* 三元社群 */
+  .three-yuan {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.2rem;
+  }
+
+  .yuan-card {
+    background: linear-gradient(135deg, #e8f5e9, #c8e6c9);
+    padding: 1.2rem;
+    border-radius: 15px;
+    text-align: center;
+  }
+
+  .yuan-card h4 {
+    color: #2E7D32;
+    font-size: 1rem;
+    margin-bottom: 0.8rem;
+  }
+
+  .yuan-card p {
+    color: #555;
+    font-size: 0.85rem;
+    line-height: 1.5;
+  }
+
+  /* 每日活動 */
+  .daily-activity {
+    background: #fff8e1;
+    padding: 1.2rem;
+    border-radius: 12px;
+    border-left: 4px solid #FF8C00;
+  }
+
+  .daily-activity h4 {
+    color: #FF8C00;
+    font-size: 1rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .daily-activity p {
+    color: #666;
+    font-size: 0.9rem;
+    line-height: 1.5;
+    margin: 0;
+  }
+
+  /* 其他活動 */
+  .other-activities {
+    background: #f3e5f5;
+    padding: 1rem;
+    border-radius: 12px;
+  }
+
+  .activity-item h4 {
+    color: #7B1FA2;
+    font-size: 0.95rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .activity-item p {
+    color: #666;
+    font-size: 0.85rem;
+    margin: 0;
+  }
+
+  /* 班級活動 */
+  .class-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+  }
+
+  .class-item {
+    background: white;
+    padding: 1.2rem;
+    border-radius: 12px;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+  }
+
+  .class-item h4 {
+    color: #8B4513;
+    font-size: 0.95rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .class-item p {
+    color: #666;
+    font-size: 0.85rem;
+    line-height: 1.5;
+    margin: 0;
+  }
+
+  /* RWD */
+  @media (max-width: 900px) {
+    .season-grid { grid-template-columns: repeat(2, 1fr); }
+    .three-yuan { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 600px) {
+    .season-grid { grid-template-columns: 1fr; }
   }
 
   .footer { background: #333; color: white; padding: 2rem; text-align: center; margin-top: 2rem; }

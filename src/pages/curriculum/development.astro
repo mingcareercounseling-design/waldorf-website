@@ -1,0 +1,60 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Navigation from '../../components/Navigation.astro';
+---
+
+<Layout title="各年段發展圖像 | 光禾華德福">
+  <Navigation />
+  
+  <section class="hero-small">
+    <div class="container">
+      <h1>各年段發展圖像</h1>
+      <p>華德福學校國小到高中的年段發展圖像</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="development-gallery">
+        <img src="/20230313-1_orig.jpg" alt="七年級發展圖像" />
+        <img src="/20230313-2_orig.jpg" alt="八年級發展圖像" />
+        <img src="/20230313-3_orig.jpg" alt="九年級發展圖像" />
+        <img src="/20230313-4_orig.jpg" alt="十年級發展圖像" />
+        <img src="/20230313-5_orig.jpg" alt="十一年級發展圖像" />
+        <img src="/20230313-6_orig.jpg" alt="十二年級發展圖像" />
+        <img src="/20230313-7_orig.jpg" alt="一至三年級發展圖像" />
+        <img src="/20230313-8_orig.jpg" alt="四至五年級發展圖像" />
+        <img src="/20230313-9_orig.jpg" alt="六至八年級發展圖像" />
+        <img src="/20230313-10_orig.jpg" alt="國小階段發展圖像" />
+        <img src="/20230313-11_orig.jpg" alt="國中階段發展圖像" />
+        <img src="/20230313-12_orig.jpg" alt="高中階段發展圖像" />
+        <img src="/20230313-13_orig.jpg" alt="完整發展圖像" />
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="container">
+      <p>© 2026 光禾華德福實驗學校. All rights reserved.</p>
+    </div>
+  </footer>
+</Layout>
+
+<style>
+  .development-gallery {
+    display: flex;
+    flex-direction: column;
+    gap: 3rem;
+    margin-top: 2rem;
+  }
+
+  .development-gallery img {
+    width: 100%;
+    max-width: 1000px;
+    height: auto;
+    margin: 0 auto;
+    display: block;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  }
+</style>

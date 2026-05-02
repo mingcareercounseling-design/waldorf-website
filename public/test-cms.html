@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+<head><title>Test</title></head>
+<body>
+<h1>Test</h1>
+<ul id="pageList"></ul>
+<script>
+const pages = [{name: '首頁', file: 'home', icon: '🏠'}];
+document.getElementById('pageList').innerHTML = pages.map(p => 
+  `<li onclick="alert('clicked ' + '${p.file}')">${p.icon} ${p.name}</li>`
+).join('');
+</script>
+</body>
+</html>

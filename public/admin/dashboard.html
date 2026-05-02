@@ -1,0 +1,892 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>光禾華德福 - 內容管理系統</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Noto Sans TC', 'Microsoft JhengHei', sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+    }
+
+    .login-container {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+    }
+
+    .login-box {
+      background: white;
+      border-radius: 20px;
+      padding: 3rem;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+      width: 100%;
+      max-width: 400px;
+    }
+
+    .login-box h1 {
+      color: #8B4513;
+      text-align: center;
+      margin-bottom: 0.5rem;
+      font-size: 1.8rem;
+    }
+
+    .login-box p {
+      color: #666;
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    .form-group {
+      margin-bottom: 1.5rem;
+    }
+
+    .form-group label {
+      display: block;
+      color: #333;
+      margin-bottom: 0.5rem;
+      font-weight: 500;
+    }
+
+    .form-group input {
+      width: 100%;
+      padding: 12px 15px;
+      border: 2px solid #e0e0e0;
+      border-radius: 10px;
+      font-size: 1rem;
+      transition: border-color 0.3s;
+    }
+
+    .form-group input:focus {
+      outline: none;
+      border-color: #228B22;
+    }
+
+    .login-btn {
+      width: 100%;
+      background: linear-gradient(135deg, #8B4513, #228B22);
+      color: white;
+      border: none;
+      padding: 14px;
+      border-radius: 10px;
+      font-size: 1.1rem;
+      cursor: pointer;
+      transition: transform 0.3s;
+    }
+
+    .login-btn:hover {
+      transform: translateY(-2px);
+    }
+
+    .dashboard {
+      display: none;
+    }
+
+    .sidebar {
+      position: fixed;
+      left: 0;
+      top: 0;
+      width: 260px;
+      height: 100vh;
+      background: linear-gradient(180deg, #2c3e50 0%, #1a252f 100%);
+      color: white;
+      padding: 2rem 0;
+      overflow-y: auto;
+    }
+
+    .sidebar h2 {
+      text-align: center;
+      font-size: 1.3rem;
+      margin-bottom: 2rem;
+      padding: 0 1rem;
+    }
+
+    .menu-item {
+      padding: 1rem 1.5rem;
+      cursor: pointer;
+      transition: background 0.3s;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .menu-item:hover {
+      background: rgba(255,255,255,0.1);
+    }
+
+    .menu-item.active {
+      background: rgba(34, 139, 34, 0.3);
+      border-left: 3px solid #228B22;
+    }
+
+    .menu-item i {
+      width: 20px;
+    }
+
+    .main-content {
+      margin-left: 260px;
+      padding: 2rem;
+      min-height: 100vh;
+      background: #f5f6fa;
+    }
+
+    .header {
+      background: white;
+      padding: 1.5rem 2rem;
+      border-radius: 15px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      margin-bottom: 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .header h1 {
+      color: #333;
+      font-size: 1.5rem;
+    }
+
+    .user-info {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .logout-btn {
+      background: #e74c3c;
+      color: white;
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    .content-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .content-card {
+      background: white;
+      border-radius: 15px;
+      padding: 1.5rem;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      transition: transform 0.3s;
+    }
+
+    .content-card:hover {
+      transform: translateY(-5px);
+    }
+
+    .content-card h3 {
+      color: #8B4513;
+      margin-bottom: 0.5rem;
+    }
+
+    .content-card p {
+      color: #666;
+      font-size: 0.9rem;
+      margin-bottom: 1rem;
+    }
+
+    .card-actions {
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    .card-btn {
+      flex: 1;
+      padding: 0.6rem;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 0.9rem;
+      transition: all 0.3s;
+    }
+
+    .card-btn.edit {
+      background: #3498db;
+      color: white;
+    }
+
+    .card-btn.view {
+      background: #228B22;
+      color: white;
+    }
+
+    .card-btn:hover {
+      opacity: 0.9;
+    }
+
+    .editor-modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.5);
+      z-index: 1000;
+      overflow-y: auto;
+    }
+
+    .editor-content {
+      background: white;
+      margin: 2rem auto;
+      max-width: 900px;
+      border-radius: 20px;
+      padding: 2rem;
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+
+    .editor-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 2rem;
+      padding-bottom: 1rem;
+      border-bottom: 2px solid #e0e0e0;
+    }
+
+    .editor-header h2 {
+      color: #8B4513;
+    }
+
+    .close-btn {
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+      cursor: pointer;
+      color: #666;
+    }
+
+    .editor-body textarea {
+      width: 100%;
+      min-height: 300px;
+      padding: 1rem;
+      border: 2px solid #e0e0e0;
+      border-radius: 10px;
+      font-size: 1rem;
+      font-family: inherit;
+      resize: vertical;
+    }
+
+    .editor-body textarea:focus {
+      outline: none;
+      border-color: #228B22;
+    }
+
+    .editor-footer {
+      display: flex;
+      gap: 1rem;
+      justify-content: flex-end;
+      margin-top: 1.5rem;
+    }
+
+    .save-btn {
+      background: #228B22;
+      color: white;
+      border: none;
+      padding: 0.8rem 2rem;
+      border-radius: 10px;
+      cursor: pointer;
+      font-size: 1rem;
+    }
+
+    .cancel-btn {
+      background: #95a5a6;
+      color: white;
+      border: none;
+      padding: 0.8rem 2rem;
+      border-radius: 10px;
+      cursor: pointer;
+      font-size: 1rem;
+    }
+
+    .upload-section {
+      background: white;
+      border-radius: 15px;
+      padding: 2rem;
+      margin-bottom: 2rem;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+
+    .upload-section h3 {
+      color: #8B4513;
+      margin-bottom: 1rem;
+    }
+
+    .upload-area {
+      border: 3px dashed #ccc;
+      border-radius: 15px;
+      padding: 3rem;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .upload-area:hover {
+      border-color: #228B22;
+      background: #f9f9f9;
+    }
+
+    .upload-area i {
+      font-size: 3rem;
+      color: #228B22;
+      margin-bottom: 1rem;
+    }
+
+    .upload-area p {
+      color: #666;
+    }
+
+    .upload-progress {
+      display: none;
+      margin-top: 1rem;
+    }
+
+    .progress-bar {
+      width: 100%;
+      height: 10px;
+      background: #e0e0e0;
+      border-radius: 5px;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #228B22, #8B4513);
+      width: 0%;
+      transition: width 0.3s;
+    }
+
+    .status-message {
+      padding: 1rem;
+      border-radius: 10px;
+      margin-bottom: 1rem;
+      display: none;
+    }
+
+    .status-message.success {
+      background: #d4edda;
+      color: #155724;
+      display: block;
+    }
+
+    .status-message.error {
+      background: #f8d7da;
+      color: #721c24;
+      display: block;
+    }
+
+    @media (max-width: 768px) {
+      .sidebar {
+        width: 100%;
+        height: auto;
+        position: relative;
+      }
+      
+      .main-content {
+        margin-left: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- 登入頁面 -->
+  <div class="login-container" id="loginPage">
+    <div class="login-box">
+      <h1>🌿 光禾華德福</h1>
+      <p>內容管理系統</p>
+      <form id="loginForm">
+        <div class="form-group">
+          <label>帳號</label>
+          <input type="text" id="username" placeholder="請輸入帳號" required>
+        </div>
+        <div class="form-group">
+          <label>密碼</label>
+          <input type="password" id="password" placeholder="請輸入密碼" required>
+        </div>
+        <button type="submit" class="login-btn">登入系統</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- 管理儀表板 -->
+  <div class="dashboard" id="dashboard">
+    <div class="sidebar">
+      <h2>🌿 光禾華德福<br>內容管理系統</h2>
+      <div class="menu-item active" data-section="home">
+        <i class="fas fa-home"></i> 首頁管理
+      </div>
+      <div class="menu-item" data-section="news">
+        <i class="fas fa-newspaper"></i> 最新消息
+      </div>
+      <div class="menu-item" data-section="newsletter">
+        <i class="fas fa-book"></i> 光禾通訊
+      </div>
+      <div class="menu-item" data-section="teachers">
+        <i class="fas fa-users"></i> 師資團隊
+      </div>
+      <div class="menu-item" data-section="activities">
+        <i class="fas fa-calendar-alt"></i> 活動集錦
+      </div>
+      <div class="menu-item" data-section="admissions">
+        <i class="fas fa-graduation-cap"></i> 招生資訊
+      </div>
+      <div class="menu-item" data-section="curriculum">
+        <i class="fas fa-book-open"></i> 課程介紹
+      </div>
+      <div class="menu-item" data-section="upload">
+        <i class="fas fa-cloud-upload-alt"></i> 檔案上傳
+      </div>
+      <div class="menu-item" data-section="settings">
+        <i class="fas fa-cog"></i> 系統設定
+      </div>
+    </div>
+
+    <div class="main-content">
+      <div class="header">
+        <h1 id="pageTitle">首頁管理</h1>
+        <div class="user-info">
+          <span>管理員</span>
+          <button class="logout-btn" onclick="logout()">登出</button>
+        </div>
+      </div>
+
+      <!-- 狀態訊息 -->
+      <div class="status-message" id="statusMessage"></div>
+
+      <!-- 首頁管理 -->
+      <div class="content-section" id="section-home">
+        <div class="content-grid">
+          <div class="content-card">
+            <h3>🏠 首頁輪播圖</h3>
+            <p>管理首頁顯示的輪播圖片</p>
+            <div class="card-actions">
+              <button class="card-btn view" onclick="editContent('home-carousel')">管理圖片</button>
+            </div>
+          </div>
+          <div class="content-card">
+            <h3>📰 最新消息</h3>
+            <p>管理首頁顯示的最新消息</p>
+            <div class="card-actions">
+              <button class="card-btn edit" onclick="editContent('home-news')">編輯</button>
+              <button class="card-btn view" onclick="previewContent('home-news')">預覽</button>
+            </div>
+          </div>
+          <div class="content-card">
+            <h3>📞 聯絡資訊</h3>
+            <p>學校地址、電話、Email</p>
+            <div class="card-actions">
+              <button class="card-btn edit" onclick="editContent('contact')">編輯</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 光禾通訊 -->
+      <div class="content-section" id="section-newsletter" style="display:none;">
+        <div class="upload-section">
+          <h3><i class="fas fa-cloud-upload-alt"></i> 上傳新期通訊</h3>
+          <div class="upload-area" onclick="document.getElementById('pdfInput').click()">
+            <i class="fas fa-file-pdf"></i>
+            <p>點擊或拖曳 PDF 檔案到此處</p>
+            <p style="font-size: 0.8rem; color: #999;">支援 PDF 格式，最大 50MB</p>
+          </div>
+          <input type="file" id="pdfInput" accept=".pdf" style="display: none;" onchange="handleFileUpload(this)">
+          <div class="upload-progress" id="uploadProgress">
+            <p>上傳中...</p>
+            <div class="progress-bar">
+              <div class="progress-fill" id="progressFill"></div>
+            </div>
+          </div>
+        </div>
+        <div class="content-grid">
+          <div class="content-card">
+            <h3>📖 第36期</h3>
+            <p>113學年度 秋冬學季合輯</p>
+            <div class="card-actions">
+              <button class="card-btn view">閱讀</button>
+              <button class="card-btn edit">編輯</button>
+            </div>
+          </div>
+          <div class="content-card">
+            <h3>📖 第35期</h3>
+            <p>112學年度 秋冬學季合輯</p>
+            <div class="card-actions">
+              <button class="card-btn view">閱讀</button>
+              <button class="card-btn edit">編輯</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 師資團隊 -->
+      <div class="content-section" id="section-teachers" style="display:none;">
+        <div class="upload-section">
+          <h3><i class="fas fa-user-plus"></i> 新增老師</h3>
+          <div class="upload-area">
+            <i class="fas fa-user"></i>
+            <p>上傳老師照片及資料</p>
+          </div>
+        </div>
+        <div class="content-grid">
+          <div class="content-card">
+            <h3>👩‍🏫 蘇泳貞</h3>
+            <p>G3 星辰班導師</p>
+            <div class="card-actions">
+              <button class="card-btn edit">編輯</button>
+              <button class="card-btn view">檢視</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 活動集錦 -->
+      <div class="content-section" id="section-activities" style="display:none;">
+        <div class="content-grid">
+          <div class="content-card">
+            <h3>📸 花絮剪影</h3>
+            <p>活動精彩瞬間照片</p>
+            <div class="card-actions">
+              <button class="card-btn edit" onclick="editContent('activities-highlights')">編輯</button>
+              <button class="card-btn view">瀏覽</button>
+            </div>
+          </div>
+          <div class="content-card">
+            <h3>🎬 影片專區</h3>
+            <p>活動影片集合</p>
+            <div class="card-actions">
+              <button class="card-btn edit" onclick="editContent('activities-videos')">編輯</button>
+              <button class="card-btn view">瀏覽</button>
+            </div>
+          </div>
+          <div class="content-card">
+            <h3>🏆 成就專區</h3>
+            <p>比賽獲獎記錄</p>
+            <div class="card-actions">
+              <button class="card-btn edit" onclick="editContent('activities-achievement')">編輯</button>
+              <button class="card-btn view">瀏覽</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 招生資訊 -->
+      <div class="content-section" id="section-admissions" style="display:none;">
+        <div class="content-grid">
+          <div class="content-card">
+            <h3>📝 入學申請</h3>
+            <p>轉學申請說明</p>
+            <div class="card-actions">
+              <button class="card-btn edit" onclick="editContent('admissions-apply')">編輯</button>
+            </div>
+          </div>
+          <div class="content-card">
+            <h3>💰 學費資訊</h3>
+            <p>各年級收費標準</p>
+            <div class="card-actions">
+              <button class="card-btn edit" onclick="editContent('admissions-tuition')">編輯</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 課程介紹 -->
+      <div class="content-section" id="section-curriculum" style="display:none;">
+        <div class="content-grid">
+          <div class="content-card">
+            <h3>🏫 小學部課程</h3>
+            <p>小學部課程介紹及影片</p>
+            <div class="card-actions">
+              <button class="card-btn edit" onclick="editContent('curriculum-elementary')">編輯</button>
+            </div>
+          </div>
+          <div class="content-card">
+            <h3>📚 中學部課程</h3>
+            <p>中學部課程介紹及影片</p>
+            <div class="card-actions">
+              <button class="card-btn edit" onclick="editContent('curriculum-secondary')">編輯</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 檔案上傳 -->
+      <div class="content-section" id="section-upload" style="display:none;">
+        <div class="upload-section">
+          <h3><i class="fas fa-cloud-upload-alt"></i> 檔案總管</h3>
+          <div class="upload-area" id="uploadArea">
+            <i class="fas fa-folder-open"></i>
+            <p>點擊或拖曳檔案到此處上傳</p>
+            <p style="font-size: 0.8rem; color: #999;">支援 PDF, JPG, PNG, MP4 等格式</p>
+          </div>
+          <input type="file" id="fileInput" multiple style="display: none;">
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- 編輯器彈窗 -->
+  <div class="editor-modal" id="editorModal">
+    <div class="editor-content">
+      <div class="editor-header">
+        <h2 id="editorTitle">編輯內容</h2>
+        <button class="close-btn" onclick="closeEditor()">&times;</button>
+      </div>
+      <div class="editor-body">
+        <textarea id="editorTextarea" placeholder="在此輸入內容..."></textarea>
+      </div>
+      <div class="editor-footer">
+        <button class="cancel-btn" onclick="closeEditor()">取消</button>
+        <button class="save-btn" onclick="saveContent()">儲存</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // 登入系統
+    document.getElementById('loginForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const username = document.getElementById('username').value;
+      const password = document.getElementById('password').value;
+      
+      // 簡單驗證（實際應該後端處理）
+      if (username && password) {
+        localStorage.setItem('adminLoggedIn', 'true');
+        document.getElementById('loginPage').style.display = 'none';
+        document.getElementById('dashboard').style.display = 'block';
+      }
+    });
+
+    // 檢查登入狀態
+    if (localStorage.getItem('adminLoggedIn') === 'true') {
+      document.getElementById('loginPage').style.display = 'none';
+      document.getElementById('dashboard').style.display = 'block';
+    }
+
+    // 登出
+    function logout() {
+      localStorage.removeItem('adminLoggedIn');
+      document.getElementById('loginPage').style.display = 'flex';
+      document.getElementById('dashboard').style.display = 'none';
+    }
+
+    // 選單切換
+    document.querySelectorAll('.menu-item').forEach(item => {
+      item.addEventListener('click', function() {
+        // 移除 active
+        document.querySelectorAll('.menu-item').forEach(i => i.classList.remove('active'));
+        this.classList.add('active');
+
+        // 隱藏所有區塊
+        document.querySelectorAll('.content-section').forEach(s => s.style.display = 'none');
+        
+        // 顯示選中的區塊
+        const section = this.dataset.section;
+        document.getElementById('section-' + section).style.display = 'block';
+        
+        // 更新標題
+        const titles = {
+          'home': '首頁管理',
+          'news': '最新消息',
+          'newsletter': '光禾通訊',
+          'teachers': '師資團隊',
+          'activities': '活動集錦',
+          'admissions': '招生資訊',
+          'curriculum': '課程介紹',
+          'upload': '檔案上傳',
+          'settings': '系統設定'
+        };
+        document.getElementById('pageTitle').textContent = titles[section] || '管理';
+      });
+    });
+
+    // 編輯內容
+    let currentEditKey = '';
+    let currentData = {};
+
+    // 載入資料
+    async function loadData(type) {
+      try {
+        const response = await fetch('/src/content/' + type + '.json');
+        if (response.ok) {
+          currentData = await response.json();
+          return currentData;
+        }
+      } catch (e) {
+        console.log('載入預設資料');
+      }
+      return null;
+    }
+
+    function editContent(key) {
+      currentEditKey = key;
+      const titles = {
+        'home-carousel': '首頁輪播圖',
+        'home-news': '最新消息',
+        'contact': '聯絡資訊',
+        'activities-highlights': '花絮剪影',
+        'activities-videos': '影片專區',
+        'activities-achievement': '成就專區',
+        'admissions-apply': '入學申請',
+        'admissions-tuition': '學費資訊',
+        'curriculum-elementary': '小學部課程',
+        'curriculum-secondary': '中學部課程'
+      };
+      
+      document.getElementById('editorTitle').textContent = '編輯 - ' + (titles[key] || key);
+      
+      // 根據 key 載入對應內容
+      let content = '';
+      if (key === 'contact') {
+        content = JSON.stringify({
+          address: "806037 高雄市前鎮區德昌路345號",
+          phone: "07-7885128",
+          email: "waldorf.kh@gmail.com"
+        }, null, 2);
+      } else if (key.startsWith('activities-')) {
+        content = JSON.stringify({
+          highlights: [{ title: "活動標題", content: "活動內容..." }]
+        }, null, 2);
+      } else {
+        content = '在此輸入內容...\n\n可以輸入 HTML 或 Markdown 格式。';
+      }
+      
+      document.getElementById('editorTextarea').value = content;
+      document.getElementById('editorModal').style.display = 'block';
+    }
+
+    function previewContent(key) {
+      const routes = {
+        'home-news': '/',
+        'contact': '/contact',
+        'activities-highlights': '/activities/highlights',
+        'activities-videos': '/activities/videos',
+        'activities-achievement': '/activities/achievement',
+        'curriculum-elementary': '/curriculum/elementary-courses'
+      };
+      const route = routes[key] || '/';
+      window.open(route, '_blank');
+    }
+
+    function closeEditor() {
+      document.getElementById('editorModal').style.display = 'none';
+    }
+
+    async function saveContent() {
+      const content = document.getElementById('editorTextarea').value;
+      
+      try {
+        // 驗證 JSON 格式
+        JSON.parse(content);
+        
+        showStatus('已複製到剪貼簿！請將資料儲存到對應的 JSON 檔案', 'success');
+        
+        // 複製到剪貼簿
+        await navigator.clipboard.writeText(content);
+        
+      } catch (e) {
+        showStatus('JSON 格式錯誤，請檢查', 'error');
+        return;
+      }
+      
+      setTimeout(closeEditor, 2000);
+    }
+
+    function showStatus(message, type) {
+      const status = document.getElementById('statusMessage');
+      status.textContent = message;
+      status.className = 'status-message ' + type;
+      setTimeout(() => {
+        status.className = 'status-message';
+      }, 3000);
+    }
+
+    // 檔案上傳處理
+    async function handleFileUpload(input) {
+      const file = input.files[0];
+      if (!file) return;
+      
+      if (file.type !== 'application/pdf') {
+        showStatus('請上傳 PDF 檔案', 'error');
+        return;
+      }
+      
+      if (file.size > 50 * 1024 * 1024) {
+        showStatus('檔案大小超過 50MB 限制', 'error');
+        return;
+      }
+      
+      // 建立 FormData 上傳
+      const formData = new FormData();
+      formData.append('file', file);
+      
+      const progress = document.getElementById('uploadProgress');
+      const progressFill = document.getElementById('progressFill');
+      progress.style.display = 'block';
+      
+      try {
+        // 這是一個客戶端上傳的模擬
+        // 實際上需要服務器端處理
+        let percent = 0;
+        const interval = setInterval(() => {
+          percent += 20;
+          progressFill.style.width = percent + '%';
+          
+          if (percent >= 100) {
+            clearInterval(interval);
+            showStatus('檔案準備上傳！請使用 FTP 或直接將檔案放到 public/newsletter/ 目錄', 'success');
+            setTimeout(() => {
+              progress.style.display = 'none';
+              progressFill.style.width = '0%';
+            }, 3000);
+          }
+        }, 300);
+      } catch (error) {
+        showStatus('上傳失敗: ' + error.message, 'error');
+      }
+    }
+
+    // 拖曳上傳
+    const uploadArea = document.getElementById('uploadArea');
+    if (uploadArea) {
+      uploadArea.addEventListener('dragover', function(e) {
+        e.preventDefault();
+        this.style.borderColor = '#228B22';
+      });
+      
+      uploadArea.addEventListener('dragleave', function(e) {
+        e.preventDefault();
+        this.style.borderColor = '#ccc';
+      });
+      
+      uploadArea.addEventListener('drop', function(e) {
+        e.preventDefault();
+        this.style.borderColor = '#ccc';
+        const files = e.dataTransfer.files;
+        if (files.length > 0) {
+          const input = document.getElementById('fileInput');
+          input.files = files;
+          handleFileUpload(input);
+        }
+      });
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,73 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Navigation from '../../components/Navigation.astro';
+---
+
+<Layout title="華德福教育QA大集合 | 光禾華德福">
+  <Navigation />
+  
+  <section class="hero-small">
+    <div class="container">
+      <h1>華德福教育 Q&A 大集合</h1>
+      <p>常見問題解答</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="qa-gallery">
+        <img src="/qa-1.jpg" alt="QA 1" />
+        <img src="/qa-2.jpg" alt="QA 2" />
+        <img src="/qa-3.jpg" alt="QA 3" />
+        <img src="/qa-4.jpg" alt="QA 4" />
+        <img src="/qa-5.jpg" alt="QA 5" />
+        <img src="/qa-6.jpg" alt="QA 6" />
+        <img src="/qa-7.jpg" alt="QA 7" />
+        <img src="/qa-8.jpg" alt="QA 8" />
+        <img src="/qa-9.jpg" alt="QA 9" />
+        <img src="/qa-10.jpg" alt="QA 10" />
+        <img src="/qa-11.jpg" alt="QA 11" />
+        <img src="/qa-12.jpg" alt="QA 12" />
+        <img src="/qa-13.jpg" alt="QA 13" />
+        <img src="/qa-14.jpg" alt="QA 14" />
+        <img src="/qa-15.jpg" alt="QA 15" />
+        <img src="/qa-16.jpg" alt="QA 16" />
+        <img src="/qa-17.jpg" alt="QA 17" />
+        <img src="/qa-18.jpg" alt="QA 18" />
+        <img src="/qa-19.jpg" alt="QA 19" />
+        <img src="/qa-20.jpg" alt="QA 20" />
+        <img src="/qa-21.jpg" alt="QA 21" />
+        <img src="/qa-22.jpg" alt="QA 22" />
+        <img src="/qa-23.jpg" alt="QA 23" />
+        <img src="/qa-24.jpg" alt="QA 24" />
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="container">
+      <p>© 2026 光禾華德福實驗學校. All rights reserved.</p>
+    </div>
+  </footer>
+</Layout>
+
+<style>
+  .hero-small { background: linear-gradient(135deg, #8B4513, #228B22); color: white; padding: 4rem 2rem; text-align: center; }
+  .hero-small h1 { font-size: 3rem; margin-bottom: 0.5rem; }
+  .hero-small p { font-size: 1.2rem; opacity: 0.9; }
+  .section { padding: 4rem 2rem; }
+  .container { max-width: 1000px; margin: 0 auto; }
+  .qa-gallery {
+    display: flex;
+    flex-direction: column;
+    gap: 3rem;
+  }
+  .qa-gallery img {
+    width: 100%;
+    height: auto;
+    display: block;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  }
+  .footer { background: #333; color: white; padding: 2rem; text-align: center; margin-top: 2rem; }
+</style>

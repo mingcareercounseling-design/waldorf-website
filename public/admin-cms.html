@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>光禾華德福 - 內容管理系統</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --primary: #8B4513;
+      --secondary: #228B22;
+      --accent: #FF8C00;
+      --light: #f5f5f5;
+      --dark: #333;
+      --border: #ddd;
+    }
+    body { font-family: 'Noto Sans TC', sans-serif; background: #f0f0f0; }
+    
+    .header {
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      color: white;
+      padding: 15px 30px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+    }
+    .header h1 { font-size: 1.5rem; }
+    .header-actions { display: flex; gap: 10px; }
+    .btn {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 500;
+      transition: all 0.2s;
+    }
+    .btn-save { background: var(--accent); color: white; }
+    .btn-export { background: rgba(255,255,255,0.2); color: white; }
+    .btn:hover { transform: translateY(-2px); }
+    
+    .container { display: flex; min-height: calc(100vh - 70px); }
+    
+    .sidebar {
+      width: 280px;
+      background: white;
+      border-right: 1px solid var(--border);
+      padding: 20px;
+      overflow-y: auto;
+    }
+    .sidebar h2 {
+      font-size: 1rem;
+      color: #666;
+      margin-bottom: 15px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--border);
+    }
+    .page-item {
+      padding: 12px 15px;
+      margin-bottom: 8px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .page-item:hover { background: var(--light); }
+    .page-item.active {
+      background: #e8f5e9;
+      color: var(--secondary);
+      border-left: 3px solid var(--secondary);
+    }
+    .page-icon { font-size: 1.2rem; }
+    
+    .main {
+      flex: 1;
+      padding: 30px;
+      background: white;
+      margin: 20px;
+      border-radius: 12px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    .page-title {
+      font-size: 1.5rem;
+      margin-bottom: 20px;
+      padding-bottom: 15px;
+      border-bottom: 2px solid var(--primary);
+    }
+    
+    .content-editor { display: flex; gap: 20px; }
+    .content-preview {
+      flex: 2;
+      padding: 20px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      min-height: 400px;
+    }
+    .content-preview h1, .content-preview h2, .content-preview h3 {
+      color: var(--primary);
+      margin: 15px 0 10px;
+    }
+    .content-preview p { line-height: 1.8; margin: 10px 0; }
+    .content-preview ul, .content-preview ol { margin: 10px 0 10px 20px; }
+    .content-preview li { margin: 5px 0; }
+    .content-preview table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 15px 0;
+    }
+    .content-preview th, .content-preview td {
+      border: 1px solid var(--border);
+      padding: 10px;
+      text-align: left;
+    }
+    .content-preview th { background: var(--light); }
+    
+    .edit-panel {
+      flex: 1;
+      background: var(--light);
+      padding: 20px;
+      border-radius: 8px;
+    }
+    .edit-panel h3 { margin-bottom: 15px; color: var(--dark); }
+    .form-group { margin-bottom: 15px; }
+    .form-group label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: 500;
+      color: #666;
+    }
+    .form-group input, .form-group textarea {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      font-family: inherit;
+      font-size: 0.95rem;
+    }
+    .form-group textarea { min-height: 150px; resize: vertical; }
+    .form-group input:focus, .form-group textarea:focus {
+      outline: none;
+      border-color: var(--secondary);
+      box-shadow: 0 0 0 3px rgba(34,139,34,0.1);
+    }
+    .help-text { font-size: 0.8rem; color: #999; margin-top: 5px; }
+    
+    .toast {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: var(--secondary);
+      color: white;
+      padding: 15px 25px;
+      border-radius: 8px;
+      display: none;
+      z-index: 1000;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    }
+    .toast.show { display: block; animation: slideIn 0.3s ease; }
+    @keyframes slideIn {
+      from { transform: translateX(100%); opacity: 0; }
+      to { transform: translateX(0); opacity: 1; }
+    }
+  </style>
+</head>
+<body>
+  <header class="header">
+    <h1>光禾華德福 - 內容管理系統</h1>
+    <div class="header-actions">
+      <button class="btn btn-export" onclick="exportJSON()">匯出 JSON</button>
+      <button class="btn btn-save" onclick="saveChanges()">儲存變更</button>
+    </div>
+  </header>
+  
+  <div class="container">
+    <aside class="sidebar">
+      <h2>選擇頁面</h2>
+      <div id="pageList"></div>
+    </aside>
+    
+    <main class="main">
+      <h2 class="page-title" id="currentPageTitle">選擇一個頁面開始編輯</h2>
+      
+      <div class="content-editor">
+        <div class="content-preview" id="contentPreview">
+          <p style="color: #999;">請從左側選擇要編輯的頁面</p>
+        </div>
+        
+        <div class="edit-panel">
+          <h3>編輯內容</h3>
+          <div class="form-group">
+            <label>標題</label>
+            <input type="text" id="editTitle" placeholder="頁面標題">
+          </div>
+          <div class="form-group">
+            <label>內容 (HTML)</label>
+            <textarea id="editContent" placeholder="<h2>標題</h2><p>內容...</p>"></textarea>
+            <p class="help-text">支援 HTML 標籤：h1-h6, p, ul, ol, li, table, strong, em, a</p>
+          </div>
+          <button class="btn btn-save" onclick="applyChanges()" style="width: 100%;">套用變更</button>
+        </div>
+      </div>
+    </main>
+  </div>
+  
+  <div class="toast" id="toast"></div>
+
+  <script>
+    // 頁面配置
+    var pages = [
+      { id: 'home', name: '首頁', icon: '🏠', file: 'home' },
+      { id: 'about', name: '關於我們', icon: '📖', file: 'about' },
+      { id: 'teachers', name: '師資團隊', icon: '👨‍🏫', file: 'teachers' },
+      { id: 'admissions', name: '招生資訊', icon: '📝', file: 'admissions' },
+      { id: 'curriculum', name: '教學圖像', icon: '🎓', file: 'curriculum' },
+      { id: 'activities', name: '活動集錦', icon: '🎉', file: 'activities' },
+      { id: 'calendar', name: '行事曆', icon: '📅', file: 'calendar' },
+      { id: 'finance', name: '財務公開', icon: '💰', file: 'finance' },
+      { id: 'contact', name: '聯絡我們', icon: '📞', file: 'contact' },
+      { id: 'visit', name: '預約參訪', icon: '🚗', file: 'visit' },
+      { id: 'apply', name: '入學申請', icon: '📋', file: 'apply' },
+      { id: 'support', name: '支持光禾', icon: '❤️', file: 'support' }
+    ];
+
+    // 初始資料
+    var pageData = {
+      home: { title: '首頁', content: '<h1>歡迎來到光禾華德福實驗學校</h1><p>在充滿愛與自由的環境中，陪孩子走一段善、美、真的學習旅程。</p>' },
+      about: { title: '關於我們', content: '<h2>光禾的願景</h2><p>成為充滿愛與自由的學習園地</p>' },
+      teachers: { title: '師資團隊', content: '<h2>教學核心小組</h2><ul><li>校長：許慧玲</li></ul>' },
+      admissions: { title: '招生資訊', content: '<h2>招生中</h2><p>歡迎加入光禾華德福</p>' },
+      curriculum: { title: '教學圖像', content: '<h2>課程特色</h2><p>全人教育藝術融入</p>' },
+      activities: { title: '活動集錦', content: '<h2>校園活動</h2><p>記錄精彩瞬間</p>' },
+      calendar: { title: '行事曆', content: '<h2>114學年度</h2><p>各項活動日期</p>' },
+      finance: { title: '財務公開', content: '<h2>財務資訊</h2><p>依規定公開</p>' },
+      contact: { title: '聯絡我們', content: '<h2>聯絡資訊</h2><p>電話：07-7885128</p>' },
+      visit: { title: '預約參訪', content: '<h2>預約參觀</h2><p>歡迎預約</p>' },
+      apply: { title: '入學申請', content: '<h2>申請流程</h2><p>請洽詢本校</p>' },
+      support: { title: '支持光禾', content: '<h2>感謝支持</h2><p>歡迎捐款</p>' }
+    };
+
+    var currentPageData = null;
+    var currentFileId = 'home';
+
+    // 初始化
+    renderPageList();
+    loadPageData('home');
+
+    // 渲染頁面列表
+    function renderPageList() {
+      var list = document.getElementById('pageList');
+      var html = '';
+      for (var i = 0; i < pages.length; i++) {
+        var page = pages[i];
+        var active = (page.file === currentFileId) ? ' active' : '';
+        html += '<div class="page-item' + active + '" onclick="loadPageData(\'' + page.file + '\')">';
+        html += '<span class="page-icon">' + page.icon + '</span>';
+        html += '<span>' + page.name + '</span>';
+        html += '</div>';
+      }
+      list.innerHTML = html;
+    }
+
+    // 載入頁面資料
+    function loadPageData(fileId) {
+      currentFileId = fileId;
+      var page = findPage(fileId);
+      
+      renderPageList();
+      document.getElementById('currentPageTitle').textContent = page.name;
+      
+      if (pageData[fileId]) {
+        currentPageData = pageData[fileId];
+      } else {
+        currentPageData = { title: page.name, content: '<h2>內容待編輯</h2>' };
+      }
+      
+      document.getElementById('contentPreview').innerHTML = currentPageData.content;
+      document.getElementById('editTitle').value = currentPageData.title || '';
+      document.getElementById('editContent').value = currentPageData.content || '';
+      
+      showToast('已載入 ' + page.name);
+    }
+
+    // 找頁面
+    function findPage(fileId) {
+      for (var i = 0; i < pages.length; i++) {
+        if (pages[i].file === fileId) return pages[i];
+      }
+      return pages[0];
+    }
+
+    // 套用變更
+    function applyChanges() {
+      var newTitle = document.getElementById('editTitle').value;
+      var newContent = document.getElementById('editContent').value;
+      
+      currentPageData = {
+        title: newTitle,
+        content: newContent
+      };
+      
+      pageData[currentFileId] = currentPageData;
+      
+      document.getElementById('contentPreview').innerHTML = newContent;
+      document.getElementById('currentPageTitle').textContent = newTitle;
+      
+      showToast('已套用變更');
+    }
+
+    // 儲存變更
+    function saveChanges() {
+      var json = JSON.stringify(pageData[currentFileId], null, 2);
+      var blob = new Blob([json], { type: 'application/json' });
+      var url = URL.createObjectURL(blob);
+      var a = document.createElement('a');
+      a.href = url;
+      a.download = currentFileId + '_data.json';
+      a.click();
+      URL.revokeObjectURL(url);
+      
+      showToast('已匯出 JSON 檔案，請覆蓋網站資料');
+    }
+
+    // 匯出完整 JSON
+    function exportJSON() {
+      var json = JSON.stringify(pageData, null, 2);
+      var blob = new Blob([json], { type: 'application/json' });
+      var url = URL.createObjectURL(blob);
+      var a = document.createElement('a');
+      a.href = url;
+      a.download = 'pages_data.json';
+      a.click();
+      URL.revokeObjectURL(url);
+      
+      showToast('已匯出完整資料');
+    }
+
+    // 顯示提示
+    function showToast(message) {
+      var toast = document.getElementById('toast');
+      toast.textContent = message;
+      toast.classList.add('show');
+      setTimeout(function() { toast.classList.remove('show'); }, 3000);
+    }
+  </script>
+</body>
+</html>

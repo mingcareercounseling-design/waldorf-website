@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>光禾華德福 - 視覺化編輯器</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    /* 編輯器框架 */
+    body { 
+      font-family: 'Noto Sans TC', -apple-system, sans-serif; 
+      background: #1a1a2e;
+      min-height: 100vh;
+    }
+    
+    /* 頂部工具欄 */
+    .editor-toolbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 60px;
+      background: linear-gradient(135deg, #8B4513, #228B22);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 2rem;
+      z-index: 10000;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+    }
+    
+    .toolbar-left { display: flex; align-items: center; gap: 1rem; }
+    .toolbar-left h1 { color: white; font-size: 1.3rem; }
+    .toolbar-right { display: flex; gap: 0.8rem; }
+    
+    .btn {
+      padding: 0.6rem 1.2rem;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 0.9rem;
+      font-weight: 500;
+      transition: all 0.2s;
+      font-family: inherit;
+    }
+    .btn:hover { transform: scale(1.05); }
+    .btn-primary { background: white; color: #228B22; }
+    .btn-secondary { background: rgba(255,255,255,0.2); color: white; }
+    .btn-success { background: #4CAF50; color: white; }
+    
+    /* 預覽區域 */
+    .preview-container {
+      margin-top: 60px;
+      padding: 2rem;
+      background: #f5f5f5;
+      min-height: calc(100vh - 60px);
+    }
+    
+    .preview-frame {
+      max-width: 1200px;
+      margin: 0 auto;
+      background: white;
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+    }
+    
+    /* 可編輯區域 */
+    .editable-section {
+      position: relative;
+      padding: 2rem;
+      margin: 1rem;
+      border: 2px dashed transparent;
+      border-radius: 10px;
+      transition: all 0.2s;
+    }
+    
+    .editable-section:hover {
+      border-color: #228B22;
+      background: rgba(34, 139, 34, 0.05);
+    }
+    
+    .editable-section.editing {
+      border-color: #8B4513;
+      background: rgba(139, 69, 19, 0.1);
+    }
+    
+    /* 編輯浮動按鈕 */
+    .edit-btn {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: #228B22;
+      color: white;
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 20px;
+      cursor: pointer;
+      font-size: 0.8rem;
+      opacity: 0;
+      transition: opacity 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    
+    .editable-section:hover .edit-btn {
+      opacity: 1;
+    }
+    
+    .edit-btn:hover {
+      background: #8B4513;
+    }
+    
+    /* 編輯面板 */
+    .edit-panel {
+      display: none;
+      position: fixed;
+      top: 60px;
+      right: -400px;
+      width: 400px;
+      height: calc(100vh - 60px);
+      background: white;
+      box-shadow: -5px 0 30px rgba(0,0,0,0.3);
+      padding: 2rem;
+      overflow-y: auto;
+      z-index: 9999;
+      transition: right 0.3s ease;
+    }
+    
+    .edit-panel.active {
+      display: block;
+      right: 0;
+    }
+    
+    .edit-panel h2 {
+      color: #333;
+      margin-bottom: 1.5rem;
+      padding-bottom: 1rem;
+      border-bottom: 2px solid #eee;
+    }
+    
+    .form-group {
+      margin-bottom: 1.5rem;
+    }
+    
+    .form-group label {
+      display: block;
+      margin-bottom: 0.5rem;
+      color: #555;
+      font-weight: 500;
+    }
+    
+    .form-group input,
+    .form-group textarea,
+    .form-group select {
+      width: 100%;
+      padding: 0.8rem;
+      border: 2px solid #eee;
+      border-radius: 10px;
+      font-size: 1rem;
+      font-family: inherit;
+      transition: border-color 0.2s;
+    }
+    
+    .form-group input:focus,
+    .form-group textarea:focus {
+      outline: none;
+      border-color: #228B22;
+    }
+    
+    .form-group textarea {
+      min-height: 150px;
+      resize: vertical;
+    }
+    
+    .panel-actions {
+      display: flex;
+      gap: 1rem;
+      margin-top: 2rem;
+      padding-top: 1rem;
+      border-top: 2px solid #eee;
+    }
+    
+    .panel-actions .btn {
+      flex: 1;
+    }
+    
+    /* 預覽內容樣式 */
+    .preview-content h1 {
+      font-size: 2.5rem;
+      color: #8B4513;
+      margin-bottom: 1rem;
+      text-align: center;
+    }
+    
+    .preview-content h2 {
+      font-size: 1.8rem;
+      color: #228B22;
+      margin: 2rem 0 1rem;
+    }
+    
+    .preview-content p {
+      color: #555;
+      line-height: 1.8;
+      margin-bottom: 1rem;
+    }
+    
+    .preview-content ul {
+      padding-left: 1.5rem;
+      margin-bottom: 1rem;
+    }
+    
+    .preview-content li {
+      color: #555;
+      padding: 0.5rem 0;
+    }
+    
+    /* 提示 */
+    .hint {
+      position: fixed;
+      bottom: 2rem;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(0,0,0,0.8);
+      color: white;
+      padding: 1rem 2rem;
+      border-radius: 30px;
+      font-size: 0.9rem;
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+    
+    .hint.show {
+      opacity: 1;
+    }
+  </style>
+</head>
+<body>
+  <!-- 工具欄 -->
+  <header class="editor-toolbar">
+    <div class="toolbar-left">
+      <h1>🌟 光禾華德福 - 視覺化編輯器</h1>
+    </div>
+    <div class="toolbar-right">
+      <button class="btn btn-secondary" onclick="previewMode()">👁️ 預覽</button>
+      <button class="btn btn-secondary" onclick="exportData()">📤 匯出資料</button>
+      <button class="btn btn-primary" onclick="saveAll()">💾 儲存全部</button>
+    </div>
+  </header>
+  
+  <!-- 預覽區域 -->
+  <div class="preview-container">
+    <div class="preview-frame">
+      <div class="preview-content">
+        
+        <!-- 首頁標題區 -->
+        <div class="editable-section" data-type="hero" data-field="title">
+          <button class="edit-btn" onclick="openEdit('hero', 'title', '首頁標題')">✏️ 編輯</button>
+          <h1>光禾華德福實驗學校</h1>
+        </div>
+        
+        <div class="editable-section" data-type="hero" data-field="subtitle">
+          <button class="edit-btn" onclick="openEdit('hero', 'subtitle', '副標題')">✏️ 編輯</button>
+          <p style="text-align:center;font-size:1.2rem;color:#666;">在充滿愛與自由的環境中，陪孩子走一段善、美、真的學習旅程</p>
+        </div>
+        
+        <!-- 關於我們 -->
+        <div class="editable-section" data-type="about" data-field="title">
+          <button class="edit-btn" onclick="openEdit('about', 'title', '關於我們標題')">✏️ 編輯</button>
+          <h2>關於我們</h2>
+        </div>
+        
+        <div class="editable-section" data-type="about" data-field="content">
+          <button class="edit-btn" onclick="openEdit('about', 'content', '關於我們內容')">✏️ 編輯</button>
+          <p>光禾華德福實驗學校成立於民國101年，致力於實踐全人教育，讓孩子在溫暖的環境中成長。我們相信每個孩子都是獨特的個體，透過均衡的意志、情感與思考發展，成為完整的人。</p>
+        </div>
+        
+        <!-- 最新消息 -->
+        <div class="editable-section" data-type="news" data-field="title">
+          <button class="edit-btn" onclick="openEdit('news', 'title', '最新消息標題')">✏️ 編輯</button>
+          <h2>最新消息</h2>
+        </div>
+        
+        <div class="editable-section" data-type="news" data-field="items">
+          <button class="edit-btn" onclick="openEdit('news', 'items', '消息項目')">✏️ 編輯</button>
+          <ul>
+            <li><strong>115學年度招生說明會</strong> - 2026年3月21日</li>
+            <li><strong>光禾榮獲高雄市實驗學校評鑑優等</strong> - 2026年2月1日</li>
+            <li><strong>春季慶典暨校慶</strong> - 2026年3月28日</li>
+          </ul>
+        </div>
+        
+        <!-- 聯絡資訊 -->
+        <div class="editable-section" data-type="contact" data-field="title">
+          <button class="edit-btn" onclick="openEdit('contact', 'title', '聯絡我們標題')">✏️ 編輯</button>
+          <h2>聯絡我們</h2>
+        </div>
+        
+        <div class="editable-section" data-type="contact" data-field="content">
+          <button class="edit-btn" onclick="openEdit('contact', 'content', '聯絡資訊')">✏️ 編輯</button>
+          <p>
+            <strong>地址：</strong>806037 高雄市前鎮區德昌路345號（興仁國中 理學大樓）<br>
+            <strong>電話：</strong>07-7885128<br>
+            <strong>Email：</strong>waldorf.kh@gmail.com
+          </p>
+        </div>
+        
+      </div>
+    </div>
+  </div>
+  
+  <!-- 編輯面板 -->
+  <div class="edit-panel" id="editPanel">
+    <h2 id="panelTitle">編輯</h2>
+    <form id="editForm">
+      <input type="hidden" id="editType">
+      <input type="hidden" id="editField">
+      <div id="formFields"></div>
+      <div class="panel-actions">
+        <button type="button" class="btn btn-secondary" onclick="closeEdit()">取消</button>
+        <button type="submit" class="btn btn-success">✅ 儲存</button>
+      </div>
+    </form>
+  </div>
+  
+  <div class="hint" id="hint">💡 滑鼠移到區塊上，點擊「✏️ 編輯」即可修改內容</div>
+
+  <script>
+    // 資料儲存
+    let pageData = {
+      hero: {
+        title: '光禾華德福實驗學校',
+        subtitle: '在充滿愛與自由的環境中，陪孩子走一段善、美、真的學習旅程'
+      },
+      about: {
+        title: '關於我們',
+        content: '光禾華德福實驗學校成立於民國101年，致力於實踐全人教育，讓孩子在溫暖的環境中成長。我們相信每個孩子都是獨特的個體，透過均衡的意志、情感與思考發展，成於完整的人。'
+      },
+      news: {
+        title: '最新消息',
+        items: '115學年度招生說明會 - 2026年3月21日\n光禾榮獲高雄市實驗學校評鑑優等 - 2026年2月1日\n春季慶典暨校慶 - 2026年3月28日'
+      },
+      contact: {
+        title: '聯絡我們',
+        content: '地址：806037 高雄市前鎮區德昌路345號（興仁國中 理學大樓）\n電話：07-7885128\nEmail：waldorf.kh@gmail.com'
+      }
+    };
+    
+    // 載入儲存的資料
+    const saved = localStorage.getItem('waldorf-visual-edit');
+    if (saved) {
+      try {
+        pageData = JSON.parse(saved);
+        updatePreview();
+      } catch(e) {}
+    }
+    
+    function updatePreview() {
+      // 更新預覽內容
+      document.querySelector('[data-type="hero"][data-field="title"] h1').textContent = pageData.hero.title;
+      document.querySelector('[data-type="hero"][data-field="subtitle"] p').textContent = pageData.hero.subtitle;
+      document.querySelector('[data-type="about"][data-field="title"] h2').textContent = pageData.about.title;
+      document.querySelector('[data-type="about"][data-field="content"] p').textContent = pageData.about.content;
+      document.querySelector('[data-type="news"][data-field="title"] h2').textContent = pageData.news.title;
+      document.querySelector('[data-type="contact"][data-field="title"] h2').textContent = pageData.contact.title;
+      document.querySelector('[data-type="contact"][data-field="content"] p').innerHTML = pageData.contact.content.replace(/\n/g, '<br>');
+      
+      // 更新列表
+      const itemsText = pageData.news.items;
+      const items = itemsText.split('\n').filter(i => i.trim());
+      let html = '<ul>';
+      items.forEach(item => {
+        html += `<li>${item}</li>`;
+      });
+      html += '</ul>';
+      document.querySelector('[data-type="news"][data-field="items"]').innerHTML = 
+        `<button class="edit-btn" onclick="openEdit('news', 'items', '消息項目')">✏️ 編輯</button>` + html;
+    }
+    
+    function openEdit(type, field, label) {
+      document.getElementById('editType').value = type;
+      document.getElementById('editField').value = field;
+      document.getElementById('panelTitle').textContent = '編輯 ' + label;
+      
+      let value = pageData[type]?.[field] || '';
+      
+      let html = '';
+      if (field === 'content' || field === 'items') {
+        html = `<div class="form-group">
+          <label>${label}</label>
+          <textarea name="value" rows="8">${value}</textarea>
+          <small style="color:#888;">每行一行，列表項目用</small>
+        </div>`;
+      } else {
+        html = `<div class="form-group">
+          <label>${label}</label>
+          <input type="text" name="value" value="${value}">
+        </div>`;
+      }
+      
+      document.getElementById('formFields').innerHTML = html;
+      document.getElementById('editPanel').classList.add('active');
+    }
+    
+    function closeEdit() {
+      document.getElementById('editPanel').classList.remove('active');
+    }
+    
+    document.getElementById('editForm').onsubmit = function(e) {
+      e.preventDefault();
+      const type = document.getElementById('editType').value;
+      const field = document.getElementById('editField').value;
+      const value = document.querySelector('[name="value"]').value;
+      
+      if (!pageData[type]) pageData[type] = {};
+      pageData[type][field] = value;
+      
+      localStorage.setItem('waldorf-visual-edit', JSON.stringify(pageData));
+      updatePreview();
+      closeEdit();
+      
+      showHint('✅ 已儲存！');
+    };
+    
+    function saveAll() {
+      localStorage.setItem('waldorf-visual-edit', JSON.stringify(pageData));
+      showHint('✅ 全部已儲存！');
+    }
+    
+    function exportData() {
+      const blob = new Blob([JSON.stringify(pageData, null, 2)], {type: 'application/json'});
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = '光禾網站內容.json';
+      a.click();
+      showHint('📤 已匯出！');
+    }
+    
+    function previewMode() {
+      showHint('👁️ 預覽模式 - 點擊區塊即可編輯');
+    }
+    
+    function showHint(text) {
+      const hint = document.getElementById('hint');
+      hint.textContent = text;
+      hint.classList.add('show');
+      setTimeout(() => hint.classList.remove('show'), 2500);
+    }
+    
+    // 顯示提示
+    setTimeout(() => {
+      showHint('💡 滑鼠移到區塊上，點擊「✏️ 編輯」即可修改內容');
+    }, 1000);
+  </script>
+</body>
+</html>

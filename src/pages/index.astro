@@ -77,6 +77,60 @@ import Navigation from '../components/Navigation.astro';
     </div>
   </section>
 
+  <!-- 班級樹苗視覺化 -->
+  <section class="section trees-section" style="background: linear-gradient(180deg, #e8f5e9 0%, #c8e6c9 100%); padding: 4rem 2rem;">
+    <div class="container">
+      <h2 class="section-title" style="color: #8B4513; margin-bottom: 2rem;">班級樹苗</h2>
+      <div class="trees-grid" id="trees-container">
+        <!-- 樹苗內容由 JS 載入 -->
+      </div>
+    </div>
+  </section>
+
+  <script>
+    // 載入樹苗資料
+    async function loadTrees() {
+      try {
+        const res = await fetch('/home-data.json');
+        const data = await res.json();
+        if (data.trees && data.trees.groups) {
+          const groups = data.trees.groups.split('|').filter(g => g.trim());
+          
+          // 班級對應圖示
+          const classIcons = {
+            '雲杉': '🌲', '月桂': '🌙', '星辰': '⭐', '澄月': '🌙',
+            '銀杏': '🍂', '暖陽': '☀️', '海洋': '🌊', '雲彩': '☁️',
+            '茉莉': '🌸', '芙蓉': '🌺', '榕樹': '🌳', '天使': '👼',
+            '彩虹': '🌈', '水晶': '💎'
+          };
+          
+          let html = '';
+          groups.forEach((name, i) => {
+            const isGraduated = name.includes('畢業') || name.includes('彩虹') || name.includes('水晶');
+            
+            // 找對應的圖示
+            let emoji = '🌱';
+            for (const key in classIcons) {
+              if (name.includes(key)) {
+                emoji = classIcons[key];
+                break;
+              }
+            }
+            
+            html += `<div class="tree-item">
+              <div style="font-size: 2.5rem;">${emoji}</div>
+              <div style="color: #333; font-size: 0.85rem; font-weight: 600; margin-top: 0.5rem;">${name}</div>
+            </div>`;
+          });
+          document.getElementById('trees-container').innerHTML = html;
+        }
+      } catch(e) {
+        console.log('載入樹苗資料失敗');
+      }
+    }
+    loadTrees();
+  </script>
+
   <!-- 光禾的蛻變與成長 -->
   <section class="section history">
     <div class="container">
@@ -182,6 +236,30 @@ import Navigation from '../components/Navigation.astro';
   .section-title { text-align: center; font-size: 2.5rem; color: #8B4513; margin-bottom: 3rem; }
 
   .news-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; }
+  
+  .trees-grid { 
+    display: grid; 
+    grid-template-columns: repeat(2, 1fr); 
+    gap: 1rem; 
+    max-width: 500px; 
+    margin: 0 auto; 
+    text-align: center; 
+  }
+
+  @media (min-width: 768px) {
+    .trees-grid {
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1.5rem;
+      max-width: 900px;
+    }
+  }
+
+  .tree-item {
+    text-align: center;
+    padding: 1rem;
+    background: rgba(255,255,255,0.7);
+    border-radius: 15px;
+  }
   .news-card { background: white; padding: 2rem; border-radius: 20px; box-shadow: 0 10px 40px rgba(139, 69, 19, 0.1); transition: transform 0.3s ease; }
   .news-card:hover { transform: translateY(-5px); }
   .news-date { color: #228B22; font-size: 0.9rem; font-weight: 500; }
@@ -218,8 +296,9 @@ import Navigation from '../components/Navigation.astro';
   .btn-secondary:hover { background: #8B4513; color: white; }
 
   @media (max-width: 768px) {
+    .hero { min-height: 60vh; padding: 3rem 1.5rem; align-items: center; }
     .hero-title { font-size: 2.5rem; }
-    .hero-buttons { flex-direction: column; }
+    .hero-buttons { flex-direction: column; align-items: center; }
     .timeline-item { flex-direction: column; }
   }
 </style>

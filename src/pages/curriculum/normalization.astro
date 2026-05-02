@@ -9,72 +9,137 @@ import Navigation from '../../components/Navigation.astro';
   <section class="hero-small">
     <div class="container">
       <h1>教學正常化</h1>
-      <p>教學正常化自我檢核與課表</p>
+      <p>華德福教育的課程規劃與教學資源</p>
     </div>
   </section>
 
   <section class="section">
     <div class="container">
       
-      <div class="content-block">
-        <h2>114學年度</h2>
-        <ul>
-          <li>114學年度國民中學正常教學學校自我檢核表</li>
-          <li>114-1晤談紀錄表</li>
-          <li>114-七年級課表-秋冬學季</li>
-          <li>114-八年級課表-秋冬學季</li>
-          <li>114-九年級課表-秋冬學季</li>
-        </ul>
+      <!-- 114學年度 -->
+      <h2>114學年度</h2>
+      <div class="downloads">
+        <a href="/114-檢核表.pdf" class="download-item" download>
+          <span class="icon">📄</span>
+          <span>114學年度國民中學正常教學學校自我檢核表.pdf</span>
+        </a>
+        <a href="/114-晤談紀錄表.pdf" class="download-item" download>
+          <span class="icon">📄</span>
+          <span>114-1晤談紀錄表.pdf</span>
+        </a>
+      </div>
+      <div class="schedule-table">
+        <a href="/114-g7.pdf" class="schedule-item" download>114學年度 七年級課表（秋冬學季）</a>
+        <a href="/114-g8.pdf" class="schedule-item" download>114學年度 八年級課表（秋冬學季）</a>
+        <a href="/114-g9.pdf" class="schedule-item" download>114學年度 九年級課表（秋冬學季）</a>
       </div>
 
-      <div class="content-block">
-        <h2>113學年度課表</h2>
-        <ul>
-          <li>113學年度 七年級課表</li>
-          <li>113學年度 八年級課表</li>
-          <li>113學年度 九年級課表</li>
-          <li>113學年國民中學教學正常化自我檢核表</li>
-          <li>113學年度晤談紀錄表</li>
-        </ul>
+      <!-- 113學年度課表 -->
+      <h2>113學年度課表</h2>
+      <div class="schedule-table">
+        <a href="/113-g7.pdf" class="schedule-item" download>113學年度 七年級課表</a>
+        <a href="/113-g8.pdf" class="schedule-item" download>113學年度 八年級課表</a>
+        <a href="/113-g9.pdf" class="schedule-item" download>113學年度 九年級課表</a>
       </div>
 
-      <div class="content-block">
-        <h2>112學年度 G7-G9課表</h2>
-        <ul>
-          <li>112學年度 七年級課表</li>
-          <li>112學年度 八年級課表</li>
-          <li>112學年度 九年級課表</li>
-          <li>112學年國民中學教學正常化自我檢核表</li>
-        </ul>
+      <!-- 113學年度文件 -->
+      <h2>113學年度文件</h2>
+      <div class="downloads">
+        <a href="/113-檢核表.pdf" class="download-item" download>
+          <span class="icon">📄</span>
+          <span>113學年國民中學教學正常化自我檢核表</span>
+        </a>
+        <a href="/113-晤談紀錄表.pdf" class="download-item" download>
+          <span class="icon">📄</span>
+          <span>113學年度晤談紀錄表</span>
+        </a>
       </div>
 
-      <div class="content-block">
-        <h2>主課程說明</h2>
-        <p>華德福的主課程是一個週期性狀態，透過這個歷程讓學生專注且持續約三至四週的學習，課程領域包含：文史，自然、數學等。在學習歷程中學生透過課程藝術化的引導吸收所學的「知識」，並透過充分的睡眠，經由隔天在課堂上的「回顧與重述」，讓經驗轉化成自己的能力，並書寫在自己的工作本上。</p>
+      <!-- 112學年度 -->
+      <h2>112學年度 G7-G9課表</h2>
+      <div class="schedule-table">
+        <a href="/112-g7.pdf" class="schedule-item" download>112學年度 七年級課表</a>
+        <a href="/112-g8.pdf" class="schedule-item" download>112學年度 八年級課表</a>
+        <a href="/112-g9.pdf" class="schedule-item" download>112學年度 九年級課表</a>
       </div>
 
-      <div class="content-block">
-        <h2>109-111學年度 課程圖像</h2>
-        <ul>
-          <li>七年級 天使班 衛教活動及課程</li>
-          <li>八年級 水晶班 學習樣貌</li>
-          <li>七年級 榕樹班 自行車募款</li>
-          <li>八年級 天使班 獨木舟活動</li>
-          <li>九年級 水晶班 學習樣貌</li>
-          <li>七年級 芙蓉班 英文戲劇</li>
-          <li>八年級 榕樹班 茶道</li>
-          <li>九年級 天使班 畢業公演</li>
-          <li>十年級 水晶班 自行車旅行</li>
-        </ul>
+      <!-- 112學年度文件 -->
+      <h2>112學年度文件</h2>
+      <div class="downloads">
+        <a href="/112-檢核表.pdf" class="download-item" download>
+          <span class="icon">📄</span>
+          <span>112學年國民中學教學正常化自我檢核表</span>
+        </a>
       </div>
 
+      <!-- 主課程說明 -->
+      <h2>主課程</h2>
       <div class="content-block">
-        <h2>107-108學年度 課程圖像</h2>
-        <ul>
-          <li>七年級 簡單機械</li>
-          <li>八年級 流體力學</li>
-          <li>七年級 生理學</li>
-        </ul>
+        <p>華德福的主課程是一個週期性狀態，透過這個歷程讓學生專注且持續約三至四週的學習，課程領域包含：文史、自然、數學等。在學習歷程中學生透過課程藝術化的引導吸收所學的「知識」，並透過充分的睡眠，經由隔天在課堂上的「回顧與重述」，讓經驗轉化成自己的能力，並書寫在自己的工作本上。</p>
+      </div>
+
+      <!-- 109-111課程圖像 -->
+      <h2>109-111學年度 課程圖像</h2>
+      <div class="video-grid">
+        <div class="video-item">
+          <h3>七年級 天使班 衛教活動及課程</h3>
+          <iframe width="100%" height="315" src="https://www.youtube.com/embed/_EJQ_HBWQB4" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        </div>
+        <div class="video-item">
+          <h3>八年級 水晶班 學習樣貌</h3>
+          <iframe width="100%" height="315" src="https://www.youtube.com/embed/QYmG6TkqmQA" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        </div>
+        <div class="video-item">
+          <h3>七年級 榕樹班 自行車募款</h3>
+          <iframe width="100%" height="315" src="https://www.youtube.com/embed/26fx9-G6REg" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        </div>
+        <div class="video-item">
+          <h3>八年級 天使班 獨木舟活動</h3>
+          <iframe width="100%" height="315" src="https://www.youtube.com/embed/GxjxbT3T9fY" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        </div>
+        <div class="video-item">
+          <h3>九年級 水晶班 學習樣貌</h3>
+          <iframe width="100%" height="315" src="https://www.youtube.com/embed/N4Hc-oDsHM4" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        </div>
+        <div class="video-item">
+          <h3>七年級 芙蓉班 英文戲劇</h3>
+          <iframe width="100%" height="315" src="https://www.youtube.com/embed/1Vy9jJuKVN8" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        </div>
+        <div class="video-item">
+          <h3>八年級 榕樹班 茶道</h3>
+          <iframe width="100%" height="315" src="https://www.youtube.com/embed/Erl_AJwtwgw" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        </div>
+        <div class="video-item">
+          <h3>九年級 天使班 畢業公演</h3>
+          <iframe width="100%" height="315" src="https://www.youtube.com/embed/Al_aRsXeGtk" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        </div>
+        <div class="video-item">
+          <h3>十年級 水晶班 自行車旅行</h3>
+          <iframe width="100%" height="315" src="https://www.youtube.com/embed/pRa3Zrp78Cw" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        </div>
+      </div>
+
+      <!-- 107-108課程圖像 -->
+      <h2>107-108學年度 課程圖像</h2>
+      <div class="video-grid">
+        <div class="video-item">
+          <h3>七年級 簡單機械</h3>
+          <iframe width="100%" height="315" src="https://www.youtube.com/embed/qpVPSh2wcxg" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        </div>
+        <div class="video-item">
+          <h3>八年級 流體力學</h3>
+          <iframe width="100%" height="315" src="https://www.youtube.com/embed/N4-2iYl1H4A" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        </div>
+        <div class="video-item">
+          <h3>七年級 生理學</h3>
+          <iframe width="100%" height="315" src="https://www.youtube.com/embed/BOTEWxmGmIA" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        </div>
+      </div>
+
+      <!-- 副課程 -->
+      <h2>副課程</h2>
+      <div class="content-block">
+        <p>內容建構中</p>
       </div>
 
     </div>
@@ -88,46 +153,28 @@ import Navigation from '../../components/Navigation.astro';
 </Layout>
 
 <style>
-  .hero-small {
-    background: linear-gradient(135deg, #8B4513, #228B22);
-    color: white;
-    padding: 4rem 2rem;
-    text-align: center;
-  }
-
+  .hero-small { background: linear-gradient(135deg, #8B4513, #228B22); color: white; padding: 4rem 2rem; text-align: center; }
   .hero-small h1 { font-size: 3rem; margin-bottom: 0.5rem; }
   .hero-small p { font-size: 1.2rem; opacity: 0.9; }
-
   .section { padding: 4rem 2rem; }
-  .container { max-width: 800px; margin: 0 auto; }
-
-  .content-block {
-    background: white;
-    padding: 2rem;
-    border-radius: 20px;
-    margin-bottom: 1.5rem;
-    box-shadow: 0 10px 40px rgba(139,69,19,0.1);
-  }
-
-  .content-block h2 {
-    color: #8B4513;
-    font-size: 1.3rem;
-    margin-bottom: 1rem;
-  }
-
-  .content-block p {
-    color: #666;
-    line-height: 1.8;
-  }
-
-  .content-block ul {
-    padding-left: 1.5rem;
-    color: #666;
-  }
-
-  .content-block li {
-    padding: 0.3rem 0;
-  }
-
+  .container { max-width: 1000px; margin: 0 auto; }
+  h2 { color: #8B4513; font-size: 1.8rem; margin: 3rem 0 1.5rem; border-bottom: 2px solid #8B4513; padding-bottom: 0.5rem; }
+  h2:first-of-type { margin-top: 0; }
+  .downloads { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1rem; margin-bottom: 1.5rem; }
+  .download-item { display: flex; align-items: center; gap: 1rem; padding: 1rem 1.5rem; background: white; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); text-decoration: none; color: #333; transition: transform 0.2s, box-shadow 0.2s; }
+  .download-item:hover { transform: translateY(-2px); box-shadow: 0 6px 16px rgba(0,0,0,0.15); }
+  .download-item .icon { font-size: 1.5rem; }
+  .schedule-table { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem; margin-bottom: 1.5rem; }
+  .schedule-item { display: block; padding: 1rem 1.5rem; background: #f5f5f5; border-radius: 12px; text-decoration: none; color: #333; text-align: center; transition: background 0.2s; }
+  .schedule-item:hover { background: #e0e0e0; }
+  .content-block { background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); margin-bottom: 1.5rem; }
+  .content-block p { line-height: 1.8; color: #555; }
+  .video-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 2rem; margin-bottom: 2rem; }
+  .video-item { background: white; padding: 1.5rem; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+  .video-item h3 { color: #8B4513; font-size: 1.1rem; margin-bottom: 1rem; }
+  .video-item iframe { border-radius: 8px; }
   .footer { background: #333; color: white; padding: 2rem; text-align: center; margin-top: 2rem; }
+  @media (max-width: 768px) {
+    .video-grid { grid-template-columns: 1fr; }
+  }
 </style>

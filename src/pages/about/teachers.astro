@@ -1,6 +1,16 @@
 ---
 import Layout from '../../layouts/Layout.astro';
 import Navigation from '../../components/Navigation.astro';
+import teachersData from '../../content/teachers.json';
+
+// 從 JSON 取得老師資料
+const allTeachers = teachersData.teachers || [];
+
+// 分類
+const coreTeachers = allTeachers.filter(t => t.category === 'core');
+const adminTeachers = allTeachers.filter(t => t.category === 'admin');
+const otherTeachers = allTeachers.filter(t => t.category === 'teacher');
+const classTeachers = allTeachers.filter(t => t.category === 'class');
 ---
 
 <Layout title="教職團隊 | 光禾華德福">
@@ -16,142 +26,62 @@ import Navigation from '../../components/Navigation.astro';
   <section class="section">
     <div class="container">
       
-      <!-- 教學核心小組 -->
+      {/* 教學核心小組 - 3人橫向一排 */}
       <div class="team-section">
         <h2>教學核心小組</h2>
         <div class="core-team">
-          <div class="team-card">
-            <img src="/images/teachers/teacher3.png" alt="許慧玲" class="teacher-photo"/>
-            <h3>校長</h3>
-            <p class="name">許慧玲</p>
-          </div>
-          <div class="team-card">
-            <img src="/images/teachers/teacher4.png" alt="林季瑩" class="teacher-photo"/>
-            <h3>小學部教師會主席</h3>
-            <p class="name">林季瑩</p>
-          </div>
-          <div class="team-card">
-            <img src="/images/teachers/teacher5.png" alt="葉友竹" class="teacher-photo"/>
-            <h3>中學部教師會主席</h3>
-            <p class="name">葉友竹</p>
-          </div>
+          {coreTeachers.map(teacher => (
+            <div class="team-card">
+              <img src={teacher.image} alt={teacher.name} class="teacher-photo"/>
+              <h3>{teacher.title}</h3>
+              <p class="name">{teacher.name}</p>
+              {teacher.bio && <p class="bio">{teacher.bio}</p>}
+            </div>
+          ))}
         </div>
       </div>
 
-      <!-- 行政團隊 -->
+      {/* 行政團隊 - 9人3x3 */}
       <div class="team-section">
         <h2>行政團隊</h2>
-        <div class="admin-grid">
-          <div class="team-card small">
-            <h3>學務</h3>
-            <p class="name">潘韻如</p>
-          </div>
-          <div class="team-card small">
-            <h3>總務</h3>
-            <p class="name">侯慕龍</p>
-          </div>
-          <div class="team-card small">
-            <h3>教務</h3>
-            <p class="name">姜宜辰</p>
-          </div>
-          <div class="team-card small">
-            <h3>校護</h3>
-            <p class="name">郭佳蕙</p>
-          </div>
-          <div class="team-card small">
-            <h3>出納</h3>
-            <p class="name">詹雅文</p>
-          </div>
-          <div class="team-card small">
-            <h3>會計</h3>
-            <p class="name">高毓君</p>
-          </div>
-          <div class="team-card small">
-            <h3>人事</h3>
-            <p class="name">林佳蒨</p>
-          </div>
-          <div class="team-card small">
-            <h3>中學部行政</h3>
-            <p class="name">王如君</p>
-          </div>
-          <div class="team-card small">
-            <h3>高中部行政</h3>
-            <p class="name">謝淳涵</p>
-          </div>
+        <div class="grid-3x3">
+          {adminTeachers.map(teacher => (
+            <div class="team-card">
+              <img src={teacher.image} alt={teacher.name} class="teacher-photo"/>
+              <h3>{teacher.title}</h3>
+              <p class="name">{teacher.name}</p>
+            </div>
+          ))}
         </div>
       </div>
 
-      <!-- 專任老師 -->
-      <div class="team-section">
-        <h2>專任老師 / 課指組</h2>
-        <div class="teachers-grid">
-          <div class="team-card">
-            <h3>專任教師／課指組組長</h3>
-            <p class="name">許丁元</p>
-          </div>
-          <div class="team-card">
-            <h3>專任教師</h3>
-            <p class="name">陳淑市</p>
-          </div>
-          <div class="team-card">
-            <h3>專任教師</h3>
-            <p class="name">湯翃豪</p>
+      {/* 專任教師 - 3人橫向一排 */}
+      {otherTeachers.length > 0 && (
+        <div class="team-section">
+          <h2>專任教師 / 課指組</h2>
+          <div class="core-team">
+            {otherTeachers.map(teacher => (
+              <div class="team-card">
+                <img src={teacher.image} alt={teacher.name} class="teacher-photo"/>
+                <h3>{teacher.title}</h3>
+                <p class="name">{teacher.name}</p>
+              </div>
+            ))}
           </div>
         </div>
-      </div>
+      )}
 
-      <!-- 教師團隊 -->
+      {/* 導師團隊 - 12人 4x3 排列 */}
       <div class="team-section">
-        <h2>教師團隊</h2>
-        <div class="teachers-grid">
-          <div class="team-card">
-            <h3>G1 雲杉班</h3>
-            <p class="name">羅淑萍</p>
-          </div>
-          <div class="team-card">
-            <h3>G2 月桂班</h3>
-            <p class="name">張斯婷</p>
-          </div>
-          <div class="team-card">
-            <h3>G3 星辰班</h3>
-            <p class="name">蘇泳貞</p>
-          </div>
-          <div class="team-card">
-            <h3>G4 澄月班</h3>
-            <p class="name">鄭景中</p>
-          </div>
-          <div class="team-card">
-            <h3>G5 銀杏班</h3>
-            <p class="name">潘怡臻</p>
-          </div>
-          <div class="team-card">
-            <h3>G6 暖陽班</h3>
-            <p class="name">林季瑩</p>
-          </div>
-          <div class="team-card">
-            <h3>G7 海洋班</h3>
-            <p class="name">陳嘉慧</p>
-          </div>
-          <div class="team-card">
-            <h3>G8 雲彩班</h3>
-            <p class="name">余怜瑱</p>
-          </div>
-          <div class="team-card">
-            <h3>G9 茉莉班</h3>
-            <p class="name">傅麗如</p>
-          </div>
-          <div class="team-card">
-            <h3>G10 芙蓉班</h3>
-            <p class="name">葉友竹</p>
-          </div>
-          <div class="team-card">
-            <h3>G11 榕樹班</h3>
-            <p class="name">黃琬茹</p>
-          </div>
-          <div class="team-card">
-            <h3>G12 天使班</h3>
-            <p class="name">巫穎妙</p>
-          </div>
+        <h2>導師團隊</h2>
+        <div class="grid-4x3">
+          {classTeachers.map(teacher => (
+            <div class="teacher-item">
+              <img src={teacher.image} alt={teacher.name} class="teacher-photo"/>
+              <p class="teacher-title">{teacher.title}</p>
+              <p class="teacher-name">{teacher.name}</p>
+            </div>
+          ))}
         </div>
       </div>
 
@@ -167,87 +97,124 @@ import Navigation from '../../components/Navigation.astro';
 
 <style>
   .hero-small { background: linear-gradient(135deg, #8B4513, #228B22); color: white; padding: 4rem 2rem; text-align: center; }
-  .hero-small h1 { font-size: 3rem; margin-bottom: 0.5rem; }
-  .hero-small p { font-size: 1.2rem; opacity: 0.9; }
-  .section { padding: 4rem 2rem; }
-  .container { max-width: 1100px; margin: 0 auto; }
-
-  .team-section {
-    background: white;
-    padding: 2rem;
-    border-radius: 20px;
-    margin-bottom: 2rem;
-    box-shadow: 0 10px 40px rgba(139,69,19,0.1);
+  .hero-small h1 { font-size: 2rem; margin-bottom: 0.5rem; }
+  .hero-small p { font-size: 1rem; opacity: 0.9; }
+  .hero-small { padding: 3rem 1rem; }
+  .section { padding: 3rem 1rem; }
+  .container { max-width: 1200px; margin: 0 auto; padding: 0 1rem; }
+  .team-section { margin-bottom: 3rem; }
+  .team-section h2 { color: #8B4513; font-size: 1.5rem; margin-bottom: 1.5rem; text-align: center; }
+  
+  /* 橫向排列 - 核心教師/專任教師 */
+  .core-team { 
+    display: flex; 
+    justify-content: center; 
+    gap: 1.5rem; 
+    flex-wrap: wrap;
   }
-  .team-section h2 { 
-    color: #8B4513; 
-    font-size: 1.5rem; 
-    margin-bottom: 1.5rem; 
-    text-align: center;
-    padding-bottom: 1rem;
-    border-bottom: 2px solid #e0d4c8;
-  }
-
-  .core-team, .teachers-grid {
+  
+  /* 3x3 網格 - 行政團隊 */
+  .grid-3x3 {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-    gap: 1.5rem;
-    justify-items: center;
-  }
-
-  .team-card {
-    text-align: center;
-    padding: 1.5rem;
-    background: #f9f9f9;
-    border-radius: 15px;
-    width: 100%;
-    max-width: 200px;
-  }
-
-  .team-card.small {
-    max-width: 140px;
-    padding: 1rem;
-  }
-
-  .teacher-photo {
-    width: 100px;
-    height: 100px;
-    border-radius: 50%;
-    object-fit: cover;
-    margin-bottom: 1rem;
-    border: 3px solid #228B22;
-  }
-
-  .team-card h3 {
-    color: #666;
-    font-size: 0.85rem;
-    margin-bottom: 0.5rem;
-    font-weight: normal;
-  }
-
-  .team-card .name {
-    color: #8B4513;
-    font-size: 1rem;
-    font-weight: bold;
-    margin:0;
-  }
-
-  .admin-team {
-    text-align: center;
-    margin-bottom: 2rem;
-  }
-
-  .group-photo {
-    max-width: 100%;
-    border-radius: 15px;
-  }
-
-  .admin-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    grid-template-columns: repeat(2, 1fr);
     gap: 1rem;
-    justify-items: center;
+    max-width: 1000px;
+    margin: 0 auto;
   }
-
+  
+  /* 4x3 網格 - 導師團隊 */
+  .grid-4x3 {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  
+  /* 卡片樣式 */
+  .team-card { 
+    background: white; 
+    padding: 1rem; 
+    border-radius: 15px; 
+    text-align: center; 
+    box-shadow: 0 5px 20px rgba(139,69,19,0.1); 
+    transition: transform 0.3s;
+  }
+  .team-card:hover { transform: translateY(-3px); }
+  
+  /* 大頭照 */
+  .teacher-photo { 
+    width: 100px; 
+    height: 100px; 
+    border-radius: 50%; 
+    object-fit: cover; 
+    margin: 0 auto 0.8rem; 
+    border: 3px solid #8B4513;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.15);
+  }
+  
+  .team-card h3 { color: #228B22; font-size: 0.85rem; margin-bottom: 0.2rem; }
+  .team-card .name { color: #333; font-size: 1rem; font-weight: bold; }
+  .team-card .bio { color: #666; font-size: 0.8rem; margin-top: 0.3rem; }
+  
+  @media (min-width: 768px) {
+    .hero-small h1 { font-size: 3rem; }
+    .hero-small { padding: 4rem 2rem; }
+    .team-section { margin-bottom: 4rem; }
+    .team-section h2 { font-size: 2rem; margin-bottom: 2rem; }
+    
+    .core-team { gap: 2rem; }
+    
+    .grid-3x3 {
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.8rem;
+    }
+    
+    .grid-4x3 {
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1.8rem;
+    }
+    
+    .team-card { 
+      padding: 1.8rem; 
+    }
+    
+    .teacher-photo { 
+      width: 180px; 
+      height: 180px; 
+      border: 5px solid #8B4513;
+    }
+    
+    .team-card h3 { font-size: 0.9rem; }
+    .team-card .name { font-size: 1.2rem; }
+    .team-card .bio { font-size: 0.85rem; }
+  }
+  
+  /* 導師項目 */
+  .teacher-item { 
+    text-align: center; 
+    padding: 1.2rem; 
+    background: white; 
+    border-radius: 15px; 
+    box-shadow: 0 5px 20px rgba(0,0,0,0.08); 
+    transition: transform 0.3s;
+  }
+  .teacher-item:hover { transform: scale(1.05); }
+  .teacher-item .teacher-photo { width: 150px; height: 150px; margin-bottom: 0.8rem; }
+  .teacher-title { color: #228B22; font-size: 0.85rem; margin-bottom: 0.3rem; }
+  .teacher-name { color: #333; font-size: 1rem; font-weight: 600; }
+  
+  /* RWD */
+  @media (max-width: 900px) {
+    .grid-4x3 { grid-template-columns: repeat(3, 1fr); }
+    .grid-3x3 { grid-template-columns: repeat(3, 1fr); }
+  }
+  @media (max-width: 700px) {
+    .grid-4x3 { grid-template-columns: repeat(2, 1fr); }
+    .grid-3x3 { grid-template-columns: repeat(2, 1fr); }
+    .core-team { flex-direction: column; align-items: center; }
+    .teacher-photo { width: 140px; height: 140px; }
+  }
+  
   .footer { background: #333; color: white; padding: 2rem; text-align: center; margin-top: 2rem; }
 </style>
