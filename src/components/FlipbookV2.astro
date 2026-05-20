@@ -92,7 +92,7 @@ const { imageUrls, title = "光禾通訊", semester = "" } = Astro.props;
       },
       function (images) {
         const refImg = images.find(Boolean);
-        if (!refImg) { showError('圖片載入失敗'); return; }
+        if (!refImg) { showError('圖片暫時無法讀取'); return; }
         buildFlipbook(refImg.naturalWidth, refImg.naturalHeight);
         if (totalImages > 4) {
           preloadImages(imageUrls.slice(4),
@@ -242,7 +242,16 @@ const { imageUrls, title = "光禾通訊", semester = "" } = Astro.props;
 
   // ── 錯誤處理 ─────────────────────────────────────
   function showError(msg) {
-    elLoading.innerHTML = '<p style="color:#e74c3c;font-size:1.2rem;">⚠️ ' + msg + '</p>';
+    elLoading.innerHTML = [
+      '<div style="text-align:center;padding:24px 16px">',
+        '<div style="font-size:2.5rem;margin-bottom:12px">📭</div>',
+        '<p style="color:#f87171;font-size:1.1rem;margin:0 0 8px">圖片暫時無法讀取</p>',
+        '<p style="color:#9ca3af;font-size:0.85rem;margin:0 0 20px">電子報圖片正在上傳中，請稍後再試</p>',
+        '<button onclick="location.reload()" style="padding:8px 20px;background:rgba(255,255,255,0.12);color:#e5e7eb;border:1px solid rgba(255,255,255,0.25);border-radius:8px;cursor:pointer;font-size:0.9rem">',
+          '🔄 重新載入',
+        '</button>',
+      '</div>'
+    ].join('');
   }
 
   // ── 啟動 ─────────────────────────────────────────
