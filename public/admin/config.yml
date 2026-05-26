@@ -3,7 +3,7 @@ backend:
   repo: mingcareercounseling-design/waldorf-newsletter-images
   branch: main
   auth_type: pkce
-  app_id: 0v23liDu3TN5aQanCs5F
+  app_id: Ov23liDu3TN5aQanCs5F
 
 # 媒體管理
 media_folder: "public/images/uploads"
