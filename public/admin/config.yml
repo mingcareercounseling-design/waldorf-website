@@ -1,6 +1,6 @@
 backend:
   name: github
-  repo: mingcareercounseling-design/waldorf-newsletter-images
+  repo: mingcareercounseling-design/waldorf-website
   branch: main
   auth_type: pkce
   app_id: Ov23liDu3TN5aQanCs5F
@@ -50,45 +50,29 @@ collections:
         options: ["慶典", "發表", "說明會", "研習", "假期", "其他"]
         default: "其他"
 
-  - name: "teachers"
-    label: "師資介紹"
-    folder: "src/content/teachers"
-    create: true
-    delete: true
-    extension: json
-    format: json
-    slug: "{{fields.name}}"
-    summary: "{{fields.name}} - {{fields.title}}"
-    fields:
-      - { label: "姓名", name: "name", widget: "string" }
-      - { label: "職稱", name: "title", widget: "string" }
-      - { label: "照片", name: "image", widget: "image", required: false }
-      - { label: "簡介", name: "bio", widget: "text" }
-      - label: "類別"
-        name: "category"
-        widget: "select"
-        options:
-          - { label: "行政團隊", value: "admin" }
-          - { label: "班級導師", value: "class" }
-          - { label: "專科老師", value: "teacher" }
-          - { label: "核心成員", value: "core" }
-
   - name: "newsletters"
     label: "光禾通訊"
     folder: "src/content/newsletters"
     create: true
-    delete: true
+    delete: false
     extension: json
     format: json
     slug: "NO{{fields.issue}}"
     summary: "第 {{fields.issue}} 期 - {{fields.title}}"
     fields:
-      - { label: "期數", name: "issue", widget: "number" }
+      - { label: "期數", name: "issue", widget: "string", hint: "例：36" }
       - { label: "標題", name: "title", widget: "string" }
       - { label: "學期", name: "semester", widget: "string", required: false, hint: "例：114春夏" }
       - { label: "封面圖", name: "cover", widget: "image", required: false }
       - { label: "CDN 圖片前綴路徑", name: "imagePrefix", widget: "string", required: false, hint: "例：https://raw.githubusercontent.com/user/repo/main/NO37/" }
       - { label: "圖片總頁數", name: "pageCount", widget: "number", default: 1 }
+      - { label: "頁碼位數", name: "pageDigits", widget: "number", default: 2, required: false, hint: "例：2 代表 01、02…" }
+      - label: "圖片格式"
+        name: "pageFormat"
+        widget: "select"
+        options: ["png", "jpg", "jpeg", "webp"]
+        default: "png"
+        required: false
       - { label: "發行年月", name: "date", widget: "datetime", format: "YYYY-MM-DD", date_format: "YYYY/MM/DD", time_format: false }
 
   # ========== 靜態頁面內容 ==========
@@ -105,6 +89,7 @@ collections:
             name: "carousel"
             widget: "list"
             fields:
+              - { label: "ID", name: "id", widget: "number" }
               - { label: "標題", name: "title", widget: "string" }
               - { label: "副標題", name: "subtitle", widget: "string" }
               - { label: "圖片", name: "image", widget: "image", required: false }
@@ -113,6 +98,7 @@ collections:
             name: "highlights"
             widget: "list"
             fields:
+              - { label: "ID", name: "id", widget: "number" }
               - { label: "標題", name: "title", widget: "string" }
               - { label: "日期", name: "date", widget: "string" }
               - { label: "內容摘要", name: "content", widget: "text" }
@@ -126,6 +112,7 @@ collections:
               - { label: "Email", name: "email", widget: "string" }
               - { label: "Facebook", name: "facebook", widget: "string", required: false }
               - { label: "Instagram", name: "instagram", widget: "string", required: false }
+              - { label: "Threads", name: "threads", widget: "string", required: false }
               - { label: "YouTube", name: "youtube", widget: "string", required: false }
 
       - label: "關於光禾"
@@ -135,6 +122,97 @@ collections:
           - { label: "學校願景", name: "vision", widget: "markdown" }
           - { label: "學校簡史", name: "history", widget: "markdown" }
           - { label: "辦學理念", name: "philosophy", widget: "markdown" }
+
+      - label: "教學圖像"
+        name: "curriculum"
+        file: "src/content/curriculum.json"
+        fields:
+          - { label: "頁面標題", name: "title", widget: "string" }
+          - { label: "簡介說明", name: "intro", widget: "markdown" }
+          - label: "課程項目"
+            name: "items"
+            widget: "list"
+            fields:
+              - { label: "標題", name: "title", widget: "string" }
+              - { label: "說明", name: "description", widget: "markdown" }
+
+      - label: "活動花絮"
+        name: "activities"
+        file: "src/content/activities.json"
+        fields:
+          - label: "精選活動"
+            name: "highlights"
+            widget: "list"
+            fields:
+              - { label: "ID", name: "id", widget: "string" }
+              - { label: "標題", name: "title", widget: "string" }
+              - { label: "日期", name: "date", widget: "string" }
+              - label: "分類"
+                name: "category"
+                widget: "select"
+                options: ["花絮剪影", "重要成果", "其他"]
+                default: "其他"
+              - { label: "內容摘要", name: "content", widget: "text" }
+          - label: "招生說明會"
+            name: "seminars"
+            widget: "list"
+            fields:
+              - { label: "ID", name: "id", widget: "string" }
+              - { label: "標題", name: "title", widget: "string" }
+              - { label: "日期", name: "date", widget: "string" }
+              - { label: "內容摘要", name: "content", widget: "text" }
+          - label: "學校榮耀"
+            name: "achievements"
+            widget: "list"
+            fields:
+              - { label: "ID", name: "id", widget: "string" }
+              - { label: "標題", name: "title", widget: "string" }
+              - { label: "日期", name: "date", widget: "string" }
+              - { label: "說明", name: "content", widget: "text" }
+          - label: "影音資源"
+            name: "videos"
+            widget: "list"
+            fields:
+              - { label: "ID", name: "id", widget: "string" }
+              - { label: "標題", name: "title", widget: "string" }
+              - { label: "影片網址", name: "url", widget: "string", required: false }
+              - { label: "說明", name: "description", widget: "text", required: false }
+
+      - label: "招生資訊"
+        name: "admissions"
+        file: "src/content/admissions/index.json"
+        fields:
+          - { label: "頁面標題", name: "title", widget: "string" }
+          - { label: "說明文字", name: "description", widget: "text" }
+          - label: "招生項目"
+            name: "items"
+            widget: "list"
+            fields:
+              - { label: "標題", name: "title", widget: "string" }
+              - { label: "內容", name: "content", widget: "markdown" }
+
+      - label: "師資介紹"
+        name: "teachers_page"
+        file: "src/content/teachers.json"
+        fields:
+          - label: "教師列表"
+            name: "teachers"
+            widget: "list"
+            summary: "{{fields.name}} - {{fields.title}}"
+            fields:
+              - { label: "ID", name: "id", widget: "string" }
+              - { label: "姓名", name: "name", widget: "string" }
+              - { label: "職稱", name: "title", widget: "string" }
+              - { label: "照片", name: "image", widget: "image", required: false }
+              - { label: "簡介", name: "bio", widget: "text", required: false }
+              - label: "類別"
+                name: "category"
+                widget: "select"
+                options:
+                  - { label: "核心成員", value: "core" }
+                  - { label: "行政團隊", value: "admin" }
+                  - { label: "班級導師", value: "class" }
+                  - { label: "專科老師", value: "teacher" }
 
       - label: "支持光禾"
         name: "support"
