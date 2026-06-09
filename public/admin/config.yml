@@ -5,18 +5,18 @@ backend:
   base_url: https://kuanghe-waldorf-school.vercel.app
   auth_endpoint: api/auth
 
-# åªé«ç®¡ç
+# Ã¥ÂªÂÃ©Â«ÂÃ§Â®Â¡Ã§ÂÂ
 media_folder: "public/images/uploads"
 public_folder: "/images/uploads"
 
-# ä»é¢èªè¨
+# Ã¤Â»ÂÃ©ÂÂ¢Ã¨ÂªÂÃ¨Â¨Â
 locale: zh_Hant
 
 collections:
-  # ========== åæéå ==========
+  # ========== Ã¥ÂÂÃ¦ÂÂÃ©ÂÂÃ¥ÂÂ ==========
 
   - name: "news"
-    label: "ææ°æ¶æ¯"
+    label: "Ã¦ÂÂÃ¦ÂÂ°Ã¦Â¶ÂÃ¦ÂÂ¯"
     folder: "src/content/news"
     create: true
     delete: true
@@ -25,13 +25,13 @@ collections:
     slug: "{{year}}-{{month}}-{{day}}-{{fields.title}}"
     summary: "{{fields.title}} ({{fields.date}})"
     fields:
-      - { label: "æ¨é¡", name: "title", widget: "string" }
-      - { label: "ç¼å¸æ¥æ", name: "date", widget: "datetime", format: "YYYY-MM-DD", date_format: "YYYY/MM/DD", time_format: false }
-      - { label: "å§å®¹", name: "content", widget: "markdown" }
-      - { label: "é£çµ", name: "link", widget: "string", required: false }
+      - { label: "Ã¦Â¨ÂÃ©Â¡Â", name: "title", widget: "string" }
+      - { label: "Ã§ÂÂ¼Ã¥Â¸ÂÃ¦ÂÂ¥Ã¦ÂÂ", name: "date", widget: "datetime", format: "YYYY-MM-DD", date_format: "YYYY/MM/DD", time_format: false }
+      - { label: "Ã¥ÂÂ§Ã¥Â®Â¹", name: "content", widget: "markdown" }
+      - { label: "Ã©ÂÂ£Ã§ÂµÂ", name: "link", widget: "string", required: false }
 
   - name: "calendar_events"
-    label: "è¡äºææ´»å"
+    label: "Ã¨Â¡ÂÃ¤ÂºÂÃ¦ÂÂÃ¦Â´Â»Ã¥ÂÂ"
     folder: "src/content/calendar"
     create: true
     delete: true
@@ -40,198 +40,200 @@ collections:
     slug: "{{year}}-{{month}}-{{day}}-{{fields.title}}"
     summary: "{{fields.title}} ({{fields.date}})"
     fields:
-      - { label: "æ¨é¡", name: "title", widget: "string" }
-      - { label: "æ¥æ", name: "date", widget: "datetime", format: "YYYY-MM-DD", date_format: "YYYY/MM/DD", time_format: false }
-      - { label: "çµææ¥æ", name: "end_date", widget: "datetime", format: "YYYY-MM-DD", date_format: "YYYY/MM/DD", time_format: false, required: false }
-      - { label: "èªªæ", name: "description", widget: "text", required: false }
-      - label: "åé¡"
+      - { label: "Ã¦Â¨ÂÃ©Â¡Â", name: "title", widget: "string" }
+      - { label: "Ã¦ÂÂ¥Ã¦ÂÂ", name: "date", widget: "datetime", format: "YYYY-MM-DD", date_format: "YYYY/MM/DD", time_format: false }
+      - { label: "Ã§ÂµÂÃ¦ÂÂÃ¦ÂÂ¥Ã¦ÂÂ", name: "end_date", widget: "datetime", format: "YYYY-MM-DD", date_format: "YYYY/MM/DD", time_format: false, required: false }
+      - { label: "Ã¨ÂªÂªÃ¦ÂÂ", name: "description", widget: "text", required: false }
+      - label: "Ã¥ÂÂÃ©Â¡Â"
         name: "category"
         widget: "select"
-        options: ["æ¶å¸", "ç¼è¡¨", "èªªææ", "ç ç¿", "åæ", "å¶ä»"]
-        default: "å¶ä»"
+        options: ["Ã¦ÂÂ¶Ã¥ÂÂ¸", "Ã§ÂÂ¼Ã¨Â¡Â¨", "Ã¨ÂªÂªÃ¦ÂÂÃ¦ÂÂ", "Ã§Â ÂÃ§Â¿Â", "Ã¥ÂÂÃ¦ÂÂ", "Ã¥ÂÂ¶Ã¤Â»Â"]
+        default: "Ã¥ÂÂ¶Ã¤Â»Â"
 
   - name: "newsletters"
-    label: "åç¦¾éè¨"
+    label: "Ã¥ÂÂÃ§Â¦Â¾Ã©ÂÂÃ¨Â¨Â"
     folder: "src/content/newsletters"
     create: true
     delete: false
     extension: json
     format: json
     slug: "NO{{fields.issue}}"
-    summary: "ç¬¬ {{fields.issue}} æ - {{fields.title}}"
+    summary: "Ã§Â¬Â¬ {{fields.issue}} Ã¦ÂÂ - {{fields.title}}"
     fields:
-      - { label: "ææ¸", name: "issue", widget: "string", hint: "ä¾ï¼36" }
-      - { label: "æ¨é¡", name: "title", widget: "string" }
-      - { label: "å­¸æ", name: "semester", widget: "string", required: false, hint: "ä¾ï¼114æ¥å¤" }
-      - { label: "å°é¢å", name: "cover", widget: "image", required: false }
-      - { label: "CDN åçåç¶´è·¯å¾", name: "imagePrefix", widget: "string", required: false, hint: "ä¾ï¼https://raw.githubusercontent.com/user/repo/main/NO37/" }
-      - { label: "åçç¸½é æ¸", name: "pageCount", widget: "number", default: 1 }
-      - { label: "é ç¢¼ä½æ¸", name: "pageDigits", widget: "number", default: 2, required: false, hint: "ä¾ï¼2 ä»£è¡¨ 01ã02â¦" }
-      - label: "åçæ ¼å¼"
+      - { label: "Ã¦ÂÂÃ¦ÂÂ¸", name: "issue", widget: "string", hint: "Ã¤Â¾ÂÃ¯Â¼Â36" }
+      - { label: "Ã¦Â¨ÂÃ©Â¡Â", name: "title", widget: "string" }
+      - { label: "Ã¥Â­Â¸Ã¦ÂÂ", name: "semester", widget: "string", required: false, hint: "Ã¤Â¾ÂÃ¯Â¼Â114Ã¦ÂÂ¥Ã¥Â¤Â" }
+      - { label: "Ã¥Â°ÂÃ©ÂÂ¢Ã¥ÂÂ", name: "cover", widget: "image", required: false }
+      - { label: "CDN Ã¥ÂÂÃ§ÂÂÃ¥ÂÂÃ§Â¶Â´Ã¨Â·Â¯Ã¥Â¾Â", name: "imagePrefix", widget: "string", required: false, hint: "Ã¤Â¾ÂÃ¯Â¼Âhttps://raw.githubusercontent.com/user/repo/main/NO37/" }
+      - { label: "Ã¥ÂÂÃ§ÂÂÃ§Â¸Â½Ã©Â ÂÃ¦ÂÂ¸", name: "pageCount", widget: "number", default: 1 }
+      - { label: "Ã©Â ÂÃ§Â¢Â¼Ã¤Â½ÂÃ¦ÂÂ¸", name: "pageDigits", widget: "number", default: 2, required: false, hint: "Ã¤Â¾ÂÃ¯Â¼Â2 Ã¤Â»Â£Ã¨Â¡Â¨ 01Ã£ÂÂ02Ã¢ÂÂ¦" }
+      - label: "Ã¥ÂÂÃ§ÂÂÃ¦Â Â¼Ã¥Â¼Â"
         name: "pageFormat"
         widget: "select"
         options: ["png", "jpg", "jpeg", "webp"]
         default: "png"
         required: false
-      - { label: "ç¼è¡å¹´æ", name: "date", widget: "datetime", format: "YYYY-MM-DD", date_format: "YYYY/MM/DD", time_format: false }
+      - { label: "Ã§ÂÂ¼Ã¨Â¡ÂÃ¥Â¹Â´Ã¦ÂÂ", name: "date", widget: "datetime", format: "YYYY-MM-DD", date_format: "YYYY/MM/DD", time_format: false }
 
-  # ========== éæé é¢å§å®¹ ==========
+  # ========== Ã©ÂÂÃ¦ÂÂÃ©Â ÂÃ©ÂÂ¢Ã¥ÂÂ§Ã¥Â®Â¹ ==========
 
   - name: "pages"
-    label: "é é¢å§å®¹"
+    label: "Ã©Â ÂÃ©ÂÂ¢Ã¥ÂÂ§Ã¥Â®Â¹"
     files:
 
-      - label: "é¦é "
+      - label: "Ã©Â¦ÂÃ©Â Â"
         name: "home"
         file: "src/content/home.json"
         fields:
-          - label: "è¼ªæ­åç"
+          - label: "Ã¨Â¼ÂªÃ¦ÂÂ­Ã¥ÂÂÃ§ÂÂ"
             name: "carousel"
             widget: "list"
             fields:
               - { label: "ID", name: "id", widget: "number" }
-              - { label: "æ¨é¡", name: "title", widget: "string" }
-              - { label: "å¯æ¨é¡", name: "subtitle", widget: "string" }
-              - { label: "åç", name: "image", widget: "image", required: false }
-              - { label: "é£çµ", name: "link", widget: "string", required: false }
-          - label: "ç²¾é¸æ¶æ¯"
+              - { label: "Ã¦Â¨ÂÃ©Â¡Â", name: "title", widget: "string" }
+              - { label: "Ã¥ÂÂ¯Ã¦Â¨ÂÃ©Â¡Â", name: "subtitle", widget: "string" }
+              - { label: "Ã¥ÂÂÃ§ÂÂ", name: "image", widget: "image", required: false }
+              - { label: "Ã©ÂÂ£Ã§ÂµÂ", name: "link", widget: "string", required: false }
+          - label: "Ã§Â²Â¾Ã©ÂÂ¸Ã¦Â¶ÂÃ¦ÂÂ¯"
             name: "highlights"
             widget: "list"
             fields:
               - { label: "ID", name: "id", widget: "number" }
-              - { label: "æ¨é¡", name: "title", widget: "string" }
-              - { label: "æ¥æ", name: "date", widget: "string" }
-              - { label: "å§å®¹æè¦", name: "content", widget: "text" }
-              - { label: "é£çµ", name: "link", widget: "string", required: false }
-          - label: "è¯çµ¡è³è¨"
+              - { label: "Ã¦Â¨ÂÃ©Â¡Â", name: "title", widget: "string" }
+              - { label: "Ã¦ÂÂ¥Ã¦ÂÂ", name: "date", widget: "string" }
+              - { label: "Ã¥ÂÂ§Ã¥Â®Â¹Ã¦ÂÂÃ¨Â¦Â", name: "content", widget: "text" }
+              - { label: "Ã©ÂÂ£Ã§ÂµÂ", name: "link", widget: "string", required: false }
+          - label: "Ã¨ÂÂ¯Ã§ÂµÂ¡Ã¨Â³ÂÃ¨Â¨Â"
             name: "contact"
             widget: "object"
             fields:
-              - { label: "å°å", name: "address", widget: "string" }
-              - { label: "é»è©±", name: "phone", widget: "string" }
+              - { label: "Ã¥ÂÂ°Ã¥ÂÂ", name: "address", widget: "string" }
+              - { label: "Ã©ÂÂ»Ã¨Â©Â±", name: "phone", widget: "string" }
               - { label: "Email", name: "email", widget: "string" }
               - { label: "Facebook", name: "facebook", widget: "string", required: false }
               - { label: "Instagram", name: "instagram", widget: "string", required: false }
               - { label: "Threads", name: "threads", widget: "string", required: false }
               - { label: "YouTube", name: "youtube", widget: "string", required: false }
 
-      - label: "éæ¼åç¦¾"
+      - label: "Ã©ÂÂÃ¦ÂÂ¼Ã¥ÂÂÃ§Â¦Â¾"
         name: "about"
         file: "src/content/about.json"
         fields:
-          - { label: "å­¸æ ¡é¡æ¯", name: "vision", widget: "markdown" }
-          - { label: "å­¸æ ¡ç°¡å²", name: "history", widget: "markdown" }
-          - { label: "è¾¦å­¸çå¿µ", name: "philosophy", widget: "markdown" }
+          - { label: "Ã¥Â­Â¸Ã¦Â Â¡Ã©Â¡ÂÃ¦ÂÂ¯", name: "vision", widget: "markdown" }
+          - { label: "Ã¥Â­Â¸Ã¦Â Â¡Ã§Â°Â¡Ã¥ÂÂ²", name: "history", widget: "markdown" }
+          - { label: "Ã¨Â¾Â¦Ã¥Â­Â¸Ã§ÂÂÃ¥Â¿Âµ", name: "philosophy", widget: "markdown" }
 
-      - label: "æå­¸åå"
+      - label: "Ã¦ÂÂÃ¥Â­Â¸Ã¥ÂÂÃ¥ÂÂ"
         name: "curriculum"
         file: "src/content/curriculum.json"
         fields:
-          - { label: "é é¢æ¨é¡", name: "title", widget: "string" }
-          - { label: "ç°¡ä»èªªæ", name: "intro", widget: "markdown" }
-          - label: "èª²ç¨é ç®"
+          - { label: "Ã©Â ÂÃ©ÂÂ¢Ã¦Â¨ÂÃ©Â¡Â", name: "title", widget: "string" }
+          - { label: "Ã§Â°Â¡Ã¤Â»ÂÃ¨ÂªÂªÃ¦ÂÂ", name: "intro", widget: "markdown" }
+          - label: "Ã¨ÂªÂ²Ã§Â¨ÂÃ©Â ÂÃ§ÂÂ®"
             name: "items"
             widget: "list"
             fields:
-              - { label: "æ¨é¡", name: "title", widget: "string" }
-              - { label: "èªªæ", name: "description", widget: "markdown" }
+              - { label: "Ã¦Â¨ÂÃ©Â¡Â", name: "title", widget: "string" }
+              - { label: "Ã¨ÂªÂªÃ¦ÂÂ", name: "description", widget: "markdown" }
 
-      - label: "æ´»åè±çµ®"
+      - label: "Ã¦Â´Â»Ã¥ÂÂÃ¨ÂÂ±Ã§ÂµÂ®"
         name: "activities"
         file: "src/content/activities.json"
         fields:
-          - label: "ç²¾é¸æ´»å"
+          - label: "Ã§Â²Â¾Ã©ÂÂ¸Ã¦Â´Â»Ã¥ÂÂ"
             name: "highlights"
             widget: "list"
             fields:
               - { label: "ID", name: "id", widget: "string" }
-              - { label: "æ¨é¡", name: "title", widget: "string" }
-              - { label: "æ¥æ", name: "date", widget: "string" }
-              - label: "åé¡"
+              - { label: "Ã¦Â¨ÂÃ©Â¡Â", name: "title", widget: "string" }
+              - { label: "Ã¦ÂÂ¥Ã¦ÂÂ", name: "date", widget: "string" }
+              - label: "Ã¥ÂÂÃ©Â¡Â"
                 name: "category"
                 widget: "select"
-                options: ["è±çµ®åªå½±", "éè¦ææ", "å¶ä»"]
-                default: "å¶ä»"
-              - { label: "å§å®¹æè¦", name: "content", widget: "text" }
-          - label: "æçèªªææ"
+                options: ["Ã¨ÂÂ±Ã§ÂµÂ®Ã¥ÂÂªÃ¥Â½Â±", "Ã©ÂÂÃ¨Â¦ÂÃ¦ÂÂÃ¦ÂÂ", "Ã¥ÂÂ¶Ã¤Â»Â"]
+                default: "Ã¥ÂÂ¶Ã¤Â»Â"
+              - { label: "Ã¥ÂÂ§Ã¥Â®Â¹Ã¦ÂÂÃ¨Â¦Â", name: "content", widget: "text" }
+          - label: "Ã¦ÂÂÃ§ÂÂÃ¨ÂªÂªÃ¦ÂÂÃ¦ÂÂ"
             name: "seminars"
             widget: "list"
             fields:
               - { label: "ID", name: "id", widget: "string" }
-              - { label: "æ¨é¡", name: "title", widget: "string" }
-              - { label: "æ¥æ", name: "date", widget: "string" }
-              - { label: "å§å®¹æè¦", name: "content", widget: "text" }
-          - label: "å­¸æ ¡æ¦®è"
+              - { label: "Ã¦Â¨ÂÃ©Â¡Â", name: "title", widget: "string" }
+              - { label: "Ã¦ÂÂ¥Ã¦ÂÂ", name: "date", widget: "string" }
+              - { label: "Ã¥ÂÂ§Ã¥Â®Â¹Ã¦ÂÂÃ¨Â¦Â", name: "content", widget: "text" }
+          - label: "Ã¥Â­Â¸Ã¦Â Â¡Ã¦Â¦Â®Ã¨ÂÂ"
             name: "achievements"
             widget: "list"
             fields:
               - { label: "ID", name: "id", widget: "string" }
-              - { label: "æ¨é¡", name: "title", widget: "string" }
-              - { label: "æ¥æ", name: "date", widget: "string" }
-              - { label: "èªªæ", name: "content", widget: "text" }
-          - label: "å½±é³è³æº"
+              - { label: "Ã¦Â¨ÂÃ©Â¡Â", name: "title", widget: "string" }
+              - { label: "Ã¦ÂÂ¥Ã¦ÂÂ", name: "date", widget: "string" }
+              - { label: "Ã¨ÂªÂªÃ¦ÂÂ", name: "content", widget: "text" }
+          - label: "Ã¥Â½Â±Ã©ÂÂ³Ã¨Â³ÂÃ¦ÂºÂ"
             name: "videos"
             widget: "list"
             fields:
               - { label: "ID", name: "id", widget: "string" }
-              - { label: "æ¨é¡", name: "title", widget: "string" }
-              - { label: "å½±çç¶²å", name: "url", widget: "string", required: false }
-              - { label: "èªªæ", name: "description", widget: "text", required: false }
+              - { label: "Ã¦Â¨ÂÃ©Â¡Â", name: "title", widget: "string" }
+              - { label: "Ã¥Â½Â±Ã§ÂÂÃ§Â¶Â²Ã¥ÂÂ", name: "url", widget: "string", required: false }
+              - { label: "Ã¨ÂªÂªÃ¦ÂÂ", name: "description", widget: "text", required: false }
 
-      - label: "æçè³è¨"
+      - label: "Ã¦ÂÂÃ§ÂÂÃ¨Â³ÂÃ¨Â¨Â"
         name: "admissions"
         file: "src/content/admissions/index.json"
         fields:
-          - { label: "é é¢æ¨é¡", name: "title", widget: "string" }
-          - { label: "èªªææå­", name: "description", widget: "text" }
-          - label: "æçé ç®"
+          - { label: "Ã©Â ÂÃ©ÂÂ¢Ã¦Â¨ÂÃ©Â¡Â", name: "title", widget: "string" }
+          - { label: "Ã¨ÂªÂªÃ¦ÂÂÃ¦ÂÂÃ¥Â­Â", name: "description", widget: "text" }
+          - label: "Ã¦ÂÂÃ§ÂÂÃ©Â ÂÃ§ÂÂ®"
             name: "items"
             widget: "list"
             fields:
-              - { label: "æ¨é¡", name: "title", widget: "string" }
-              - { label: "å§å®¹", name: "content", widget: "markdown" }
+              - { label: "Ã¦Â¨ÂÃ©Â¡Â", name: "title", widget: "string" }
+              - { label: "Ã¥ÂÂ§Ã¥Â®Â¹", name: "content", widget: "markdown" }
 
-      - label: "å¸«è³ä»ç´¹"
+      - label: "Ã¥Â¸Â«Ã¨Â³ÂÃ¤Â»ÂÃ§Â´Â¹"
         name: "teachers_page"
         file: "src/content/teachers.json"
         fields:
-          - label: "æå¸«åè¡¨"
+          - label: "Ã¦ÂÂÃ¥Â¸Â«Ã¥ÂÂÃ¨Â¡Â¨"
             name: "teachers"
             widget: "list"
             summary: "{{fields.name}} - {{fields.title}}"
             fields:
               - { label: "ID", name: "id", widget: "string" }
-              - { label: "å§å", name: "name", widget: "string" }
-              - { label: "è·ç¨±", name: "title", widget: "string" }
-              - { label: "ç§ç", name: "image", widget: "image", required: false }
-              - { label: "ç°¡ä»", name: "bio", widget: "text", required: false }
-              - label: "é¡å¥"
+              - { label: "Ã¥Â§ÂÃ¥ÂÂ", name: "name", widget: "string" }
+              - { label: "Ã¨ÂÂ·Ã§Â¨Â±", name: "title", widget: "string" }
+              - { label: "Ã§ÂÂ§Ã§ÂÂ", name: "image", widget: "image", required: false }
+              - { label: "Ã§Â°Â¡Ã¤Â»Â", name: "bio", widget: "text", required: false }
+              - label: "Ã©Â¡ÂÃ¥ÂÂ¥"
                 name: "category"
                 widget: "select"
                 options:
-                  - { label: "æ ¸å¿æå¡", value: "core" }
-                  - { label: "è¡æ¿åé", value: "admin" }
-                  - { label: "ç­ç´å°å¸«", value: "class" }
-                  - { label: "å°ç§èå¸«", value: "teacher" }
+                  - { label: "Ã¦Â Â¸Ã¥Â¿ÂÃ¦ÂÂÃ¥ÂÂ¡", value: "core" }
+                  - { label: "Ã¨Â¡ÂÃ¦ÂÂ¿Ã¥ÂÂÃ©ÂÂ", value: "admin" }
+                  - { label: "Ã§ÂÂ­Ã§Â´ÂÃ¥Â°ÂÃ¥Â¸Â«", value: "class" }
+                  - { label: "Ã¥Â°ÂÃ§Â§ÂÃ¨ÂÂÃ¥Â¸Â«", value: "teacher" }
 
-      - label: "æ¯æåç¦¾"
+      - label: "Ã¦ÂÂ¯Ã¦ÂÂÃ¥ÂÂÃ§Â¦Â¾"
         name: "support"
         file: "src/content/support.json"
         fields:
-          - { label: "èªªææå­", name: "intro", widget: "markdown" }
-          - label: "ææ¬¾æ¹å¼"
+          - { label: "Ã¨ÂªÂªÃ¦ÂÂÃ¦ÂÂÃ¥Â­Â", name: "intro", widget: "markdown" }
+          - label: "Ã¦ÂÂÃ¦Â¬Â¾Ã¦ÂÂ¹Ã¥Â¼Â"
             name: "methods"
             widget: "list"
             fields:
-              - { label: "æ¹å¼", name: "method", widget: "string" }
-              - { label: "èªªæ", name: "description", widget: "text" }
+              - { label: "Ã¦ÂÂ¹Ã¥Â¼Â", name: "method", widget: "string" }
+              - { label: "Ã¨ÂªÂªÃ¦ÂÂ", name: "description", widget: "text" }
 
-      - label: "è¯çµ¡æå"
+      - label: "Ã¨ÂÂ¯Ã§ÂµÂ¡Ã¦ÂÂÃ¥ÂÂ"
         name: "contact_page"
         file: "src/content/contact.json"
         fields:
-          - { label: "å°å", name: "address", widget: "string" }
-          - { label: "é»è©±", name: "phone", widget: "string" }
+          - { label: "Ã¥ÂÂ°Ã¥ÂÂ", name: "address", widget: "string" }
+          - { label: "Ã©ÂÂ»Ã¨Â©Â±", name: "phone", widget: "string" }
           - { label: "Email", name: "email", widget: "string" }
-          - { label: "å°ååµå¥ç¢¼", name: "mapEmbed", widget: "text", required: false }
-          - { label: "è£åèªªæ", name: "note", widget: "markdown", required: false }
+          - { label: "Ã¥ÂÂ°Ã¥ÂÂÃ¥ÂµÂÃ¥ÂÂ¥Ã§Â¢Â¼", name: "mapEmbed", widget: "text", required: false }
+          - { label: "Ã¨Â£ÂÃ¥ÂÂÃ¨ÂªÂªÃ¦ÂÂ", name: "note", widget: "markdown", required: false }
+
+# deploy trigger
