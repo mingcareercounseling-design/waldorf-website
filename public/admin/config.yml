@@ -2,21 +2,21 @@ backend:
   name: github
   repo: mingcareercounseling-design/waldorf-website
   branch: main
-  auth_type: pkce
-  app_id: Ov23liDu3TN5aQanCs5F
+  base_url: https://kuanghe-waldorf-school.vercel.app
+  auth_endpoint: api/auth
 
-# 媒體管理
+# åªé«ç®¡ç
 media_folder: "public/images/uploads"
 public_folder: "/images/uploads"
 
-# 介面語言
+# ä»é¢èªè¨
 locale: zh_Hant
 
 collections:
-  # ========== 動態集合 ==========
+  # ========== åæéå ==========
 
   - name: "news"
-    label: "最新消息"
+    label: "ææ°æ¶æ¯"
     folder: "src/content/news"
     create: true
     delete: true
@@ -25,13 +25,13 @@ collections:
     slug: "{{year}}-{{month}}-{{day}}-{{fields.title}}"
     summary: "{{fields.title}} ({{fields.date}})"
     fields:
-      - { label: "標題", name: "title", widget: "string" }
-      - { label: "發布日期", name: "date", widget: "datetime", format: "YYYY-MM-DD", date_format: "YYYY/MM/DD", time_format: false }
-      - { label: "內容", name: "content", widget: "markdown" }
-      - { label: "連結", name: "link", widget: "string", required: false }
+      - { label: "æ¨é¡", name: "title", widget: "string" }
+      - { label: "ç¼å¸æ¥æ", name: "date", widget: "datetime", format: "YYYY-MM-DD", date_format: "YYYY/MM/DD", time_format: false }
+      - { label: "å§å®¹", name: "content", widget: "markdown" }
+      - { label: "é£çµ", name: "link", widget: "string", required: false }
 
   - name: "calendar_events"
-    label: "行事曆活動"
+    label: "è¡äºææ´»å"
     folder: "src/content/calendar"
     create: true
     delete: true
@@ -40,198 +40,198 @@ collections:
     slug: "{{year}}-{{month}}-{{day}}-{{fields.title}}"
     summary: "{{fields.title}} ({{fields.date}})"
     fields:
-      - { label: "標題", name: "title", widget: "string" }
-      - { label: "日期", name: "date", widget: "datetime", format: "YYYY-MM-DD", date_format: "YYYY/MM/DD", time_format: false }
-      - { label: "結束日期", name: "end_date", widget: "datetime", format: "YYYY-MM-DD", date_format: "YYYY/MM/DD", time_format: false, required: false }
-      - { label: "說明", name: "description", widget: "text", required: false }
-      - label: "分類"
+      - { label: "æ¨é¡", name: "title", widget: "string" }
+      - { label: "æ¥æ", name: "date", widget: "datetime", format: "YYYY-MM-DD", date_format: "YYYY/MM/DD", time_format: false }
+      - { label: "çµææ¥æ", name: "end_date", widget: "datetime", format: "YYYY-MM-DD", date_format: "YYYY/MM/DD", time_format: false, required: false }
+      - { label: "èªªæ", name: "description", widget: "text", required: false }
+      - label: "åé¡"
         name: "category"
         widget: "select"
-        options: ["慶典", "發表", "說明會", "研習", "假期", "其他"]
-        default: "其他"
+        options: ["æ¶å¸", "ç¼è¡¨", "èªªææ", "ç ç¿", "åæ", "å¶ä»"]
+        default: "å¶ä»"
 
   - name: "newsletters"
-    label: "光禾通訊"
+    label: "åç¦¾éè¨"
     folder: "src/content/newsletters"
     create: true
     delete: false
     extension: json
     format: json
     slug: "NO{{fields.issue}}"
-    summary: "第 {{fields.issue}} 期 - {{fields.title}}"
+    summary: "ç¬¬ {{fields.issue}} æ - {{fields.title}}"
     fields:
-      - { label: "期數", name: "issue", widget: "string", hint: "例：36" }
-      - { label: "標題", name: "title", widget: "string" }
-      - { label: "學期", name: "semester", widget: "string", required: false, hint: "例：114春夏" }
-      - { label: "封面圖", name: "cover", widget: "image", required: false }
-      - { label: "CDN 圖片前綴路徑", name: "imagePrefix", widget: "string", required: false, hint: "例：https://raw.githubusercontent.com/user/repo/main/NO37/" }
-      - { label: "圖片總頁數", name: "pageCount", widget: "number", default: 1 }
-      - { label: "頁碼位數", name: "pageDigits", widget: "number", default: 2, required: false, hint: "例：2 代表 01、02…" }
-      - label: "圖片格式"
+      - { label: "ææ¸", name: "issue", widget: "string", hint: "ä¾ï¼36" }
+      - { label: "æ¨é¡", name: "title", widget: "string" }
+      - { label: "å­¸æ", name: "semester", widget: "string", required: false, hint: "ä¾ï¼114æ¥å¤" }
+      - { label: "å°é¢å", name: "cover", widget: "image", required: false }
+      - { label: "CDN åçåç¶´è·¯å¾", name: "imagePrefix", widget: "string", required: false, hint: "ä¾ï¼https://raw.githubusercontent.com/user/repo/main/NO37/" }
+      - { label: "åçç¸½é æ¸", name: "pageCount", widget: "number", default: 1 }
+      - { label: "é ç¢¼ä½æ¸", name: "pageDigits", widget: "number", default: 2, required: false, hint: "ä¾ï¼2 ä»£è¡¨ 01ã02â¦" }
+      - label: "åçæ ¼å¼"
         name: "pageFormat"
         widget: "select"
         options: ["png", "jpg", "jpeg", "webp"]
         default: "png"
         required: false
-      - { label: "發行年月", name: "date", widget: "datetime", format: "YYYY-MM-DD", date_format: "YYYY/MM/DD", time_format: false }
+      - { label: "ç¼è¡å¹´æ", name: "date", widget: "datetime", format: "YYYY-MM-DD", date_format: "YYYY/MM/DD", time_format: false }
 
-  # ========== 靜態頁面內容 ==========
+  # ========== éæé é¢å§å®¹ ==========
 
   - name: "pages"
-    label: "頁面內容"
+    label: "é é¢å§å®¹"
     files:
 
-      - label: "首頁"
+      - label: "é¦é "
         name: "home"
         file: "src/content/home.json"
         fields:
-          - label: "輪播圖片"
+          - label: "è¼ªæ­åç"
             name: "carousel"
             widget: "list"
             fields:
               - { label: "ID", name: "id", widget: "number" }
-              - { label: "標題", name: "title", widget: "string" }
-              - { label: "副標題", name: "subtitle", widget: "string" }
-              - { label: "圖片", name: "image", widget: "image", required: false }
-              - { label: "連結", name: "link", widget: "string", required: false }
-          - label: "精選消息"
+              - { label: "æ¨é¡", name: "title", widget: "string" }
+              - { label: "å¯æ¨é¡", name: "subtitle", widget: "string" }
+              - { label: "åç", name: "image", widget: "image", required: false }
+              - { label: "é£çµ", name: "link", widget: "string", required: false }
+          - label: "ç²¾é¸æ¶æ¯"
             name: "highlights"
             widget: "list"
             fields:
               - { label: "ID", name: "id", widget: "number" }
-              - { label: "標題", name: "title", widget: "string" }
-              - { label: "日期", name: "date", widget: "string" }
-              - { label: "內容摘要", name: "content", widget: "text" }
-              - { label: "連結", name: "link", widget: "string", required: false }
-          - label: "聯絡資訊"
+              - { label: "æ¨é¡", name: "title", widget: "string" }
+              - { label: "æ¥æ", name: "date", widget: "string" }
+              - { label: "å§å®¹æè¦", name: "content", widget: "text" }
+              - { label: "é£çµ", name: "link", widget: "string", required: false }
+          - label: "è¯çµ¡è³è¨"
             name: "contact"
             widget: "object"
             fields:
-              - { label: "地址", name: "address", widget: "string" }
-              - { label: "電話", name: "phone", widget: "string" }
+              - { label: "å°å", name: "address", widget: "string" }
+              - { label: "é»è©±", name: "phone", widget: "string" }
               - { label: "Email", name: "email", widget: "string" }
               - { label: "Facebook", name: "facebook", widget: "string", required: false }
               - { label: "Instagram", name: "instagram", widget: "string", required: false }
               - { label: "Threads", name: "threads", widget: "string", required: false }
               - { label: "YouTube", name: "youtube", widget: "string", required: false }
 
-      - label: "關於光禾"
+      - label: "éæ¼åç¦¾"
         name: "about"
         file: "src/content/about.json"
         fields:
-          - { label: "學校願景", name: "vision", widget: "markdown" }
-          - { label: "學校簡史", name: "history", widget: "markdown" }
-          - { label: "辦學理念", name: "philosophy", widget: "markdown" }
+          - { label: "å­¸æ ¡é¡æ¯", name: "vision", widget: "markdown" }
+          - { label: "å­¸æ ¡ç°¡å²", name: "history", widget: "markdown" }
+          - { label: "è¾¦å­¸çå¿µ", name: "philosophy", widget: "markdown" }
 
-      - label: "教學圖像"
+      - label: "æå­¸åå"
         name: "curriculum"
         file: "src/content/curriculum.json"
         fields:
-          - { label: "頁面標題", name: "title", widget: "string" }
-          - { label: "簡介說明", name: "intro", widget: "markdown" }
-          - label: "課程項目"
+          - { label: "é é¢æ¨é¡", name: "title", widget: "string" }
+          - { label: "ç°¡ä»èªªæ", name: "intro", widget: "markdown" }
+          - label: "èª²ç¨é ç®"
             name: "items"
             widget: "list"
             fields:
-              - { label: "標題", name: "title", widget: "string" }
-              - { label: "說明", name: "description", widget: "markdown" }
+              - { label: "æ¨é¡", name: "title", widget: "string" }
+              - { label: "èªªæ", name: "description", widget: "markdown" }
 
-      - label: "活動花絮"
+      - label: "æ´»åè±çµ®"
         name: "activities"
         file: "src/content/activities.json"
         fields:
-          - label: "精選活動"
+          - label: "ç²¾é¸æ´»å"
             name: "highlights"
             widget: "list"
             fields:
               - { label: "ID", name: "id", widget: "string" }
-              - { label: "標題", name: "title", widget: "string" }
-              - { label: "日期", name: "date", widget: "string" }
-              - label: "分類"
+              - { label: "æ¨é¡", name: "title", widget: "string" }
+              - { label: "æ¥æ", name: "date", widget: "string" }
+              - label: "åé¡"
                 name: "category"
                 widget: "select"
-                options: ["花絮剪影", "重要成果", "其他"]
-                default: "其他"
-              - { label: "內容摘要", name: "content", widget: "text" }
-          - label: "招生說明會"
+                options: ["è±çµ®åªå½±", "éè¦ææ", "å¶ä»"]
+                default: "å¶ä»"
+              - { label: "å§å®¹æè¦", name: "content", widget: "text" }
+          - label: "æçèªªææ"
             name: "seminars"
             widget: "list"
             fields:
               - { label: "ID", name: "id", widget: "string" }
-              - { label: "標題", name: "title", widget: "string" }
-              - { label: "日期", name: "date", widget: "string" }
-              - { label: "內容摘要", name: "content", widget: "text" }
-          - label: "學校榮耀"
+              - { label: "æ¨é¡", name: "title", widget: "string" }
+              - { label: "æ¥æ", name: "date", widget: "string" }
+              - { label: "å§å®¹æè¦", name: "content", widget: "text" }
+          - label: "å­¸æ ¡æ¦®è"
             name: "achievements"
             widget: "list"
             fields:
               - { label: "ID", name: "id", widget: "string" }
-              - { label: "標題", name: "title", widget: "string" }
-              - { label: "日期", name: "date", widget: "string" }
-              - { label: "說明", name: "content", widget: "text" }
-          - label: "影音資源"
+              - { label: "æ¨é¡", name: "title", widget: "string" }
+              - { label: "æ¥æ", name: "date", widget: "string" }
+              - { label: "èªªæ", name: "content", widget: "text" }
+          - label: "å½±é³è³æº"
             name: "videos"
             widget: "list"
             fields:
               - { label: "ID", name: "id", widget: "string" }
-              - { label: "標題", name: "title", widget: "string" }
-              - { label: "影片網址", name: "url", widget: "string", required: false }
-              - { label: "說明", name: "description", widget: "text", required: false }
+              - { label: "æ¨é¡", name: "title", widget: "string" }
+              - { label: "å½±çç¶²å", name: "url", widget: "string", required: false }
+              - { label: "èªªæ", name: "description", widget: "text", required: false }
 
-      - label: "招生資訊"
+      - label: "æçè³è¨"
         name: "admissions"
         file: "src/content/admissions/index.json"
         fields:
-          - { label: "頁面標題", name: "title", widget: "string" }
-          - { label: "說明文字", name: "description", widget: "text" }
-          - label: "招生項目"
+          - { label: "é é¢æ¨é¡", name: "title", widget: "string" }
+          - { label: "èªªææå­", name: "description", widget: "text" }
+          - label: "æçé ç®"
             name: "items"
             widget: "list"
             fields:
-              - { label: "標題", name: "title", widget: "string" }
-              - { label: "內容", name: "content", widget: "markdown" }
+              - { label: "æ¨é¡", name: "title", widget: "string" }
+              - { label: "å§å®¹", name: "content", widget: "markdown" }
 
-      - label: "師資介紹"
+      - label: "å¸«è³ä»ç´¹"
         name: "teachers_page"
         file: "src/content/teachers.json"
         fields:
-          - label: "教師列表"
+          - label: "æå¸«åè¡¨"
             name: "teachers"
             widget: "list"
             summary: "{{fields.name}} - {{fields.title}}"
             fields:
               - { label: "ID", name: "id", widget: "string" }
-              - { label: "姓名", name: "name", widget: "string" }
-              - { label: "職稱", name: "title", widget: "string" }
-              - { label: "照片", name: "image", widget: "image", required: false }
-              - { label: "簡介", name: "bio", widget: "text", required: false }
-              - label: "類別"
+              - { label: "å§å", name: "name", widget: "string" }
+              - { label: "è·ç¨±", name: "title", widget: "string" }
+              - { label: "ç§ç", name: "image", widget: "image", required: false }
+              - { label: "ç°¡ä»", name: "bio", widget: "text", required: false }
+              - label: "é¡å¥"
                 name: "category"
                 widget: "select"
                 options:
-                  - { label: "核心成員", value: "core" }
-                  - { label: "行政團隊", value: "admin" }
-                  - { label: "班級導師", value: "class" }
-                  - { label: "專科老師", value: "teacher" }
+                  - { label: "æ ¸å¿æå¡", value: "core" }
+                  - { label: "è¡æ¿åé", value: "admin" }
+                  - { label: "ç­ç´å°å¸«", value: "class" }
+                  - { label: "å°ç§èå¸«", value: "teacher" }
 
-      - label: "支持光禾"
+      - label: "æ¯æåç¦¾"
         name: "support"
         file: "src/content/support.json"
         fields:
-          - { label: "說明文字", name: "intro", widget: "markdown" }
-          - label: "捐款方式"
+          - { label: "èªªææå­", name: "intro", widget: "markdown" }
+          - label: "ææ¬¾æ¹å¼"
             name: "methods"
             widget: "list"
             fields:
-              - { label: "方式", name: "method", widget: "string" }
-              - { label: "說明", name: "description", widget: "text" }
+              - { label: "æ¹å¼", name: "method", widget: "string" }
+              - { label: "èªªæ", name: "description", widget: "text" }
 
-      - label: "聯絡我們"
+      - label: "è¯çµ¡æå"
         name: "contact_page"
         file: "src/content/contact.json"
         fields:
-          - { label: "地址", name: "address", widget: "string" }
-          - { label: "電話", name: "phone", widget: "string" }
+          - { label: "å°å", name: "address", widget: "string" }
+          - { label: "é»è©±", name: "phone", widget: "string" }
           - { label: "Email", name: "email", widget: "string" }
-          - { label: "地圖嵌入碼", name: "mapEmbed", widget: "text", required: false }
-          - { label: "補充說明", name: "note", widget: "markdown", required: false }
+          - { label: "å°ååµå¥ç¢¼", name: "mapEmbed", widget: "text", required: false }
+          - { label: "è£åèªªæ", name: "note", widget: "markdown", required: false }
