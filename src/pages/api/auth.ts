@@ -17,6 +17,8 @@ export const GET: APIRoute = async ({ request, redirect }) => {
     return redirect(githubUrl.toString(), 302);
   }
 
+  console.log('[auth] code received, secret present:', !!CLIENT_SECRET);
+
   try {
     const tokenResp = await fetch('https://github.com/login/oauth/access_token', {
       method: 'POST',
@@ -25,8 +27,11 @@ export const GET: APIRoute = async ({ request, redirect }) => {
     });
     const tokenData = await tokenResp.json() as { access_token?: string; error?: string; error_description?: string };
 
+    console.log('[auth] github response:', JSON.stringify({ error: tokenData.error, has_token: !!tokenData.access_token }));
+
     if (tokenData.error || !tokenData.access_token) {
-      return new Response(makePopupHtml('error', tokenData.error_description || tokenData.error || 'auth failed'), {
+      const errMsg = tokenData.error_description || tokenData.error || 'auth failed';
+      return new Response(makePopupHtml('error', errMsg), {
         headers: { 'Content-Type': 'text/html' },
       });
     }
@@ -34,6 +39,7 @@ export const GET: APIRoute = async ({ request, redirect }) => {
       headers: { 'Content-Type': 'text/html' },
     });
   } catch (e) {
+    console.log('[auth] fetch error:', String(e));
     return new Response(makePopupHtml('error', 'fetch failed'), {
       headers: { 'Content-Type': 'text/html' },
     });
@@ -41,9 +47,10 @@ export const GET: APIRoute = async ({ request, redirect }) => {
 };
 
 function makePopupHtml(status: 'success' | 'error', payload: string) {
+  // Both success and error must send JSON objects so Sveltia CMS can parse them
   const content = status === 'success'
     ? { token: payload, provider: 'github' }
-    : payload;
+    : { error: payload, provider: 'github', errorCode: 'AUTH_FAILED' };
   const msgStr = `authorization:github:${status}:${JSON.stringify(content)}`;
   const msgJson = JSON.stringify(msgStr);
   return `<!DOCTYPE html><html><body><script>
