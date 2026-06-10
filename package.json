@@ -3,23 +3,27 @@
     "type": "module",
     "version": "0.0.1",
     "engines": {
-          "node": ">=22.12.0"
+        "node": ">=22.12.0"
     },
     "scripts": {
-          "dev": "astro dev",
-          "build": "astro build",
-          "preview": "astro preview",
-          "astro": "astro"
+        "dev": "astro dev",
+        "build": "astro build",
+        "preview": "astro preview",
+        "astro": "astro",
+        "admin": "node admin-server.js"
     },
     "dependencies": {
-          "@astrojs/vercel": "^10.0.4",
-          "@tailwindcss/vite": "^4.2.2",
-          "astro": "^6.0.8",
-          "flipbook-js": "^1.1.1",
-          "page-flip": "^2.0.7",
-          "tailwindcss": "^4.2.2"
+        "@astrojs/vercel": "^10.0.4",
+        "@tailwindcss/vite": "^4.2.2",
+        "astro": "^6.0.8",
+        "express": "^5.2.1",
+        "flipbook-js": "^1.1.1",
+        "multer": "^2.1.1",
+        "page-flip": "^2.0.7",
+        "tailwindcss": "^4.2.2",
+        "tinacms": "^3.9.1"
     },
     "devDependencies": {
-          "@tinacms/cli": "^2.1.11"
+        "@tinacms/cli": "^2.1.11"
     }
 }
