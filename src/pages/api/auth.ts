@@ -30,7 +30,6 @@ export const GET: APIRoute = async ({ request, redirect }) => {
         headers: { 'Content-Type': 'text/html' },
       });
     }
-
     return new Response(makePopupHtml('success', tokenData.access_token), {
       headers: { 'Content-Type': 'text/html' },
     });
@@ -42,16 +41,18 @@ export const GET: APIRoute = async ({ request, redirect }) => {
 };
 
 function makePopupHtml(status: 'success' | 'error', payload: string) {
-  const msg = status === 'success'
-    ? `authorization:github:success:{"token":"${payload}","provider":"github"}`
-    : `authorization:github:error:${JSON.stringify(payload)}`;
+  const content = status === 'success'
+    ? { token: payload, provider: 'github' }
+    : payload;
+  const msgStr = `authorization:github:${status}:${JSON.stringify(content)}`;
+  const msgJson = JSON.stringify(msgStr);
   return `<!DOCTYPE html><html><body><script>
 (function(){
-  function receive(e){
-    window.opener.postMessage('${msg}', e.origin);
-  }
-  window.addEventListener('message', receive, false);
+  var msg = ${msgJson};
+  function send(origin) { window.opener.postMessage(msg, origin || '*'); }
+  window.addEventListener('message', function(e) { send(e.origin); }, false);
   window.opener.postMessage('authorizing:github', '*');
+  setTimeout(function() { send('*'); }, 500);
 })();
-</script></body></html>`;
+<\/script></body></html>`;
 }
