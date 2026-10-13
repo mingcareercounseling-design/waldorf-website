@@ -11,7 +11,7 @@
     { "id": "9", "name": "高毓君", "title": "會計", "bio": "", "image": "/images/teachers/gao-yujun.jpg", "category": "admin" },
     { "id": "10", "name": "林季瑩", "title": "人事", "bio": "", "image": "/images/teachers/lin-jiying.jpg", "category": "admin" },
     
-    { "id": "12", "name": "巫穎妙", "title": "中學行政", "bio": "", "image": "/images/teachers/wu-yingmiao.jpg", "category": "admin" },
+    { "id": "12", "name": "巫顓妙", "title": "中學行政", "bio": "", "image": "/images/teachers/wu-yingmiao.jpg", "category": "admin" },
     
     { "id": "14", "name": "陳淑市", "title": "專任教師", "bio": "", "image": "/images/teachers/chen-shushi.jpg", "category": "teacher" },
     { "id": "15", "name": "湯翻豪", "title": "專任教師", "bio": "", "image": "/images/teachers/tang-fanhao.jpg", "category": "teacher" },
