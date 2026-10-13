@@ -9,23 +9,24 @@
     { "id": "7", "name": "郭佳蕙", "title": "校護", "bio": "", "image": "/images/teachers/guo-jiayou.jpg", "category": "admin" },
     { "id": "8", "name": "詹雅文", "title": "出納", "bio": "", "image": "/images/teachers/zhan-yawen.jpg", "category": "admin" },
     { "id": "9", "name": "高毓君", "title": "會計", "bio": "", "image": "/images/teachers/gao-yujun.jpg", "category": "admin" },
-    { "id": "10", "name": "林佳蒨", "title": "人事", "bio": "", "image": "/images/teachers/lin-jiaqian.jpg", "category": "admin" },
+    { "id": "10", "name": "林季瑩", "title": "人事", "bio": "", "image": "/images/teachers/lin-jiying.jpg", "category": "admin" },
     
-    { "id": "12", "name": "謝淳涵", "title": "中學行政", "bio": "", "image": "/images/teachers/xie-chunhan.jpg", "category": "admin" },
+    { "id": "12", "name": ""巫穎妙"", "title": "中學行政", "bio": "", "image": "/images/teachers/wu-yingmiao.jpg", "category": "admin" },
     
     { "id": "14", "name": "陳淑市", "title": "專任教師", "bio": "", "image": "/images/teachers/chen-shushi.jpg", "category": "teacher" },
     { "id": "15", "name": "湯翻豪", "title": "專任教師", "bio": "", "image": "/images/teachers/tang-fanhao.jpg", "category": "teacher" },
-    { "id": "16", "name": "羅淑萍", "title": "G1 雲杉班導師", "bio": "", "image": "/images/teachers/luo-shuping.jpg", "category": "class" },
-    { "id": "17", "name": "張斯婷", "title": "G2 月桂班導師", "bio": "", "image": "/images/teachers/zhang-siting.jpg", "category": "class" },
-    { "id": "18", "name": "蘇泳貞", "title": "G3 星辰班導師", "bio": "", "image": "/images/teachers/su-yongzhen.jpg", "category": "class" },
-    { "id": "19", "name": "鄭景中", "title": "G4 澄月班導師", "bio": "", "image": "/images/teachers/zheng-jingzhong.jpg", "category": "class" },
-    { "id": "20", "name": "潘怡臻", "title": "G5 銀杏班導師", "bio": "", "image": "/images/teachers/pan-yizhen.jpg", "category": "class" },
-    { "id": "21", "name": "林季瑩", "title": "G6 暖陽班導師", "bio": "", "image": "/images/teachers/lin-jiying.jpg", "category": "class" },
-    { "id": "22", "name": "陳嘉慧", "title": "G7 海洋班導師", "bio": "", "image": "/images/teachers/chen-jiahui.jpg", "category": "class" },
-    { "id": "23", "name": "佘怜瑱", "title": "G8 雲彩班導師", "bio": "", "image": "/images/teachers/yu-lianchen.jpg", "category": "class" },
-    { "id": "24", "name": "傅麗如", "title": "G9 茉莉班導師", "bio": "", "image": "/images/teachers/fu-liru.jpg", "category": "class" },
-    { "id": "25", "name": "葉友竹", "title": "G10 芙蓉班導師", "bio": "", "image": "/images/teachers/ye-youzhu.jpg", "category": "class" },
-    { "id": "26", "name": "黃琬茹", "title": "G11 榕樹班導師", "bio": "", "image": "/images/teachers/huang-wanru.jpg", "category": "class" },
-    { "id": "27", "name": "巫穎妙", "title": "G12 天使班導師", "bio": "", "image": "/images/teachers/wu-yingmiao.jpg", "category": "class" }
+ 
+    { "id": "16", "name": "何欣諭", "title": "G1 金盞班導師", "bio": "", "image": "/images/teachers/luo-shuping.jpg", "category": "class" },
+    { "id": "17", "name": "羅淑萍", "title": "G2 雲杉班導師", "bio": "", "image": "/images/teachers/luo-shuping.jpg", "category": "class" },
+    { "id": "18", "name": "張斯婷", "title": "G3 月桂班導師", "bio": "", "image": "/images/teachers/zhang-siting.jpg", "category": "class" },
+    { "id": "19", "name": "蘇泳貞", "title": "G4 星辰班導師", "bio": "", "image": "/images/teachers/su-yongzhen.jpg", "category": "class" },
+    { "id": "20", "name": "鄭景中", "title": "G5 澄月班導師", "bio": "", "image": "/images/teachers/zheng-jingzhong.jpg", "category": "class" },
+    { "id": "21", "name": "潘怡臻", "title": "G6 銀杏班導師", "bio": "", "image": "/images/teachers/pan-yizhen.jpg", "category": "class" },
+    { "id": "22", "name": "林佳蒨", "title": "G7 暖陽班導師", "bio": "", "image": "/images/teachers/lin-jiaqian.jpg", "category": "class" },
+    { "id": "23", "name": "陳嘉慧", "title": "G8 海洋班導師", "bio": "", "image": "/images/teachers/chen-jiahui.jpg", "category": "class" },
+    { "id": "24", "name": "佘怜瑱", "title": "G9 雲彩班導師", "bio": "", "image": "/images/teachers/yu-lianchen.jpg", "category": "class" },
+    { "id": "25", "name": "葉友竹", "title": "G10 茉莉班導師", "bio": "", "image": "/images/teachers/ye-youzhu.jpg", "category": "class" },
+    { "id": "26", "name": "葉友竹", "title": "G11 芙蓉班導師", "bio": "", "image": "/images/teachers/ye-youzhu.jpg", "category": "class" },
+    { "id": "27", "name": "傅麗如", "title": "G12 榕樹班導師", "bio": "", "image": "/images/teachers/fu-liru.jpg", "category": "class" }
   ]
 }
