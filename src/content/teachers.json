@@ -16,7 +16,7 @@
     { "id": "14", "name": "陳淑市", "title": "專任教師", "bio": "", "image": "/images/teachers/chen-shushi.jpg", "category": "teacher" },
     { "id": "15", "name": "湯翻豪", "title": "專任教師", "bio": "", "image": "/images/teachers/tang-fanhao.jpg", "category": "teacher" },
  
-    { "id": "16", "name": "何欣諭", "title": "G1 金盞班導師", "bio": "", "image": "/images/teachers/luo-shuping.jpg", "category": "class" },
+    { "id": "16", "name": "何欣諭", "title": "G1 金盞班導師", "bio": "", "image": "/images/teachers/he-xinyu.png", "category": "class" },
     { "id": "17", "name": "羅淑萍", "title": "G2 雲杉班導師", "bio": "", "image": "/images/teachers/luo-shuping.jpg", "category": "class" },
     { "id": "18", "name": "張斯婷", "title": "G3 月桂班導師", "bio": "", "image": "/images/teachers/zhang-siting.jpg", "category": "class" },
     { "id": "19", "name": "蘇泳貞", "title": "G4 星辰班導師", "bio": "", "image": "/images/teachers/su-yongzhen.jpg", "category": "class" },
