@@ -9,7 +9,12 @@ import Navigation from '../components/Navigation.astro';
   <!-- Hero Section -->
   <section class="hero">
     <div class="hero-content">
-      <h1 class="hero-title">
+<img
+  src="/116DM.png"
+  alt="116學年度光禾華德福實驗學校招生說明會海報"
+  class="hero-poster"
+/>
+   <h1 class="hero-title">
         <span class="gradient-text">光禾華德福實驗學校</span>
       </h1>
       <p class="hero-subtitle">用愛與自然，啟發孩子的無限可能</p>
@@ -230,6 +235,13 @@ import Navigation from '../components/Navigation.astro';
   }
 
   .hero-content { z-index: 2; padding: 2rem; }
+.hero-poster {
+  display: block;
+  width: min(280px, 75vw);
+  height: auto;
+  margin: 0 auto 1.5rem;
+  border-radius: 12px;
+}
   .hero-title { font-size: 3.2rem; margin-bottom: 0.75rem; }
   .hero-subtitle { font-size: 1.25rem; color: #666; margin-bottom: 1.25rem; }
   .hero-buttons { display: flex; gap: 1rem; justify-content: center; }
